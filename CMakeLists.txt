@@ -23,8 +23,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/PropertyEvent.msg"
   "msg/RawImage.msg"
   "srv/GetProperties.srv"
-  "srv/SetProperties.srv"
-)
+  "srv/SetProperties.srv")
 
 ament_export_dependencies(rosidl_default_runtime)
 ament_package()
