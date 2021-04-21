@@ -8,4 +8,4 @@ This package provides ROS 2 interfaces for [Shisen camera tools package](https:/
 
 ## License
 
-This project is licensed under [the MIT License](./LICENSE).
+This project is maintained by [ICHIRO ITS](https://github.com/ichiro-its) and licensed under the [MIT License](./LICENSE).
