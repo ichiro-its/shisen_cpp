@@ -1,8 +1,9 @@
 # Shisen Interfaces
 
 [![latest version](https://img.shields.io/github/v/release/ichiro-its/shisen_interfaces.svg)](https://github.com/ichiro-its/shisen_interfaces/releases/)
+![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/ichiro-its/shisen_interfaces/1?label=v1.0.0%20progress)
 [![license](https://img.shields.io/github/license/ichiro-its/shisen_interfaces.svg)](./LICENSE)
-[![build and test status](https://github.com/ichiro-its/shisen_interfaces/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/ichiro-its/shisen_interfaces/actions)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ichiro-its/shisen_interfaces/Build%20and%20Test?logo=github)
 
 This package provides ROS 2 interfaces for [Shisen camera tools package](https://github.com/ichiro-its/shisen).
 
