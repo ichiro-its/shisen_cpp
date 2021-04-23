@@ -1,11 +1,12 @@
 # Shisen Interfaces
 
-[![latest version](https://img.shields.io/github/v/release/ichiro-its/shisen_interfaces.svg)](https://github.com/ichiro-its/shisen_interfaces/releases/)
-[![license](https://img.shields.io/github/license/ichiro-its/shisen_interfaces.svg)](./LICENSE)
-[![build and test status](https://github.com/ichiro-its/shisen_interfaces/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/ichiro-its/shisen_interfaces/actions)
+[![latest version](https://img.shields.io/github/v/release/ichiro-its/shisen_interfaces)](https://github.com/ichiro-its/shisen_interfaces/releases/)
+[![milestone](https://img.shields.io/github/milestones/progress/ichiro-its/shisen_interfaces/1?label=milestone)](https://github.com/ichiro-its/shisen_interfaces/milestone/1)
+[![license](https://img.shields.io/github/license/ichiro-its/shisen_interfaces)](./LICENSE)
+[![test status](https://img.shields.io/github/workflow/status/ichiro-its/shisen_interfaces/Build%20and%20Test?label=test)](https://github.com/ichiro-its/shisen_interfaces/actions)
 
-This package provides ROS 2 interfaces for [Shisen camera tools package](https://github.com/ichiro-its/shisen).
+This package provides [ROS 2 interfaces](https://docs.ros.org/en/foxy/Concepts/About-ROS-Interfaces.html) for [Shisen](https://github.com/ichiro-its/shisen) camera tools package.
 
 ## License
 
-This project is licensed under [the MIT License](./LICENSE).
+This project is maintained by [ICHIRO ITS](https://github.com/ichiro-its) and licensed under the [MIT License](./LICENSE).
