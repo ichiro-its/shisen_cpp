@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2021 Alfi Maulana
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_INTERFACES__SHISEN_INTERFACES_HPP_
-#define SHISEN_INTERFACES__SHISEN_INTERFACES_HPP_
+#ifndef SHISEN_CPP__INTERFACE_HPP_
+#define SHISEN_CPP__INTERFACE_HPP_
 
 #include <shisen_interfaces/msg/compressed_image.hpp>
 #include <shisen_interfaces/msg/property.hpp>
@@ -28,4 +28,16 @@
 #include <shisen_interfaces/srv/get_properties.hpp>
 #include <shisen_interfaces/srv/set_properties.hpp>
 
-#endif  // SHISEN_INTERFACES__SHISEN_INTERFACES_HPP_
+namespace shisen_cpp
+{
+
+using CompressedImage = shisen_interfaces::msg::CompressedImage;
+using Property = shisen_interfaces::msg::Property;
+using PropertyEvent = shisen_interfaces::msg::PropertyEvent;
+using RawImage = shisen_interfaces::msg::RawImage;
+using GetProperties = shisen_interfaces::srv::GetProperties;
+using SetProperties = shisen_interfaces::srv::SetProperties;
+
+}  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__INTERFACE_HPP_
