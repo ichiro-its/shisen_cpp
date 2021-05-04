@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Alfi Maulana
+// Copyright (c) 2021 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,22 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__INTERFACE_HPP_
-#define SHISEN_CPP__INTERFACE_HPP_
+#include <gtest/gtest.h>
+#include <shisen_cpp/shisen_cpp.hpp>
 
-#include <shisen_interfaces/msg/camera_setting.hpp>
-#include <shisen_interfaces/msg/compressed_image.hpp>
-#include <shisen_interfaces/msg/raw_image.hpp>
-#include <shisen_interfaces/srv/configure_camera_setting.hpp>
-
-namespace shisen_cpp
-{
-
-using shisen_interfaces::msg::CameraSetting;
-using shisen_interfaces::msg::CompressedImage;
-using shisen_interfaces::msg::RawImage;
-using shisen_interfaces::srv::ConfigureCameraSetting;
-
-}  // namespace shisen_cpp
-
-#endif  // SHISEN_CPP__INTERFACE_HPP_
+TEST(CompileTest, Interface) {
+  shisen_cpp::CameraSetting();
+  shisen_cpp::CompressedImage();
+  shisen_cpp::ConfigureCameraSetting();
+  shisen_cpp::RawImage();
+}
