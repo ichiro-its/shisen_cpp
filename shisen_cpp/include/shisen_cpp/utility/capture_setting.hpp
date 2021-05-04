@@ -39,12 +39,14 @@ struct CaptureSetting
 
   const CaptureSetting & operator=(const CaptureSettingMsg & msg);
 
-  Emptiable<double> brightness;
-  Emptiable<double> contrast;
-  Emptiable<double> saturation;
-  Emptiable<double> temperature;
-  Emptiable<double> hue;
-  Emptiable<double> gain;
+  void update_with(const CaptureSetting & capture_setting);
+
+  Emptiable<int> brightness;
+  Emptiable<int> contrast;
+  Emptiable<int> saturation;
+  Emptiable<int> temperature;
+  Emptiable<int> hue;
+  Emptiable<int> gain;
 };
 
 }  // namespace shisen_cpp

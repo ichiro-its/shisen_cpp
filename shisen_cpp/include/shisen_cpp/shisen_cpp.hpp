@@ -23,6 +23,7 @@
 
 #include "./consumer/image_consumer.hpp"
 
+#include "./provider/capture_setting_provider.hpp"
 #include "./provider/image_provider.hpp"
 
 #include "./utility.hpp"

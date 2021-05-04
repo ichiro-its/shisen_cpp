@@ -15,10 +15,10 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(shisen_interfaces REQUIRED)
 
 install(DIRECTORY "include" DESTINATION ".")
-
 
 add_library(${PROJECT_NAME}
   "src/capture_setting.cpp"
@@ -28,7 +28,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
-ament_target_dependencies(${PROJECT_NAME} shisen_interfaces)
+ament_target_dependencies(${PROJECT_NAME} rclcpp shisen_interfaces)
 
 install(TARGETS ${PROJECT_NAME}
   EXPORT export_${PROJECT_NAME}

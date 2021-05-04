@@ -19,7 +19,10 @@
 // THE SOFTWARE.
 
 #include <gtest/gtest.h>
+#include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/shisen_cpp.hpp>
+
+#include <memory>
 
 TEST(CompileTest, Interface) {
   shisen_cpp::CaptureSetting();
@@ -29,8 +32,22 @@ TEST(CompileTest, Interface) {
 }
 
 TEST(CompileTest, Consumer) {
-  shisen_cpp::CompressedImageConsumer();
-  shisen_cpp::CompressedImageProvider();
-  shisen_cpp::RawImageConsumer();
-  shisen_cpp::RawImageProvider();
+  try {
+    auto node = std::make_shared<rclcpp::Node>("compile_test");
+
+    std::make_shared<shisen_cpp::CompressedImageProvider>(node);
+    std::make_shared<shisen_cpp::RawImageProvider>(node);
+  } catch (...) {
+  }
+}
+
+TEST(CompileTest, Provider) {
+  try {
+    auto node = std::make_shared<rclcpp::Node>("compile_test");
+
+    std::make_shared<shisen_cpp::CaptureSettingProvider>(node);
+    std::make_shared<shisen_cpp::CompressedImageProvider>(node);
+    std::make_shared<shisen_cpp::RawImageProvider>(node);
+  } catch (...) {
+  }
 }

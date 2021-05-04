@@ -35,27 +35,27 @@ CaptureSetting::CaptureSetting(const CaptureSettingMsg & msg)
 const CaptureSetting & CaptureSetting::operator=(const CaptureSettingMsg & msg)
 {
   if (msg.brightness.size() > 0) {
-    brightness.set(msg.brightness.front());
+    brightness = msg.brightness.front();
   }
 
   if (msg.contrast.size() > 0) {
-    contrast.set(msg.contrast.front());
+    contrast = msg.contrast.front();
   }
 
   if (msg.saturation.size() > 0) {
-    saturation.set(msg.saturation.front());
+    saturation = msg.saturation.front();
   }
 
   if (msg.temperature.size() > 0) {
-    temperature.set(msg.temperature.front());
+    temperature = msg.temperature.front();
   }
 
   if (msg.hue.size() > 0) {
-    hue.set(msg.hue.front());
+    hue = msg.hue.front();
   }
 
   if (msg.gain.size() > 0) {
-    gain.set(msg.gain.front());
+    gain = msg.gain.front();
   }
 
   return *this;
@@ -66,30 +66,57 @@ CaptureSetting::operator CaptureSettingMsg() const
   CaptureSettingMsg msg;
 
   if (brightness.is_not_empty()) {
-    msg.brightness.push_back(brightness.get());
+    msg.brightness.push_back(brightness);
   }
 
   if (contrast.is_not_empty()) {
-    msg.contrast.push_back(contrast.get());
+    msg.contrast.push_back(contrast);
   }
 
   if (saturation.is_not_empty()) {
-    msg.saturation.push_back(saturation.get());
+    msg.saturation.push_back(saturation);
   }
 
   if (temperature.is_not_empty()) {
-    msg.temperature.push_back(temperature.get());
+    msg.temperature.push_back(temperature);
   }
 
   if (hue.is_not_empty()) {
-    msg.hue.push_back(hue.get());
+    msg.hue.push_back(hue);
   }
 
   if (gain.is_not_empty()) {
-    msg.gain.push_back(gain.get());
+    msg.gain.push_back(gain);
   }
 
   return msg;
+}
+
+void CaptureSetting::update_with(const CaptureSetting & capture_setting)
+{
+  if (capture_setting.brightness.is_not_empty()) {
+    brightness = capture_setting.brightness;
+  }
+
+  if (capture_setting.contrast.is_not_empty()) {
+    contrast = capture_setting.contrast;
+  }
+
+  if (capture_setting.saturation.is_not_empty()) {
+    saturation = capture_setting.saturation;
+  }
+
+  if (capture_setting.temperature.is_not_empty()) {
+    temperature = capture_setting.temperature;
+  }
+
+  if (capture_setting.hue.is_not_empty()) {
+    hue = capture_setting.hue;
+  }
+
+  if (capture_setting.gain.is_not_empty()) {
+    gain = capture_setting.gain;
+  }
 }
 
 }  // namespace shisen_cpp
