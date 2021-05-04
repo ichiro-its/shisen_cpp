@@ -35,6 +35,7 @@ TEST(CompileTest, Consumer) {
   try {
     auto node = std::make_shared<rclcpp::Node>("compile_test");
 
+    std::make_shared<shisen_cpp::CaptureSettingConsumer>(node);
     std::make_shared<shisen_cpp::CompressedImageProvider>(node);
     std::make_shared<shisen_cpp::RawImageProvider>(node);
   } catch (...) {

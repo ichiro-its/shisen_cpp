@@ -21,6 +21,7 @@
 #ifndef SHISEN_CPP__SHISEN_CPP_HPP_
 #define SHISEN_CPP__SHISEN_CPP_HPP_
 
+#include "./consumer/capture_setting_consumer.hpp"
 #include "./consumer/image_consumer.hpp"
 
 #include "./provider/capture_setting_provider.hpp"

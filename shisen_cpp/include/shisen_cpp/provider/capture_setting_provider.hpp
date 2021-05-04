@@ -80,7 +80,7 @@ CaptureSettingProvider::CaptureSettingProvider(
       ConfigureCaptureSetting::Response::SharedPtr response) {
         // Set capture setting if exist
         if (request->capture_setting.size() > 0) {
-          update_capture_setting((CaptureSetting)request->capture_setting.front());
+          update_capture_setting((const CaptureSetting &)request->capture_setting.front());
         }
 
         response->capture_setting.push_back(get_capture_setting());
