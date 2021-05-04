@@ -37,14 +37,14 @@ TEST(EmptiableTest, Empty) {
   ASSERT_TRUE(foo.is_empty());
 }
 
-TEST(CompileTest, Initialized) {
+TEST(EmptiableTest, Initialized) {
   shisen_cpp::Emptiable<Foo> foo(-1, 5.0);
   ASSERT_TRUE(foo.is_empty());
   ASSERT_DOUBLE_EQ(-1, foo.get().a);
   ASSERT_DOUBLE_EQ(5.0, foo.get().b);
 }
 
-TEST(CompileTest, SetAndUnset) {
+TEST(EmptiableTest, SetAndUnset) {
   shisen_cpp::Emptiable<double> foo;
   ASSERT_TRUE(foo.is_empty());
   ASSERT_DOUBLE_EQ(5.0, foo.get(5.0));

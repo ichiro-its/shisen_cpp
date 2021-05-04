@@ -21,7 +21,6 @@
 #ifndef SHISEN_CPP__UTILITY__INTERFACE_HPP_
 #define SHISEN_CPP__UTILITY__INTERFACE_HPP_
 
-#include <shisen_interfaces/msg/capture_setting.hpp>
 #include <shisen_interfaces/msg/compressed_image.hpp>
 #include <shisen_interfaces/msg/raw_image.hpp>
 #include <shisen_interfaces/srv/configure_capture_setting.hpp>
@@ -29,7 +28,6 @@
 namespace shisen_cpp
 {
 
-using shisen_interfaces::msg::CaptureSetting;
 using shisen_interfaces::msg::CompressedImage;
 using shisen_interfaces::msg::RawImage;
 using shisen_interfaces::srv::ConfigureCaptureSetting;
