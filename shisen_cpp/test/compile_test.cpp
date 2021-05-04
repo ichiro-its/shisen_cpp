@@ -22,9 +22,9 @@
 #include <shisen_cpp/shisen_cpp.hpp>
 
 TEST(CompileTest, Interface) {
-  shisen_cpp::CameraSetting();
+  shisen_cpp::CaptureSetting();
   shisen_cpp::CompressedImage();
-  shisen_cpp::ConfigureCameraSetting();
+  shisen_cpp::ConfigureCaptureSetting();
   shisen_cpp::RawImage();
 }
 
