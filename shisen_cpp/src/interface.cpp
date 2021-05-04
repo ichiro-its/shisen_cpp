@@ -18,35 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__UTILITY__CAPTURE_SETTING_HPP_
-#define SHISEN_CPP__UTILITY__CAPTURE_SETTING_HPP_
-
-#include <shisen_interfaces/msg/capture_setting.hpp>
-
-#include "./emptiable.hpp"
+#include <shisen_cpp/utility/interface.hpp>
 
 namespace shisen_cpp
 {
 
-using CaptureSettingMsg = shisen_interfaces::msg::CaptureSetting;
+const char * CAMERA_PREFIX = "/camera";
 
-struct CaptureSetting
-{
-  CaptureSetting();
-  explicit CaptureSetting(const CaptureSettingMsg & msg);
+const char * IMAGE_SUFFIX = "/image";
+const char * COMPRESSED_IMAGE_SUFFIX = "/compressed_image";
+const char * RAW_IMAGE_SUFFIX = "/raw_image";
 
-  operator CaptureSettingMsg() const;
-
-  const CaptureSetting & operator=(const CaptureSettingMsg & msg);
-
-  Emptiable<double> brightness;
-  Emptiable<double> contrast;
-  Emptiable<double> saturation;
-  Emptiable<double> temperature;
-  Emptiable<double> hue;
-  Emptiable<double> gain;
-};
+const char * CAPTURE_SETTING_EVENT_SUFFIX = "/capture_setting_event";
+const char * CONFIGURE_CAPTURE_SETTING_SUFFIX = "/configure_capture_setting";
 
 }  // namespace shisen_cpp
-
-#endif  // SHISEN_CPP__UTILITY__CAPTURE_SETTING_HPP_

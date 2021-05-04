@@ -32,14 +32,14 @@ using shisen_interfaces::msg::CompressedImage;
 using shisen_interfaces::msg::RawImage;
 using shisen_interfaces::srv::ConfigureCaptureSetting;
 
-const char * const CAMERA_PREFIX = "/camera";
+extern const char * CAMERA_PREFIX;
 
-const char * const IMAGE_SUFFIX = "/image";
-const char * const COMPRESSED_IMAGE_SUFFIX = "/compressed_image";
-const char * const RAW_IMAGE_SUFFIX = "/raw_image";
+extern const char * IMAGE_SUFFIX;
+extern const char * COMPRESSED_IMAGE_SUFFIX;
+extern const char * RAW_IMAGE_SUFFIX;
 
-const char * const CAPTURE_SETTING_EVENT_SUFFIX = "/capture_setting_event";
-const char * const CONFIGURE_CAPTURE_SETTING_SUFFIX = "/configure_capture_setting";
+extern const char * CAPTURE_SETTING_EVENT_SUFFIX;
+extern const char * CONFIGURE_CAPTURE_SETTING_SUFFIX;
 
 }  // namespace shisen_cpp
 
