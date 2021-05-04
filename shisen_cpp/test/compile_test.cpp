@@ -31,4 +31,6 @@ TEST(CompileTest, Interface) {
 TEST(CompileTest, Consumer) {
   shisen_cpp::CompressedImageConsumer();
   shisen_cpp::CompressedImageProvider();
+  shisen_cpp::RawImageConsumer();
+  shisen_cpp::RawImageProvider();
 }

@@ -36,7 +36,9 @@ using shisen_interfaces::srv::ConfigureCameraSetting;
 
 const char * const CAMERA_PREFIX = "/camera";
 
+const char * const IMAGE_SUFFIX = "/image";
 const char * const COMPRESSED_IMAGE_SUFFIX = "/compressed_image";
+const char * const RAW_IMAGE_SUFFIX = "/raw_image";
 
 }  // namespace shisen_cpp
 

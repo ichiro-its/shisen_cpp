@@ -21,9 +21,9 @@
 #ifndef SHISEN_CPP__SHISEN_CPP_HPP_
 #define SHISEN_CPP__SHISEN_CPP_HPP_
 
-#include "./consumer/compressed_image_consumer.hpp"
+#include "./consumer/image_consumer.hpp"
 
-#include "./provider/compressed_image_provider.hpp"
+#include "./provider/image_provider.hpp"
 
 #include "./interface.hpp"
 
