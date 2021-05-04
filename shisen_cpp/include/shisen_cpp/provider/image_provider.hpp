@@ -41,12 +41,7 @@ template<typename T>
 class ImageProvider
 {
 public:
-  inline ImageProvider();
-
   inline explicit ImageProvider(
-    rclcpp::Node::SharedPtr node, const std::string & prefix = CAMERA_PREFIX);
-
-  inline void set_node(
     rclcpp::Node::SharedPtr node, const std::string & prefix = CAMERA_PREFIX);
 
   inline void set_image(const T & image);
@@ -64,25 +59,15 @@ private:
 };
 
 template<typename T>
-ImageProvider<T>::ImageProvider()
-{
-}
-
-template<typename T>
 ImageProvider<T>::ImageProvider(
   rclcpp::Node::SharedPtr node, const std::string & prefix)
-{
-  set_node(node, prefix);
-}
-
-template<typename T>
-void ImageProvider<T>::set_node(rclcpp::Node::SharedPtr node, const std::string & prefix)
 {
   // Initialize the node
   this->node = node;
 
   // Initialize the image publisher
   {
+    // Get the topic suffix from the template type
     std::string image_suffix = IMAGE_SUFFIX;
     if (std::is_same<T, CompressedImage>::value) {
       image_suffix = COMPRESSED_IMAGE_SUFFIX;
@@ -106,6 +91,8 @@ template<typename T>
 void ImageProvider<T>::set_image(const T & image)
 {
   current_image = image;
+
+  // Publish changes
   image_publisher->publish(get_image());
 }
 

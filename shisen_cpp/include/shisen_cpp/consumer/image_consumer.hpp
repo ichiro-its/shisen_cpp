@@ -43,52 +43,33 @@ class ImageConsumer
 public:
   using ImageCallback = std::function<void (const T &)>;
 
-  inline ImageConsumer();
-
   inline explicit ImageConsumer(
     rclcpp::Node::SharedPtr node, const std::string & prefix = CAMERA_PREFIX);
 
-  inline void set_node(
-    rclcpp::Node::SharedPtr node, const std::string & prefix = CAMERA_PREFIX);
-
-  inline void set_on_image_changed(const ImageCallback & callback);
+  inline virtual void on_image_changed(const T & image);
 
   inline rclcpp::Node::SharedPtr get_node() const;
 
   inline const T & get_image() const;
 
 private:
-  inline void change_image(const T & image);
-
   rclcpp::Node::SharedPtr node;
 
   typename rclcpp::Subscription<T>::SharedPtr image_subscription;
-
-  ImageCallback on_image_changed;
 
   T current_image;
 };
 
 template<typename T>
-ImageConsumer<T>::ImageConsumer()
-{
-}
-
-template<typename T>
 ImageConsumer<T>::ImageConsumer(
   rclcpp::Node::SharedPtr node, const std::string & prefix)
-{
-  set_node(node, prefix);
-}
-
-template<typename T>
-void ImageConsumer<T>::set_node(rclcpp::Node::SharedPtr node, const std::string & prefix)
 {
   // Initialize the node
   this->node = node;
 
   // Initialize the image subscription
   {
+    // Get the topic suffix from the template type
     std::string image_suffix = IMAGE_SUFFIX;
     if (std::is_same<T, CompressedImage>::value) {
       image_suffix = COMPRESSED_IMAGE_SUFFIX;
@@ -99,7 +80,10 @@ void ImageConsumer<T>::set_node(rclcpp::Node::SharedPtr node, const std::string 
     image_subscription = get_node()->template create_subscription<T>(
       prefix + image_suffix, 10,
       [this](const typename T::SharedPtr msg) {
-        change_image(*msg);
+        current_image = *msg;
+
+        // Call callback after image changed
+        on_image_changed(get_image());
       });
 
     RCLCPP_INFO_STREAM(
@@ -109,9 +93,8 @@ void ImageConsumer<T>::set_node(rclcpp::Node::SharedPtr node, const std::string 
 }
 
 template<typename T>
-void ImageConsumer<T>::set_on_image_changed(const ImageConsumer<T>::ImageCallback & callback)
+void ImageConsumer<T>::on_image_changed(const T & /*image*/)
 {
-  on_image_changed = callback;
 }
 
 template<typename T>
@@ -124,15 +107,6 @@ template<typename T>
 const T & ImageConsumer<T>::get_image() const
 {
   return current_image;
-}
-
-template<typename T>
-void ImageConsumer<T>::change_image(const T & image)
-{
-  current_image = image;
-  if (on_image_changed) {
-    on_image_changed(get_image());
-  }
 }
 
 }  // namespace shisen_cpp
