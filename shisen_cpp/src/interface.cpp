@@ -18,15 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#include <shisen_cpp/utility/interface.hpp>
 
-#include "./consumer/capture_setting_consumer.hpp"
-#include "./consumer/image_consumer.hpp"
+namespace shisen_cpp
+{
 
-#include "./provider/capture_setting_provider.hpp"
-#include "./provider/image_provider.hpp"
+const char * CAMERA_PREFIX = "/camera";
 
-#include "./utility.hpp"
+const char * IMAGE_SUFFIX = "/image";
+const char * COMPRESSED_IMAGE_SUFFIX = "/compressed_image";
+const char * RAW_IMAGE_SUFFIX = "/raw_image";
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+const char * CAPTURE_SETTING_EVENT_SUFFIX = "/capture_setting_event";
+const char * CONFIGURE_CAPTURE_SETTING_SUFFIX = "/configure_capture_setting";
+
+}  // namespace shisen_cpp

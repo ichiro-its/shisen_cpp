@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Alfi Maulana
+// Copyright (c) 2021 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,26 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__INTERFACE_HPP_
-#define SHISEN_CPP__INTERFACE_HPP_
+#ifndef SHISEN_CPP__UTILITY__CAPTURE_SETTING_HPP_
+#define SHISEN_CPP__UTILITY__CAPTURE_SETTING_HPP_
 
-#include <shisen_interfaces/msg/compressed_image.hpp>
-#include <shisen_interfaces/msg/property.hpp>
-#include <shisen_interfaces/msg/property_event.hpp>
-#include <shisen_interfaces/msg/raw_image.hpp>
-#include <shisen_interfaces/srv/get_properties.hpp>
-#include <shisen_interfaces/srv/set_properties.hpp>
+#include <shisen_interfaces/msg/capture_setting.hpp>
+
+#include "./emptiable.hpp"
 
 namespace shisen_cpp
 {
 
-using CompressedImage = shisen_interfaces::msg::CompressedImage;
-using Property = shisen_interfaces::msg::Property;
-using PropertyEvent = shisen_interfaces::msg::PropertyEvent;
-using RawImage = shisen_interfaces::msg::RawImage;
-using GetProperties = shisen_interfaces::srv::GetProperties;
-using SetProperties = shisen_interfaces::srv::SetProperties;
+using CaptureSettingMsg = shisen_interfaces::msg::CaptureSetting;
+
+struct CaptureSetting
+{
+  CaptureSetting();
+  explicit CaptureSetting(const CaptureSettingMsg & msg);
+
+  operator CaptureSettingMsg() const;
+
+  const CaptureSetting & operator=(const CaptureSettingMsg & msg);
+
+  void update_with(const CaptureSetting & capture_setting);
+
+  Emptiable<int> brightness;
+  Emptiable<int> contrast;
+  Emptiable<int> saturation;
+  Emptiable<int> temperature;
+  Emptiable<int> hue;
+  Emptiable<int> gain;
+};
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__INTERFACE_HPP_
+#endif  // SHISEN_CPP__UTILITY__CAPTURE_SETTING_HPP_

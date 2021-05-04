@@ -18,15 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#include <gtest/gtest.h>
+#include <rclcpp/rclcpp.hpp>
+#include <shisen_cpp/shisen_cpp.hpp>
 
-#include "./consumer/capture_setting_consumer.hpp"
-#include "./consumer/image_consumer.hpp"
+#include <memory>
 
-#include "./provider/capture_setting_provider.hpp"
-#include "./provider/image_provider.hpp"
+TEST(CompileTest, Interface) {
+  shisen_cpp::CaptureSetting();
+  shisen_cpp::CompressedImage();
+  shisen_cpp::ConfigureCaptureSetting();
+  shisen_cpp::RawImage();
+}
 
-#include "./utility.hpp"
+TEST(CompileTest, Consumer) {
+  try {
+    auto node = std::make_shared<rclcpp::Node>("compile_test");
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+    std::make_shared<shisen_cpp::CaptureSettingConsumer>(node);
+    std::make_shared<shisen_cpp::CompressedImageProvider>(node);
+    std::make_shared<shisen_cpp::RawImageProvider>(node);
+  } catch (...) {
+  }
+}
+
+TEST(CompileTest, Provider) {
+  try {
+    auto node = std::make_shared<rclcpp::Node>("compile_test");
+
+    std::make_shared<shisen_cpp::CaptureSettingProvider>(node);
+    std::make_shared<shisen_cpp::CompressedImageProvider>(node);
+    std::make_shared<shisen_cpp::RawImageProvider>(node);
+  } catch (...) {
+  }
+}

@@ -18,15 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#include <gtest/gtest.h>
+#include <shisen_cpp/shisen_cpp.hpp>
 
-#include "./consumer/capture_setting_consumer.hpp"
-#include "./consumer/image_consumer.hpp"
+struct Foo
+{
+  int a;
+  double b;
 
-#include "./provider/capture_setting_provider.hpp"
-#include "./provider/image_provider.hpp"
+  Foo(const int & a, const double & b)
+  : a(a), b(b)
+  {
+  }
+};
 
-#include "./utility.hpp"
+TEST(EmptiableTest, Empty) {
+  shisen_cpp::Emptiable<int> foo;
+  ASSERT_TRUE(foo.is_empty());
+}
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+TEST(EmptiableTest, Initialized) {
+  shisen_cpp::Emptiable<Foo> foo(-1, 5.0);
+  ASSERT_TRUE(foo.is_empty());
+  ASSERT_DOUBLE_EQ(-1, foo.get().a);
+  ASSERT_DOUBLE_EQ(5.0, foo.get().b);
+}
+
+TEST(EmptiableTest, SetAndUnset) {
+  shisen_cpp::Emptiable<double> foo;
+  ASSERT_TRUE(foo.is_empty());
+  ASSERT_DOUBLE_EQ(5.0, foo.get(5.0));
+
+  foo.set(10.0);
+  ASSERT_TRUE(foo.is_not_empty());
+  ASSERT_DOUBLE_EQ(10.0, foo.get());
+
+  foo = 20.0;
+  ASSERT_DOUBLE_EQ(20.0, foo);
+
+  foo.clear();
+  ASSERT_FALSE(foo.is_not_empty());
+  ASSERT_DOUBLE_EQ(20.0, foo);
+}

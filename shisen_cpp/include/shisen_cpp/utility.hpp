@@ -18,15 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#ifndef SHISEN_CPP__UTILITY_HPP_
+#define SHISEN_CPP__UTILITY_HPP_
 
-#include "./consumer/capture_setting_consumer.hpp"
-#include "./consumer/image_consumer.hpp"
+#include "./utility/capture_setting.hpp"
+#include "./utility/emptiable.hpp"
+#include "./utility/interface.hpp"
 
-#include "./provider/capture_setting_provider.hpp"
-#include "./provider/image_provider.hpp"
-
-#include "./utility.hpp"
-
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+#endif  // SHISEN_CPP__UTILITY_HPP_
