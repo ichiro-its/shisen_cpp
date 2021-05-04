@@ -18,12 +18,10 @@ find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/CameraSetting.msg"
   "msg/CompressedImage.msg"
-  "msg/Property.msg"
-  "msg/PropertyEvent.msg"
   "msg/RawImage.msg"
-  "srv/GetProperties.srv"
-  "srv/SetProperties.srv")
+  "srv/ConfigureCameraSetting.srv")
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

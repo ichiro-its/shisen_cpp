@@ -21,22 +21,18 @@
 #ifndef SHISEN_CPP__INTERFACE_HPP_
 #define SHISEN_CPP__INTERFACE_HPP_
 
+#include <shisen_interfaces/msg/camera_setting.msg>
 #include <shisen_interfaces/msg/compressed_image.hpp>
-#include <shisen_interfaces/msg/property.hpp>
-#include <shisen_interfaces/msg/property_event.hpp>
 #include <shisen_interfaces/msg/raw_image.hpp>
-#include <shisen_interfaces/srv/get_properties.hpp>
-#include <shisen_interfaces/srv/set_properties.hpp>
+#include <shisen_interfaces/srv/configure_camera_setting.hpp>
 
 namespace shisen_cpp
 {
 
-using CompressedImage = shisen_interfaces::msg::CompressedImage;
-using Property = shisen_interfaces::msg::Property;
-using PropertyEvent = shisen_interfaces::msg::PropertyEvent;
-using RawImage = shisen_interfaces::msg::RawImage;
-using GetProperties = shisen_interfaces::srv::GetProperties;
-using SetProperties = shisen_interfaces::srv::SetProperties;
+using shisen_interfaces::msg::CameraSetting;
+using shisen_interfaces::msg::CompressedImage;
+using shisen_interfaces::msg::RawImage;
+using shisen_interfaces::srv::ConfigureCameraSetting;
 
 }  // namespace shisen_cpp
 
