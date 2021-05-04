@@ -53,7 +53,10 @@ TEST(CompileTest, SetAndUnset) {
   ASSERT_TRUE(foo.is_not_empty());
   ASSERT_DOUBLE_EQ(10.0, foo.get());
 
+  foo = 20.0;
+  ASSERT_DOUBLE_EQ(20.0, foo);
+
   foo.clear();
   ASSERT_FALSE(foo.is_not_empty());
-  ASSERT_DOUBLE_EQ(10.0, foo.get());
+  ASSERT_DOUBLE_EQ(20.0, foo);
 }

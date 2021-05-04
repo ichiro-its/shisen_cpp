@@ -31,15 +31,19 @@ public:
   template<typename ... Types>
   explicit Emptiable(Types ... types);
 
-  void clear();
+  inline operator T() const;
 
-  void set(const T & new_value);
+  inline const T & operator=(const T & new_value);
 
-  bool is_empty() const;
-  bool is_not_empty() const;
+  inline void clear();
 
-  const T & get() const;
-  const T & get(const T & default_value) const;
+  inline void set(const T & new_value);
+
+  inline bool is_empty() const;
+  inline bool is_not_empty() const;
+
+  inline const T & get() const;
+  inline const T & get(const T & default_value) const;
 
 private:
   bool empty;
@@ -52,6 +56,19 @@ Emptiable<T>::Emptiable(Types ... types)
 : empty(true),
   value(types ...)
 {
+}
+
+template<typename T>
+Emptiable<T>::operator T() const
+{
+  return value;
+}
+
+template<typename T>
+const T & Emptiable<T>::operator=(const T & new_value)
+{
+  set(new_value);
+  return get();
 }
 
 template<typename T>
