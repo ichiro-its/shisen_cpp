@@ -27,3 +27,7 @@ TEST(CompileTest, Interface) {
   shisen_cpp::ConfigureCameraSetting();
   shisen_cpp::RawImage();
 }
+
+TEST(CompileTest, Consumer) {
+  shisen_cpp::CompressedImageConsumer();
+}

@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Alfi Maulana
+// Copyright (c) 2021 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,10 @@ using shisen_interfaces::msg::CameraSetting;
 using shisen_interfaces::msg::CompressedImage;
 using shisen_interfaces::msg::RawImage;
 using shisen_interfaces::srv::ConfigureCameraSetting;
+
+const char * const CAMERA_PREFIX = "/camera";
+
+const char * const COMPRESSED_IMAGE_SUFFIX = "/compressed_image";
 
 }  // namespace shisen_cpp
 
