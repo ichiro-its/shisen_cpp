@@ -18,13 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#ifndef SHISEN_CPP__UTILITY__INTERFACE_HPP_
+#define SHISEN_CPP__UTILITY__INTERFACE_HPP_
 
-#include "./consumer/image_consumer.hpp"
+#include <shisen_interfaces/msg/capture_setting.hpp>
+#include <shisen_interfaces/msg/compressed_image.hpp>
+#include <shisen_interfaces/msg/raw_image.hpp>
+#include <shisen_interfaces/srv/configure_capture_setting.hpp>
 
-#include "./provider/image_provider.hpp"
+namespace shisen_cpp
+{
 
-#include "./utility.hpp"
+using shisen_interfaces::msg::CaptureSetting;
+using shisen_interfaces::msg::CompressedImage;
+using shisen_interfaces::msg::RawImage;
+using shisen_interfaces::srv::ConfigureCaptureSetting;
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+const char * const CAMERA_PREFIX = "/camera";
+
+const char * const IMAGE_SUFFIX = "/image";
+const char * const COMPRESSED_IMAGE_SUFFIX = "/compressed_image";
+const char * const RAW_IMAGE_SUFFIX = "/raw_image";
+
+const char * const CAPTURE_SETTING_EVENT_SUFFIX = "/capture_setting_event";
+const char * const CONFIGURE_CAPTURE_SETTING_SUFFIX = "/configure_capture_setting";
+
+}  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__UTILITY__INTERFACE_HPP_

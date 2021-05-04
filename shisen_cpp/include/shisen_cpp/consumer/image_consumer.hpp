@@ -26,7 +26,7 @@
 #include <memory>
 #include <string>
 
-#include "../interface.hpp"
+#include "../utility.hpp"
 
 namespace shisen_cpp
 {
