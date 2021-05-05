@@ -18,10 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <string>
-
 #ifndef SHISEN_CPP__UTILITY__OPTIONS_HPP_
 #define SHISEN_CPP__UTILITY__OPTIONS_HPP_
+
+#include <string>
 
 #include "./interface.hpp"
 
