@@ -34,8 +34,12 @@ namespace shisen_cpp
 class CaptureSettingProvider
 {
 public:
+  struct Options : public virtual CameraPrefixOptions
+  {
+  };
+
   inline explicit CaptureSettingProvider(
-    rclcpp::Node::SharedPtr node, const std::string & prefix = CAMERA_PREFIX);
+    rclcpp::Node::SharedPtr node, const Options & options = Options());
 
   inline virtual CaptureSetting on_configure_capture_setting(
     const CaptureSetting & capture_setting);
@@ -56,7 +60,7 @@ private:
 };
 
 CaptureSettingProvider::CaptureSettingProvider(
-  rclcpp::Node::SharedPtr node, const std::string & prefix)
+  rclcpp::Node::SharedPtr node, const CaptureSettingProvider::Options & options)
 {
   // Initialize the node
   this->node = node;
@@ -64,7 +68,7 @@ CaptureSettingProvider::CaptureSettingProvider(
   // Initialize the capture setting event publisher
   {
     capture_setting_event_publisher = get_node()->create_publisher<CaptureSettingMsg>(
-      prefix + CAPTURE_SETTING_EVENT_SUFFIX, 10);
+      options.camera_prefix + CAPTURE_SETTING_EVENT_SUFFIX, 10);
 
     RCLCPP_INFO_STREAM(
       get_node()->get_logger(),
@@ -75,7 +79,7 @@ CaptureSettingProvider::CaptureSettingProvider(
   // Initialize the configure capture setting service
   {
     configure_capture_setting_service = get_node()->create_service<ConfigureCaptureSetting>(
-      prefix + CONFIGURE_CAPTURE_SETTING_SUFFIX,
+      options.camera_prefix + CONFIGURE_CAPTURE_SETTING_SUFFIX,
       [this](ConfigureCaptureSetting::Request::SharedPtr request,
       ConfigureCaptureSetting::Response::SharedPtr response) {
         // Set capture setting if exist
