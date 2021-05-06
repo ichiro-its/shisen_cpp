@@ -26,15 +26,15 @@
 #include <memory>
 #include <string>
 
-#include "../utility.hpp"
+#include "../node.hpp"
 
 namespace shisen_cpp
 {
 
-class ImageProvider
+class ImageProvider : public CameraNode
 {
 public:
-  struct Options : public virtual CameraPrefixOptions
+  struct Options : public virtual CameraNode::Options
   {
   };
 
@@ -43,13 +43,9 @@ public:
 
   inline void set_image(const Image & image);
 
-  inline rclcpp::Node::SharedPtr get_node() const;
-
   inline const Image & get_image() const;
 
 private:
-  rclcpp::Node::SharedPtr node;
-
   typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
 
   Image current_image;
@@ -57,14 +53,12 @@ private:
 
 ImageProvider::ImageProvider(
   rclcpp::Node::SharedPtr node, const ImageProvider::Options & options)
+: CameraNode(node, options)
 {
-  // Initialize the node
-  this->node = node;
-
   // Initialize the image publisher
   {
     image_publisher = get_node()->template create_publisher<Image>(
-      options.camera_prefix + IMAGE_SUFFIX, 10);
+      get_camera_prefix() + IMAGE_SUFFIX, 10);
 
     RCLCPP_INFO_STREAM(
       get_node()->get_logger(),
@@ -81,11 +75,6 @@ void ImageProvider::set_image(const Image & image)
 
   // Publish changes
   image_publisher->publish(get_image());
-}
-
-rclcpp::Node::SharedPtr ImageProvider::get_node() const
-{
-  return node;
 }
 
 const Image & ImageProvider::get_image() const

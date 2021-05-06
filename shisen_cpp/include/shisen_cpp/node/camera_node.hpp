@@ -18,14 +18,59 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/utility/interface.hpp>
+#ifndef SHISEN_CPP__NODE__CAMERA_NODE_HPP_
+#define SHISEN_CPP__NODE__CAMERA_NODE_HPP_
+
+#include <rclcpp/rclcpp.hpp>
+
+#include <string>
+
+#include "../utility.hpp"
 
 namespace shisen_cpp
 {
 
-const char * IMAGE_SUFFIX = "/image";
+class CameraNode
+{
+public:
+  struct Options
+  {
+    std::string camera_prefix;
 
-const char * CAPTURE_SETTING_EVENT_SUFFIX = "/capture_setting_event";
-const char * CONFIGURE_CAPTURE_SETTING_SUFFIX = "/configure_capture_setting";
+    Options()
+    : camera_prefix("camera")
+    {
+    }
+  };
+
+  inline explicit CameraNode(rclcpp::Node::SharedPtr node, const Options & options);
+
+  inline rclcpp::Node::SharedPtr get_node() const;
+
+  inline const std::string & get_camera_prefix() const;
+
+private:
+  rclcpp::Node::SharedPtr node;
+
+  std::string camera_prefix;
+};
+
+CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const CameraNode::Options & options)
+: node(node),
+  camera_prefix(options.camera_prefix)
+{
+}
+
+rclcpp::Node::SharedPtr CameraNode::get_node() const
+{
+  return node;
+}
+
+const std::string & CameraNode::get_camera_prefix() const
+{
+  return camera_prefix;
+}
 
 }  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__NODE__CAMERA_NODE_HPP_

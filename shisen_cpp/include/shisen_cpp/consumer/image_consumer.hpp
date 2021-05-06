@@ -26,17 +26,17 @@
 #include <memory>
 #include <string>
 
-#include "../utility.hpp"
+#include "../node.hpp"
 
 namespace shisen_cpp
 {
 
-class ImageConsumer
+class ImageConsumer : public CameraNode
 {
 public:
   using ImageCallback = std::function<void (const Image &)>;
 
-  struct Options : public virtual CameraPrefixOptions
+  struct Options : public virtual CameraNode::Options
   {
   };
 
@@ -45,13 +45,9 @@ public:
 
   inline virtual void on_image_changed(const Image & image);
 
-  inline rclcpp::Node::SharedPtr get_node() const;
-
   inline const Image & get_image() const;
 
 private:
-  rclcpp::Node::SharedPtr node;
-
   rclcpp::Subscription<Image>::SharedPtr image_subscription;
 
   Image current_image;
@@ -59,14 +55,12 @@ private:
 
 ImageConsumer::ImageConsumer(
   rclcpp::Node::SharedPtr node, const ImageConsumer::Options & options)
+: CameraNode(node, options)
 {
-  // Initialize the node
-  this->node = node;
-
   // Initialize the image subscription
   {
     image_subscription = get_node()->template create_subscription<Image>(
-      options.camera_prefix + IMAGE_SUFFIX, 10,
+      get_camera_prefix() + IMAGE_SUFFIX, 10,
       [this](const Image::SharedPtr msg) {
         current_image = *msg;
 
@@ -82,11 +76,6 @@ ImageConsumer::ImageConsumer(
 
 void ImageConsumer::on_image_changed(const Image & /*image*/)
 {
-}
-
-rclcpp::Node::SharedPtr ImageConsumer::get_node() const
-{
-  return node;
 }
 
 const Image & ImageConsumer::get_image() const

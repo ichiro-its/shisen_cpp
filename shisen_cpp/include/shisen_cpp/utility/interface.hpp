@@ -30,8 +30,6 @@ namespace shisen_cpp
 using shisen_interfaces::msg::Image;
 using shisen_interfaces::srv::ConfigureCaptureSetting;
 
-extern const char * CAMERA_PREFIX;
-
 extern const char * IMAGE_SUFFIX;
 
 extern const char * CAPTURE_SETTING_EVENT_SUFFIX;
