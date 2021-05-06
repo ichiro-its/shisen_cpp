@@ -66,3 +66,28 @@ TEST(CaptureSettingTest, ToMsg) {
   ASSERT_EQ(30, msg.saturation.front());
   ASSERT_EQ(40, msg.gain.front());
 }
+
+TEST(CaptureSettingTest, UpdateWith) {
+  shisen_cpp::CaptureSetting a;
+
+  a.brightness = 10;
+  a.contrast = 20;
+  a.temperature = 30;
+  a.hue = 40;
+
+  shisen_cpp::CaptureSetting b;
+
+  b.brightness = 40;
+  b.contrast = 30;
+  b.saturation = 20;
+  b.gain = 10;
+
+  a.update_with(b);
+
+  ASSERT_EQ(40, a.brightness);
+  ASSERT_EQ(30, a.contrast);
+  ASSERT_EQ(20, a.saturation);
+  ASSERT_EQ(30, a.temperature);
+  ASSERT_EQ(40, a.hue);
+  ASSERT_EQ(10, a.gain);
+}

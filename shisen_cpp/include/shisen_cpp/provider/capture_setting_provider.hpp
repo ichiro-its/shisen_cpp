@@ -44,7 +44,7 @@ public:
   inline virtual CaptureSetting on_configure_capture_setting(
     const CaptureSetting & capture_setting);
 
-  inline void update_capture_setting(const CaptureSetting & capture_setting);
+  inline void configure_capture_setting(const CaptureSetting & capture_setting = CaptureSetting());
 
   inline rclcpp::Node::SharedPtr get_node() const;
 
@@ -82,9 +82,9 @@ CaptureSettingProvider::CaptureSettingProvider(
       options.camera_prefix + CONFIGURE_CAPTURE_SETTING_SUFFIX,
       [this](ConfigureCaptureSetting::Request::SharedPtr request,
       ConfigureCaptureSetting::Response::SharedPtr response) {
-        // Set capture setting if exist
+        // Configure capture setting if exist
         if (request->capture_setting.size() > 0) {
-          update_capture_setting((const CaptureSetting &)request->capture_setting.front());
+          configure_capture_setting((const CaptureSetting &)request->capture_setting.front());
         }
 
         response->capture_setting.push_back(get_capture_setting());
@@ -96,8 +96,8 @@ CaptureSettingProvider::CaptureSettingProvider(
         configure_capture_setting_service->get_service_name() << "`!");
   }
 
-  // Initial data publish
-  update_capture_setting(get_capture_setting());
+  // Initial data fetching
+  ConfigureCaptureSetting();
 }
 
 CaptureSetting CaptureSettingProvider::on_configure_capture_setting(
@@ -106,7 +106,7 @@ CaptureSetting CaptureSettingProvider::on_configure_capture_setting(
   return capture_setting;
 }
 
-void CaptureSettingProvider::update_capture_setting(const CaptureSetting & capture_setting)
+void CaptureSettingProvider::configure_capture_setting(const CaptureSetting & capture_setting)
 {
   // Update with configured data
   current_capture_setting.update_with(on_configure_capture_setting(capture_setting));
