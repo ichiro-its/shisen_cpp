@@ -35,9 +35,26 @@ TEST(CompileTest, Consumer) {
   try {
     auto node = std::make_shared<rclcpp::Node>("compile_test");
 
-    std::make_shared<shisen_cpp::CaptureSettingConsumer>(node);
-    std::make_shared<shisen_cpp::CompressedImageProvider>(node);
-    std::make_shared<shisen_cpp::RawImageProvider>(node);
+    {
+      shisen_cpp::CaptureSettingConsumer::Options options;
+      options.camera_prefix = "foo";
+
+      std::make_shared<shisen_cpp::CaptureSettingConsumer>(node, options);
+    }
+
+    {
+      shisen_cpp::CompressedImageConsumer::Options options;
+      options.camera_prefix = "foo";
+
+      std::make_shared<shisen_cpp::CompressedImageConsumer>(node, options);
+    }
+
+    {
+      shisen_cpp::RawImageConsumer::Options options;
+      options.camera_prefix = "foo";
+
+      std::make_shared<shisen_cpp::RawImageConsumer>(node, options);
+    }
   } catch (...) {
   }
 }
@@ -46,9 +63,26 @@ TEST(CompileTest, Provider) {
   try {
     auto node = std::make_shared<rclcpp::Node>("compile_test");
 
-    std::make_shared<shisen_cpp::CaptureSettingProvider>(node);
-    std::make_shared<shisen_cpp::CompressedImageProvider>(node);
-    std::make_shared<shisen_cpp::RawImageProvider>(node);
+    {
+      shisen_cpp::CaptureSettingProvider::Options options;
+      options.camera_prefix = "foo";
+
+      std::make_shared<shisen_cpp::CaptureSettingProvider>(node, options);
+    }
+
+    {
+      shisen_cpp::CompressedImageProvider::Options options;
+      options.camera_prefix = "foo";
+
+      std::make_shared<shisen_cpp::CompressedImageProvider>(node, options);
+    }
+
+    {
+      shisen_cpp::RawImageProvider::Options options;
+      options.camera_prefix = "foo";
+
+      std::make_shared<shisen_cpp::RawImageProvider>(node, options);
+    }
   } catch (...) {
   }
 }

@@ -41,8 +41,12 @@ template<typename T>
 class ImageProvider
 {
 public:
+  struct Options : public virtual CameraPrefixOptions
+  {
+  };
+
   inline explicit ImageProvider(
-    rclcpp::Node::SharedPtr node, const std::string & prefix = CAMERA_PREFIX);
+    rclcpp::Node::SharedPtr node, const Options & options = Options());
 
   inline void set_image(const T & image);
 
@@ -60,7 +64,7 @@ private:
 
 template<typename T>
 ImageProvider<T>::ImageProvider(
-  rclcpp::Node::SharedPtr node, const std::string & prefix)
+  rclcpp::Node::SharedPtr node, const ImageProvider<T>::Options & options)
 {
   // Initialize the node
   this->node = node;
@@ -76,7 +80,7 @@ ImageProvider<T>::ImageProvider(
     }
 
     image_publisher = get_node()->template create_publisher<T>(
-      prefix + image_suffix, 10);
+      options.camera_prefix + image_suffix, 10);
 
     RCLCPP_INFO_STREAM(
       get_node()->get_logger(),

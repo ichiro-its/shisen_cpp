@@ -37,8 +37,12 @@ class CaptureSettingConsumer
 public:
   using CaptureSettingCallback = std::function<void (const CaptureSetting &)>;
 
+  struct Options : public virtual CameraPrefixOptions
+  {
+  };
+
   inline explicit CaptureSettingConsumer(
-    rclcpp::Node::SharedPtr node, const std::string & prefix = CAMERA_PREFIX);
+    rclcpp::Node::SharedPtr node, const Options & options = Options());
 
   inline virtual void on_capture_setting_changed(const CaptureSetting & capture_setting);
 
@@ -67,7 +71,7 @@ private:
 };
 
 CaptureSettingConsumer::CaptureSettingConsumer(
-  rclcpp::Node::SharedPtr node, const std::string & prefix)
+  rclcpp::Node::SharedPtr node, const CaptureSettingConsumer::Options & options)
 {
   // Initialize the node
   this->node = node;
@@ -75,7 +79,7 @@ CaptureSettingConsumer::CaptureSettingConsumer(
   // Initialize the capture setting event subscription
   {
     capture_setting_event_subscription = get_node()->create_subscription<CaptureSettingMsg>(
-      prefix + CAPTURE_SETTING_EVENT_SUFFIX, 10,
+      options.camera_prefix + CAPTURE_SETTING_EVENT_SUFFIX, 10,
       [this](const CaptureSettingMsg::SharedPtr msg) {
         change_capture_setting((const CaptureSetting &)*msg);
       });
@@ -89,7 +93,7 @@ CaptureSettingConsumer::CaptureSettingConsumer(
   // Initialize the configure capture setting client
   {
     configure_capture_setting_client = get_node()->create_client<ConfigureCaptureSetting>(
-      prefix + CONFIGURE_CAPTURE_SETTING_SUFFIX);
+      options.camera_prefix + CONFIGURE_CAPTURE_SETTING_SUFFIX);
 
     RCLCPP_INFO(get_node()->get_logger(), "Waiting for configure capture setting server...");
     if (!configure_capture_setting_client->wait_for_service(std::chrono::seconds(3))) {

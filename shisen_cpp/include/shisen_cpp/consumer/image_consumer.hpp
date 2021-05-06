@@ -43,8 +43,12 @@ class ImageConsumer
 public:
   using ImageCallback = std::function<void (const T &)>;
 
+  struct Options : public virtual CameraPrefixOptions
+  {
+  };
+
   inline explicit ImageConsumer(
-    rclcpp::Node::SharedPtr node, const std::string & prefix = CAMERA_PREFIX);
+    rclcpp::Node::SharedPtr node, const Options & options = Options());
 
   inline virtual void on_image_changed(const T & image);
 
@@ -62,7 +66,7 @@ private:
 
 template<typename T>
 ImageConsumer<T>::ImageConsumer(
-  rclcpp::Node::SharedPtr node, const std::string & prefix)
+  rclcpp::Node::SharedPtr node, const ImageConsumer<T>::Options & options)
 {
   // Initialize the node
   this->node = node;
@@ -78,7 +82,7 @@ ImageConsumer<T>::ImageConsumer(
     }
 
     image_subscription = get_node()->template create_subscription<T>(
-      prefix + image_suffix, 10,
+      options.camera_prefix + image_suffix, 10,
       [this](const typename T::SharedPtr msg) {
         current_image = *msg;
 
