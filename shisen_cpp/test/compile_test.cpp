@@ -26,9 +26,8 @@
 
 TEST(CompileTest, Interface) {
   shisen_cpp::CaptureSetting();
-  shisen_cpp::CompressedImage();
   shisen_cpp::ConfigureCaptureSetting();
-  shisen_cpp::RawImage();
+  shisen_cpp::Image();
 }
 
 TEST(CompileTest, Consumer) {
@@ -43,17 +42,10 @@ TEST(CompileTest, Consumer) {
     }
 
     {
-      shisen_cpp::CompressedImageConsumer::Options options;
+      shisen_cpp::ImageConsumer::Options options;
       options.camera_prefix = "foo";
 
-      std::make_shared<shisen_cpp::CompressedImageConsumer>(node, options);
-    }
-
-    {
-      shisen_cpp::RawImageConsumer::Options options;
-      options.camera_prefix = "foo";
-
-      std::make_shared<shisen_cpp::RawImageConsumer>(node, options);
+      std::make_shared<shisen_cpp::ImageConsumer>(node, options);
     }
   } catch (...) {
   }
@@ -71,17 +63,10 @@ TEST(CompileTest, Provider) {
     }
 
     {
-      shisen_cpp::CompressedImageProvider::Options options;
+      shisen_cpp::ImageProvider::Options options;
       options.camera_prefix = "foo";
 
-      std::make_shared<shisen_cpp::CompressedImageProvider>(node, options);
-    }
-
-    {
-      shisen_cpp::RawImageProvider::Options options;
-      options.camera_prefix = "foo";
-
-      std::make_shared<shisen_cpp::RawImageProvider>(node, options);
+      std::make_shared<shisen_cpp::ImageProvider>(node, options);
     }
   } catch (...) {
   }

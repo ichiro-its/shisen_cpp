@@ -31,13 +31,6 @@
 namespace shisen_cpp
 {
 
-template<typename T>
-class ImageProvider;
-
-using CompressedImageProvider = ImageProvider<CompressedImage>;
-using RawImageProvider = ImageProvider<RawImage>;
-
-template<typename T>
 class ImageProvider
 {
 public:
@@ -48,39 +41,30 @@ public:
   inline explicit ImageProvider(
     rclcpp::Node::SharedPtr node, const Options & options = Options());
 
-  inline void set_image(const T & image);
+  inline void set_image(const Image & image);
 
   inline rclcpp::Node::SharedPtr get_node() const;
 
-  inline const T & get_image() const;
+  inline const Image & get_image() const;
 
 private:
   rclcpp::Node::SharedPtr node;
 
-  typename rclcpp::Publisher<T>::SharedPtr image_publisher;
+  typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
 
-  T current_image;
+  Image current_image;
 };
 
-template<typename T>
-ImageProvider<T>::ImageProvider(
-  rclcpp::Node::SharedPtr node, const ImageProvider<T>::Options & options)
+ImageProvider::ImageProvider(
+  rclcpp::Node::SharedPtr node, const ImageProvider::Options & options)
 {
   // Initialize the node
   this->node = node;
 
   // Initialize the image publisher
   {
-    // Get the topic suffix from the template type
-    std::string image_suffix = IMAGE_SUFFIX;
-    if (std::is_same<T, CompressedImage>::value) {
-      image_suffix = COMPRESSED_IMAGE_SUFFIX;
-    } else if (std::is_same<T, RawImage>::value) {
-      image_suffix = RAW_IMAGE_SUFFIX;
-    }
-
-    image_publisher = get_node()->template create_publisher<T>(
-      options.camera_prefix + image_suffix, 10);
+    image_publisher = get_node()->template create_publisher<Image>(
+      options.camera_prefix + IMAGE_SUFFIX, 10);
 
     RCLCPP_INFO_STREAM(
       get_node()->get_logger(),
@@ -91,8 +75,7 @@ ImageProvider<T>::ImageProvider(
   set_image(get_image());
 }
 
-template<typename T>
-void ImageProvider<T>::set_image(const T & image)
+void ImageProvider::set_image(const Image & image)
 {
   current_image = image;
 
@@ -100,14 +83,12 @@ void ImageProvider<T>::set_image(const T & image)
   image_publisher->publish(get_image());
 }
 
-template<typename T>
-rclcpp::Node::SharedPtr ImageProvider<T>::get_node() const
+rclcpp::Node::SharedPtr ImageProvider::get_node() const
 {
   return node;
 }
 
-template<typename T>
-const T & ImageProvider<T>::get_image() const
+const Image & ImageProvider::get_image() const
 {
   return current_image;
 }

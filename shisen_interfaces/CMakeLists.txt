@@ -19,8 +19,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/CaptureSetting.msg"
-  "msg/CompressedImage.msg"
-  "msg/RawImage.msg"
+  "msg/Image.msg"
   "srv/ConfigureCaptureSetting.srv")
 
 if(BUILD_TESTING)
