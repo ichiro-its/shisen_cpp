@@ -43,7 +43,7 @@ public:
     }
   };
 
-  inline explicit CameraNode(rclcpp::Node::SharedPtr node, const Options & options);
+  inline explicit CameraNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
 
   inline rclcpp::Node::SharedPtr get_node() const;
 
