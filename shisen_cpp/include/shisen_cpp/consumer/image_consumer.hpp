@@ -26,64 +26,42 @@
 #include <memory>
 #include <string>
 
-#include "../utility.hpp"
+#include "../node.hpp"
 
 namespace shisen_cpp
 {
 
-template<typename T>
-class ImageConsumer;
-
-using CompressedImageConsumer = ImageConsumer<CompressedImage>;
-using RawImageConsumer = ImageConsumer<RawImage>;
-
-template<typename T>
-class ImageConsumer
+class ImageConsumer : public CameraNode
 {
 public:
-  using ImageCallback = std::function<void (const T &)>;
+  using ImageCallback = std::function<void (const Image &)>;
 
-  struct Options : public virtual CameraPrefixOptions
+  struct Options : public virtual CameraNode::Options
   {
   };
 
   inline explicit ImageConsumer(
     rclcpp::Node::SharedPtr node, const Options & options = Options());
 
-  inline virtual void on_image_changed(const T & image);
+  inline virtual void on_image_changed(const Image & image);
 
-  inline rclcpp::Node::SharedPtr get_node() const;
-
-  inline const T & get_image() const;
+  inline const Image & get_image() const;
 
 private:
-  rclcpp::Node::SharedPtr node;
+  rclcpp::Subscription<Image>::SharedPtr image_subscription;
 
-  typename rclcpp::Subscription<T>::SharedPtr image_subscription;
-
-  T current_image;
+  Image current_image;
 };
 
-template<typename T>
-ImageConsumer<T>::ImageConsumer(
-  rclcpp::Node::SharedPtr node, const ImageConsumer<T>::Options & options)
+ImageConsumer::ImageConsumer(
+  rclcpp::Node::SharedPtr node, const ImageConsumer::Options & options)
+: CameraNode(node, options)
 {
-  // Initialize the node
-  this->node = node;
-
   // Initialize the image subscription
   {
-    // Get the topic suffix from the template type
-    std::string image_suffix = IMAGE_SUFFIX;
-    if (std::is_same<T, CompressedImage>::value) {
-      image_suffix = COMPRESSED_IMAGE_SUFFIX;
-    } else if (std::is_same<T, RawImage>::value) {
-      image_suffix = RAW_IMAGE_SUFFIX;
-    }
-
-    image_subscription = get_node()->template create_subscription<T>(
-      options.camera_prefix + image_suffix, 10,
-      [this](const typename T::SharedPtr msg) {
+    image_subscription = get_node()->template create_subscription<Image>(
+      get_camera_prefix() + IMAGE_SUFFIX, 10,
+      [this](const Image::SharedPtr msg) {
         current_image = *msg;
 
         // Call callback after image changed
@@ -96,19 +74,11 @@ ImageConsumer<T>::ImageConsumer(
   }
 }
 
-template<typename T>
-void ImageConsumer<T>::on_image_changed(const T & /*image*/)
+void ImageConsumer::on_image_changed(const Image & /*image*/)
 {
 }
 
-template<typename T>
-rclcpp::Node::SharedPtr ImageConsumer<T>::get_node() const
-{
-  return node;
-}
-
-template<typename T>
-const T & ImageConsumer<T>::get_image() const
+const Image & ImageConsumer::get_image() const
 {
   return current_image;
 }

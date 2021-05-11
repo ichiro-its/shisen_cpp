@@ -27,17 +27,17 @@
 #include <memory>
 #include <string>
 
-#include "../utility.hpp"
+#include "../node.hpp"
 
 namespace shisen_cpp
 {
 
-class CaptureSettingConsumer
+class CaptureSettingConsumer : public CameraNode
 {
 public:
   using CaptureSettingCallback = std::function<void (const CaptureSetting &)>;
 
-  struct Options : public virtual CameraPrefixOptions
+  struct Options : public virtual CameraNode::Options
   {
   };
 
@@ -55,14 +55,10 @@ public:
 
   inline void fetch_capture_setting(const CaptureSettingCallback & callback = {});
 
-  inline rclcpp::Node::SharedPtr get_node() const;
-
   inline const CaptureSetting & get_capture_setting() const;
 
 private:
   inline void change_capture_setting(const CaptureSetting & capture_setting);
-
-  rclcpp::Node::SharedPtr node;
 
   rclcpp::Subscription<CaptureSettingMsg>::SharedPtr capture_setting_event_subscription;
   rclcpp::Client<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_client;
@@ -72,14 +68,12 @@ private:
 
 CaptureSettingConsumer::CaptureSettingConsumer(
   rclcpp::Node::SharedPtr node, const CaptureSettingConsumer::Options & options)
+: CameraNode(node, options)
 {
-  // Initialize the node
-  this->node = node;
-
   // Initialize the capture setting event subscription
   {
     capture_setting_event_subscription = get_node()->create_subscription<CaptureSettingMsg>(
-      options.camera_prefix + CAPTURE_SETTING_EVENT_SUFFIX, 10,
+      get_camera_prefix() + CAPTURE_SETTING_EVENT_SUFFIX, 10,
       [this](const CaptureSettingMsg::SharedPtr msg) {
         change_capture_setting((const CaptureSetting &)*msg);
       });
@@ -93,7 +87,7 @@ CaptureSettingConsumer::CaptureSettingConsumer(
   // Initialize the configure capture setting client
   {
     configure_capture_setting_client = get_node()->create_client<ConfigureCaptureSetting>(
-      options.camera_prefix + CONFIGURE_CAPTURE_SETTING_SUFFIX);
+      get_camera_prefix() + CONFIGURE_CAPTURE_SETTING_SUFFIX);
 
     RCLCPP_INFO(get_node()->get_logger(), "Waiting for configure capture setting server...");
     if (!configure_capture_setting_client->wait_for_service(std::chrono::seconds(3))) {
@@ -149,11 +143,6 @@ void CaptureSettingConsumer::fetch_capture_setting(const CaptureSettingCallback 
 {
   request_to_configure_capture_setting(
     std::make_shared<ConfigureCaptureSetting::Request>(), callback);
-}
-
-rclcpp::Node::SharedPtr CaptureSettingConsumer::get_node() const
-{
-  return node;
 }
 
 const CaptureSetting & CaptureSettingConsumer::get_capture_setting() const

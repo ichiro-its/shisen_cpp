@@ -21,22 +21,16 @@
 #ifndef SHISEN_CPP__UTILITY__INTERFACE_HPP_
 #define SHISEN_CPP__UTILITY__INTERFACE_HPP_
 
-#include <shisen_interfaces/msg/compressed_image.hpp>
-#include <shisen_interfaces/msg/raw_image.hpp>
+#include <shisen_interfaces/msg/image.hpp>
 #include <shisen_interfaces/srv/configure_capture_setting.hpp>
 
 namespace shisen_cpp
 {
 
-using shisen_interfaces::msg::CompressedImage;
-using shisen_interfaces::msg::RawImage;
+using shisen_interfaces::msg::Image;
 using shisen_interfaces::srv::ConfigureCaptureSetting;
 
-extern const char * CAMERA_PREFIX;
-
 extern const char * IMAGE_SUFFIX;
-extern const char * COMPRESSED_IMAGE_SUFFIX;
-extern const char * RAW_IMAGE_SUFFIX;
 
 extern const char * CAPTURE_SETTING_EVENT_SUFFIX;
 extern const char * CONFIGURE_CAPTURE_SETTING_SUFFIX;

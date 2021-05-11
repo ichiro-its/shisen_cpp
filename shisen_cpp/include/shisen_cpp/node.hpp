@@ -18,14 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/utility/interface.hpp>
+#ifndef SHISEN_CPP__NODE_HPP_
+#define SHISEN_CPP__NODE_HPP_
 
-namespace shisen_cpp
-{
+#include "./node/camera_node.hpp"
 
-const char * IMAGE_SUFFIX = "/image";
-
-const char * CAPTURE_SETTING_EVENT_SUFFIX = "/capture_setting_event";
-const char * CONFIGURE_CAPTURE_SETTING_SUFFIX = "/configure_capture_setting";
-
-}  // namespace shisen_cpp
+#endif  // SHISEN_CPP__NODE_HPP_

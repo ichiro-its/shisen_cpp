@@ -26,15 +26,15 @@
 #include <memory>
 #include <string>
 
-#include "../utility.hpp"
+#include "../node.hpp"
 
 namespace shisen_cpp
 {
 
-class CaptureSettingProvider
+class CaptureSettingProvider : public CameraNode
 {
 public:
-  struct Options : public virtual CameraPrefixOptions
+  struct Options : public virtual CameraNode::Options
   {
   };
 
@@ -46,13 +46,9 @@ public:
 
   inline void configure_capture_setting(const CaptureSetting & capture_setting = CaptureSetting());
 
-  inline rclcpp::Node::SharedPtr get_node() const;
-
   inline const CaptureSetting & get_capture_setting() const;
 
 private:
-  rclcpp::Node::SharedPtr node;
-
   rclcpp::Publisher<CaptureSettingMsg>::SharedPtr capture_setting_event_publisher;
   rclcpp::Service<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_service;
 
@@ -61,14 +57,12 @@ private:
 
 CaptureSettingProvider::CaptureSettingProvider(
   rclcpp::Node::SharedPtr node, const CaptureSettingProvider::Options & options)
+: CameraNode(node, options)
 {
-  // Initialize the node
-  this->node = node;
-
   // Initialize the capture setting event publisher
   {
     capture_setting_event_publisher = get_node()->create_publisher<CaptureSettingMsg>(
-      options.camera_prefix + CAPTURE_SETTING_EVENT_SUFFIX, 10);
+      get_camera_prefix() + CAPTURE_SETTING_EVENT_SUFFIX, 10);
 
     RCLCPP_INFO_STREAM(
       get_node()->get_logger(),
@@ -79,7 +73,7 @@ CaptureSettingProvider::CaptureSettingProvider(
   // Initialize the configure capture setting service
   {
     configure_capture_setting_service = get_node()->create_service<ConfigureCaptureSetting>(
-      options.camera_prefix + CONFIGURE_CAPTURE_SETTING_SUFFIX,
+      get_camera_prefix() + CONFIGURE_CAPTURE_SETTING_SUFFIX,
       [this](ConfigureCaptureSetting::Request::SharedPtr request,
       ConfigureCaptureSetting::Response::SharedPtr response) {
         // Configure capture setting if exist
@@ -111,11 +105,6 @@ void CaptureSettingProvider::configure_capture_setting(const CaptureSetting & ca
   // Update with configured data
   current_capture_setting.update_with(on_configure_capture_setting(capture_setting));
   capture_setting_event_publisher->publish(get_capture_setting());
-}
-
-rclcpp::Node::SharedPtr CaptureSettingProvider::get_node() const
-{
-  return node;
 }
 
 const CaptureSetting & CaptureSettingProvider::get_capture_setting() const
