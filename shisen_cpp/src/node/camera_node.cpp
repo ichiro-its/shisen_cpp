@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 #include <shisen_cpp/node/camera_node.hpp>
+#include <string>
 
 namespace shisen_cpp
 {

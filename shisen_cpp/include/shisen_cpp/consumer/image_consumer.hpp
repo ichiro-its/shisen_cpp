@@ -42,7 +42,7 @@ public:
 
   explicit ImageConsumer(
     rclcpp::Node::SharedPtr node, const Options & options = Options());
-  
+
   ~ImageConsumer();
 
   virtual void on_image_changed(const Image & image);

@@ -20,6 +20,8 @@
 
 #include <shisen_cpp/consumer/capture_setting_consumer.hpp>
 
+#include <memory>
+
 namespace shisen_cpp
 {
 

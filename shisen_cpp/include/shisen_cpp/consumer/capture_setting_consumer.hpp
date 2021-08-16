@@ -43,7 +43,7 @@ public:
 
   explicit CaptureSettingConsumer(
     rclcpp::Node::SharedPtr node, const Options & options = Options());
-  
+
   ~CaptureSettingConsumer();
 
   virtual void on_capture_setting_changed(const CaptureSetting & capture_setting);
