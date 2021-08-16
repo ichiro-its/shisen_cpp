@@ -18,41 +18,81 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__UTILITY__EMPTIABLE_HPP_
-#define SHISEN_CPP__UTILITY__EMPTIABLE_HPP_
+#ifndef SHISEN_CPP__UTILITY__EMPTIABLE_IMPL_HPP_
+#define SHISEN_CPP__UTILITY__EMPTIABLE_IMPL_HPP_
+
+#include "shisen_cpp/utility/emptiable.hpp"
 
 namespace shisen_cpp
 {
 
 template<typename T>
-class Emptiable
+template<typename ... Types>
+Emptiable<T>::Emptiable(Types ... types)
+: empty(true),
+  value(types ...)
 {
-public:
-  template<typename ... Types>
-  explicit Emptiable(Types ... types);
-  ~Emptiable();
+}
 
-  operator T() const;
+template<typename T>
+Emptiable<T>::~Emptiable()
+{
+}
 
-  const T & operator=(const T & new_value);
+template<typename T>
+Emptiable<T>::operator T() const
+{
+  return value;
+}
 
-  void clear();
+template<typename T>
+const T & Emptiable<T>::operator=(const T & new_value)
+{
+  set(new_value);
+  return get();
+}
 
-  void set(const T & new_value);
+template<typename T>
+void Emptiable<T>::clear()
+{
+  empty = true;
+}
 
-  bool is_empty() const;
-  bool is_not_empty() const;
+template<typename T>
+void Emptiable<T>::set(const T & new_value)
+{
+  empty = false;
+  value = new_value;
+}
 
-  const T & get() const;
-  const T & get(const T & default_value) const;
+template<typename T>
+bool Emptiable<T>::is_empty() const
+{
+  return empty;
+}
 
-private:
-  bool empty;
-  T value;
-};
+template<typename T>
+bool Emptiable<T>::is_not_empty() const
+{
+  return !is_empty();
+}
+
+template<typename T>
+const T & Emptiable<T>::get() const
+{
+  return value;
+}
+
+template<typename T>
+const T & Emptiable<T>::get(const T & default_value) const
+{
+  if (is_empty()) {
+    return default_value;
+  }
+
+  return get();
+}
 
 }  // namespace shisen_cpp
 
-#include "shisen_cpp/utility/emptiable.impl.hpp"
-
-#endif  // SHISEN_CPP__UTILITY__EMPTIABLE_HPP_
+#endif  // SHISEN_CPP__UTILITY__EMPTIABLE_IMPL_HPP_
