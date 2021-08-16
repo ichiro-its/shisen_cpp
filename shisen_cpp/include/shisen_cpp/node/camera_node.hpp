@@ -43,33 +43,18 @@ public:
     }
   };
 
-  inline explicit CameraNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
+  explicit CameraNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
+  ~CameraNode();
 
-  inline rclcpp::Node::SharedPtr get_node() const;
+  rclcpp::Node::SharedPtr get_node() const;
 
-  inline const std::string & get_camera_prefix() const;
+  const std::string & get_camera_prefix() const;
 
 private:
   rclcpp::Node::SharedPtr node;
 
   std::string camera_prefix;
 };
-
-CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const CameraNode::Options & options)
-: node(node),
-  camera_prefix(options.camera_prefix)
-{
-}
-
-rclcpp::Node::SharedPtr CameraNode::get_node() const
-{
-  return node;
-}
-
-const std::string & CameraNode::get_camera_prefix() const
-{
-  return camera_prefix;
-}
 
 }  // namespace shisen_cpp
 

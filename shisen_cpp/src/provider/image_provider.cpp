@@ -18,40 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
-#define SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
-
-#include <rclcpp/rclcpp.hpp>
-
-#include <memory>
-#include <string>
-
-#include "../node.hpp"
+#include <shisen_cpp/provider/image_provider.hpp>
 
 namespace shisen_cpp
 {
 
-class ImageProvider : public CameraNode
+ImageProvider::ImageProvider(
+  rclcpp::Node::SharedPtr node, const ImageProvider::Options & options)
+: CameraNode(node, options)
 {
-public:
-  struct Options : public virtual CameraNode::Options
+  // Initialize the image publisher
   {
-  };
+    image_publisher = get_node()->template create_publisher<Image>(
+      get_camera_prefix() + IMAGE_SUFFIX, 10);
 
-  explicit ImageProvider(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~ImageProvider();
+    RCLCPP_INFO_STREAM(
+      get_node()->get_logger(),
+      "Image publisher initialized on `" << image_publisher->get_topic_name() << "`!");
+  }
 
-  void set_image(const Image & image);
+  // Initial data publish
+  set_image(get_image());
+}
 
-  const Image & get_image() const;
+ImageProvider::~ImageProvider()
+{
+}
 
-private:
-  typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
+void ImageProvider::set_image(const Image & image)
+{
+  current_image = image;
 
-  Image current_image;
-};
+  // Publish changes
+  image_publisher->publish(get_image());
+}
+
+const Image & ImageProvider::get_image() const
+{
+  return current_image;
+}
 
 }  // namespace shisen_cpp
-
-#endif  // SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
