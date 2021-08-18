@@ -30,88 +30,29 @@ class Emptiable
 public:
   template<typename ... Types>
   explicit Emptiable(Types ... types);
+  ~Emptiable();
 
-  inline operator T() const;
+  operator T() const;
 
-  inline const T & operator=(const T & new_value);
+  const T & operator=(const T & new_value);
 
-  inline void clear();
+  void clear();
 
-  inline void set(const T & new_value);
+  void set(const T & new_value);
 
-  inline bool is_empty() const;
-  inline bool is_not_empty() const;
+  bool is_empty() const;
+  bool is_not_empty() const;
 
-  inline const T & get() const;
-  inline const T & get(const T & default_value) const;
+  const T & get() const;
+  const T & get(const T & default_value) const;
 
 private:
   bool empty;
   T value;
 };
 
-template<typename T>
-template<typename ... Types>
-Emptiable<T>::Emptiable(Types ... types)
-: empty(true),
-  value(types ...)
-{
-}
-
-template<typename T>
-Emptiable<T>::operator T() const
-{
-  return value;
-}
-
-template<typename T>
-const T & Emptiable<T>::operator=(const T & new_value)
-{
-  set(new_value);
-  return get();
-}
-
-template<typename T>
-void Emptiable<T>::clear()
-{
-  empty = true;
-}
-
-template<typename T>
-void Emptiable<T>::set(const T & new_value)
-{
-  empty = false;
-  value = new_value;
-}
-
-template<typename T>
-bool Emptiable<T>::is_empty() const
-{
-  return empty;
-}
-
-template<typename T>
-bool Emptiable<T>::is_not_empty() const
-{
-  return !is_empty();
-}
-
-template<typename T>
-const T & Emptiable<T>::get() const
-{
-  return value;
-}
-
-template<typename T>
-const T & Emptiable<T>::get(const T & default_value) const
-{
-  if (is_empty()) {
-    return default_value;
-  }
-
-  return get();
-}
-
 }  // namespace shisen_cpp
+
+#include "shisen_cpp/utility/emptiable.impl.hpp"
 
 #endif  // SHISEN_CPP__UTILITY__EMPTIABLE_HPP_

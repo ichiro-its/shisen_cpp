@@ -18,40 +18,81 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
-#define SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
+#ifndef SHISEN_CPP__UTILITY__EMPTIABLE_IMPL_HPP_
+#define SHISEN_CPP__UTILITY__EMPTIABLE_IMPL_HPP_
 
-#include <rclcpp/rclcpp.hpp>
-
-#include <memory>
-#include <string>
-
-#include "../node.hpp"
+#include "shisen_cpp/utility/emptiable.hpp"
 
 namespace shisen_cpp
 {
 
-class ImageProvider : public CameraNode
+template<typename T>
+template<typename ... Types>
+Emptiable<T>::Emptiable(Types ... types)
+: empty(true),
+  value(types ...)
 {
-public:
-  struct Options : public virtual CameraNode::Options
-  {
-  };
+}
 
-  explicit ImageProvider(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~ImageProvider();
+template<typename T>
+Emptiable<T>::~Emptiable()
+{
+}
 
-  void set_image(const Image & image);
+template<typename T>
+Emptiable<T>::operator T() const
+{
+  return value;
+}
 
-  const Image & get_image() const;
+template<typename T>
+const T & Emptiable<T>::operator=(const T & new_value)
+{
+  set(new_value);
+  return get();
+}
 
-private:
-  typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
+template<typename T>
+void Emptiable<T>::clear()
+{
+  empty = true;
+}
 
-  Image current_image;
-};
+template<typename T>
+void Emptiable<T>::set(const T & new_value)
+{
+  empty = false;
+  value = new_value;
+}
+
+template<typename T>
+bool Emptiable<T>::is_empty() const
+{
+  return empty;
+}
+
+template<typename T>
+bool Emptiable<T>::is_not_empty() const
+{
+  return !is_empty();
+}
+
+template<typename T>
+const T & Emptiable<T>::get() const
+{
+  return value;
+}
+
+template<typename T>
+const T & Emptiable<T>::get(const T & default_value) const
+{
+  if (is_empty()) {
+    return default_value;
+  }
+
+  return get();
+}
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
+#endif  // SHISEN_CPP__UTILITY__EMPTIABLE_IMPL_HPP_

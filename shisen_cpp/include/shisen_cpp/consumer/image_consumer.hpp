@@ -40,48 +40,20 @@ public:
   {
   };
 
-  inline explicit ImageConsumer(
+  explicit ImageConsumer(
     rclcpp::Node::SharedPtr node, const Options & options = Options());
 
-  inline virtual void on_image_changed(const Image & image);
+  ~ImageConsumer();
 
-  inline const Image & get_image() const;
+  virtual void on_image_changed(const Image & image);
+
+  const Image & get_image() const;
 
 private:
   rclcpp::Subscription<Image>::SharedPtr image_subscription;
 
   Image current_image;
 };
-
-ImageConsumer::ImageConsumer(
-  rclcpp::Node::SharedPtr node, const ImageConsumer::Options & options)
-: CameraNode(node, options)
-{
-  // Initialize the image subscription
-  {
-    image_subscription = get_node()->template create_subscription<Image>(
-      get_camera_prefix() + IMAGE_SUFFIX, 10,
-      [this](const Image::SharedPtr msg) {
-        current_image = *msg;
-
-        // Call callback after image changed
-        on_image_changed(get_image());
-      });
-
-    RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
-      "Image subscription initialized on `" << image_subscription->get_topic_name() << "`!");
-  }
-}
-
-void ImageConsumer::on_image_changed(const Image & /*image*/)
-{
-}
-
-const Image & ImageConsumer::get_image() const
-{
-  return current_image;
-}
 
 }  // namespace shisen_cpp
 

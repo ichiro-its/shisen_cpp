@@ -41,122 +41,32 @@ public:
   {
   };
 
-  inline explicit CaptureSettingConsumer(
+  explicit CaptureSettingConsumer(
     rclcpp::Node::SharedPtr node, const Options & options = Options());
 
-  inline virtual void on_capture_setting_changed(const CaptureSetting & capture_setting);
+  ~CaptureSettingConsumer();
 
-  inline void request_to_configure_capture_setting(
+  virtual void on_capture_setting_changed(const CaptureSetting & capture_setting);
+
+  void request_to_configure_capture_setting(
     ConfigureCaptureSetting::Request::SharedPtr request,
     const CaptureSettingCallback & callback = {});
 
-  inline void configure_capture_setting(
+  void configure_capture_setting(
     const CaptureSetting & capture_setting, const CaptureSettingCallback & callback = {});
 
-  inline void fetch_capture_setting(const CaptureSettingCallback & callback = {});
+  void fetch_capture_setting(const CaptureSettingCallback & callback = {});
 
-  inline const CaptureSetting & get_capture_setting() const;
+  const CaptureSetting & get_capture_setting() const;
 
 private:
-  inline void change_capture_setting(const CaptureSetting & capture_setting);
+  void change_capture_setting(const CaptureSetting & capture_setting);
 
   rclcpp::Subscription<CaptureSettingMsg>::SharedPtr capture_setting_event_subscription;
   rclcpp::Client<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_client;
 
   CaptureSetting current_capture_setting;
 };
-
-CaptureSettingConsumer::CaptureSettingConsumer(
-  rclcpp::Node::SharedPtr node, const CaptureSettingConsumer::Options & options)
-: CameraNode(node, options)
-{
-  // Initialize the capture setting event subscription
-  {
-    capture_setting_event_subscription = get_node()->create_subscription<CaptureSettingMsg>(
-      get_camera_prefix() + CAPTURE_SETTING_EVENT_SUFFIX, 10,
-      [this](const CaptureSettingMsg::SharedPtr msg) {
-        change_capture_setting((const CaptureSetting &)*msg);
-      });
-
-    RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
-      "Capture setting event subscription initialized on `" <<
-        capture_setting_event_subscription->get_topic_name() << "`!");
-  }
-
-  // Initialize the configure capture setting client
-  {
-    configure_capture_setting_client = get_node()->create_client<ConfigureCaptureSetting>(
-      get_camera_prefix() + CONFIGURE_CAPTURE_SETTING_SUFFIX);
-
-    RCLCPP_INFO(get_node()->get_logger(), "Waiting for configure capture setting server...");
-    if (!configure_capture_setting_client->wait_for_service(std::chrono::seconds(3))) {
-      RCLCPP_ERROR(get_node()->get_logger(), "Configure capture setting server is not ready!");
-      throw std::runtime_error("configure capture setting server is not ready");
-    }
-
-    RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
-      "Configure capture setting client initialized on `" <<
-        configure_capture_setting_client->get_service_name() << "`!");
-  }
-
-  // Initial data fetch
-  fetch_capture_setting();
-}
-
-void CaptureSettingConsumer::on_capture_setting_changed(const CaptureSetting & /*capture_setting*/)
-{
-}
-
-void CaptureSettingConsumer::request_to_configure_capture_setting(
-  ConfigureCaptureSetting::Request::SharedPtr request, const CaptureSettingCallback & callback)
-{
-  configure_capture_setting_client->async_send_request(
-    request, [this, callback](rclcpp::Client<ConfigureCaptureSetting>::SharedFuture future) {
-      auto response = future.get();
-      if (response->capture_setting.size() > 0) {
-        change_capture_setting((const CaptureSetting &)response->capture_setting.front());
-
-        // Call callback after future completed
-        if (callback) {
-          callback(get_capture_setting());
-        }
-      } else {
-        RCLCPP_WARN(
-          get_node()->get_logger(),
-          "Configure capture setting service response is empty!");
-      }
-    });
-}
-
-void CaptureSettingConsumer::configure_capture_setting(
-  const CaptureSetting & capture_setting, const CaptureSettingCallback & callback)
-{
-  auto request = std::make_shared<ConfigureCaptureSetting::Request>();
-  request->capture_setting.push_back(capture_setting);
-
-  request_to_configure_capture_setting(request, callback);
-}
-
-void CaptureSettingConsumer::fetch_capture_setting(const CaptureSettingCallback & callback)
-{
-  request_to_configure_capture_setting(
-    std::make_shared<ConfigureCaptureSetting::Request>(), callback);
-}
-
-const CaptureSetting & CaptureSettingConsumer::get_capture_setting() const
-{
-  return current_capture_setting;
-}
-
-void CaptureSettingConsumer::change_capture_setting(const CaptureSetting & capture_setting)
-{
-  current_capture_setting = capture_setting;
-
-  // Call callback after capture setting changed
-  on_capture_setting_changed(get_capture_setting());
-}
 
 }  // namespace shisen_cpp
 

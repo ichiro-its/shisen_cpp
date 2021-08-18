@@ -18,40 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
-#define SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
-
-#include <rclcpp/rclcpp.hpp>
-
-#include <memory>
+#include <shisen_cpp/node/camera_node.hpp>
 #include <string>
-
-#include "../node.hpp"
 
 namespace shisen_cpp
 {
 
-class ImageProvider : public CameraNode
+CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const CameraNode::Options & options)
+: node(node),
+  camera_prefix(options.camera_prefix)
 {
-public:
-  struct Options : public virtual CameraNode::Options
-  {
-  };
+}
 
-  explicit ImageProvider(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~ImageProvider();
+CameraNode::~CameraNode()
+{
+}
 
-  void set_image(const Image & image);
+rclcpp::Node::SharedPtr CameraNode::get_node() const
+{
+  return node;
+}
 
-  const Image & get_image() const;
-
-private:
-  typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
-
-  Image current_image;
-};
+const std::string & CameraNode::get_camera_prefix() const
+{
+  return camera_prefix;
+}
 
 }  // namespace shisen_cpp
-
-#endif  // SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_

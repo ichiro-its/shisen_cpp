@@ -18,40 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
-#define SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
-
-#include <rclcpp/rclcpp.hpp>
-
-#include <memory>
-#include <string>
-
-#include "../node.hpp"
+#include <shisen_cpp/consumer/image_consumer.hpp>
 
 namespace shisen_cpp
 {
 
-class ImageProvider : public CameraNode
+ImageConsumer::ImageConsumer(
+  rclcpp::Node::SharedPtr node, const ImageConsumer::Options & options)
+: CameraNode(node, options)
 {
-public:
-  struct Options : public virtual CameraNode::Options
+  // Initialize the image subscription
   {
-  };
+    image_subscription = get_node()->template create_subscription<Image>(
+      get_camera_prefix() + IMAGE_SUFFIX, 10,
+      [this](const Image::SharedPtr msg) {
+        current_image = *msg;
 
-  explicit ImageProvider(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~ImageProvider();
+        // Call callback after image changed
+        on_image_changed(get_image());
+      });
 
-  void set_image(const Image & image);
+    RCLCPP_INFO_STREAM(
+      get_node()->get_logger(),
+      "Image subscription initialized on `" << image_subscription->get_topic_name() << "`!");
+  }
+}
 
-  const Image & get_image() const;
+ImageConsumer::~ImageConsumer()
+{
+}
 
-private:
-  typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
+void ImageConsumer::on_image_changed(const Image & /*image*/)
+{
+}
 
-  Image current_image;
-};
+const Image & ImageConsumer::get_image() const
+{
+  return current_image;
+}
 
 }  // namespace shisen_cpp
-
-#endif  // SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
