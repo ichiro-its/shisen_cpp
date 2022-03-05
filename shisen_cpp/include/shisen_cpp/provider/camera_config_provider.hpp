@@ -18,24 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__UTILITY__INTERFACE_HPP_
-#define SHISEN_CPP__UTILITY__INTERFACE_HPP_
+#ifndef SHISEN_CPP__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
+#define SHISEN_CPP__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
 
-#include <shisen_interfaces/msg/image.hpp>
-#include <shisen_interfaces/srv/configure_capture_setting.hpp>
+#include <rclcpp/rclcpp.hpp>
+
+#include <memory>
+#include <string>
+
+#include "shisen_interfaces/msg/camera_config.hpp"
+#include "../node.hpp"
 
 namespace shisen_cpp
 {
+using shisen_interfaces::msg::CameraConfig;
 
-using shisen_interfaces::msg::Image;
-using shisen_interfaces::srv::ConfigureCaptureSetting;
+class CameraConfigProvider : public CameraNode
+{
+public:
+  struct Options : public virtual CameraNode::Options
+  {
+  };
 
-extern const char * IMAGE_SUFFIX;
+  explicit CameraConfigProvider(
+    rclcpp::Node::SharedPtr node, const Options & options = Options());
+  ~CameraConfigProvider();
 
-extern const char * CAMERA_CONFIG_SUFFIX;
-extern const char * CAPTURE_SETTING_EVENT_SUFFIX;
-extern const char * CONFIGURE_CAPTURE_SETTING_SUFFIX;
+  void set_camera_config(const CameraConfig & config);
+
+  const CameraConfig & get_camera_config() const;
+
+  // add function for calculation view_v_angle and view_h_angle
+private:
+  rclcpp::Publisher<CameraConfig>::SharedPtr camera_config_publisher;
+
+  CameraConfig camera_config;
+};
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__UTILITY__INTERFACE_HPP_
+#endif  // SHISEN_CPP__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_

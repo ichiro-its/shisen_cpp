@@ -25,6 +25,7 @@ namespace shisen_cpp
 
 const char * IMAGE_SUFFIX = "/image";
 
+const char * CAMERA_CONFIG_SUFFIX = "/camera_config";
 const char * CAPTURE_SETTING_EVENT_SUFFIX = "/capture_setting_event";
 const char * CONFIGURE_CAPTURE_SETTING_SUFFIX = "/configure_capture_setting";
 
