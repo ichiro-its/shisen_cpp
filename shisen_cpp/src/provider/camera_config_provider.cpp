@@ -34,7 +34,8 @@ CameraConfigProvider::CameraConfigProvider(
 
     RCLCPP_INFO_STREAM(
       get_node()->get_logger(),
-      "Camera Config publisher initialized on `" << camera_config_publisher->get_topic_name() << "`!");
+      "Camera Config publisher initialized on `" << camera_config_publisher->get_topic_name() <<
+        "`!");
   }
 
   // Initial data publish

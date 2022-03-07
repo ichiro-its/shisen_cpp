@@ -24,6 +24,7 @@
 #include "./consumer/capture_setting_consumer.hpp"
 #include "./consumer/image_consumer.hpp"
 
+#include "./provider/camera_config_provider.hpp"
 #include "./provider/capture_setting_provider.hpp"
 #include "./provider/image_provider.hpp"
 

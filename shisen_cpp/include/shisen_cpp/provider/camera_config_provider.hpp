@@ -48,7 +48,6 @@ public:
 
   const CameraConfig & get_camera_config() const;
 
-  // add function for calculation view_v_angle and view_h_angle
 private:
   rclcpp::Publisher<CameraConfig>::SharedPtr camera_config_publisher;
 
