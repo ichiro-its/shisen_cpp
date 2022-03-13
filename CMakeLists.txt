@@ -26,6 +26,7 @@ add_library(${PROJECT_NAME} SHARED
   "src/consumer/capture_setting_consumer.cpp"
   "src/consumer/image_consumer.cpp"
   "src/node/camera_node.cpp"
+  "src/provider/camera_config_provider.cpp"
   "src/provider/capture_setting_provider.cpp"
   "src/provider/image_provider.cpp")
 

@@ -32,6 +32,7 @@ using shisen_interfaces::srv::ConfigureCaptureSetting;
 
 extern const char * IMAGE_SUFFIX;
 
+extern const char * CAMERA_CONFIG_SUFFIX;
 extern const char * CAPTURE_SETTING_EVENT_SUFFIX;
 extern const char * CONFIGURE_CAPTURE_SETTING_SUFFIX;
 

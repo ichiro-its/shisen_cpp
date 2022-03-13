@@ -18,15 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#include <shisen_cpp/provider/camera_config_provider.hpp>
 
-#include "./consumer/capture_setting_consumer.hpp"
-#include "./consumer/image_consumer.hpp"
+namespace shisen_cpp
+{
 
-#include "./provider/capture_setting_provider.hpp"
-#include "./provider/image_provider.hpp"
+CameraConfigProvider::CameraConfigProvider(
+  rclcpp::Node::SharedPtr node, const CameraConfigProvider::Options & options)
+: CameraNode(node, options)
+{
+  // Initialize the camera config publisher
+  {
+    camera_config_publisher = get_node()->template create_publisher<CameraConfig>(
+      get_camera_prefix() + CAMERA_CONFIG_SUFFIX, 10);
 
-#include "./utility.hpp"
+    RCLCPP_INFO_STREAM(
+      get_node()->get_logger(),
+      "Camera Config publisher initialized on `" << camera_config_publisher->get_topic_name() <<
+        "`!");
+  }
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+  // Initial data publish
+  set_camera_config(get_camera_config());
+}
+
+CameraConfigProvider::~CameraConfigProvider()
+{
+}
+
+void CameraConfigProvider::set_camera_config(const CameraConfig & config)
+{
+  camera_config = config;
+
+  // Publish changes
+  camera_config_publisher->publish(get_camera_config());
+}
+
+const CameraConfig & CameraConfigProvider::get_camera_config() const
+{
+  return camera_config;
+}
+
+}  // namespace shisen_cpp
