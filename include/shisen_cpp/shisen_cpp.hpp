@@ -21,13 +21,9 @@
 #ifndef SHISEN_CPP__SHISEN_CPP_HPP_
 #define SHISEN_CPP__SHISEN_CPP_HPP_
 
-#include "./consumer/capture_setting_consumer.hpp"
-#include "./consumer/image_consumer.hpp"
-
-#include "./provider/camera_config_provider.hpp"
-#include "./provider/capture_setting_provider.hpp"
-#include "./provider/image_provider.hpp"
-
+#include "./consumer.hpp"
+#include "./node.hpp"
+#include "./provider.hpp"
 #include "./utility.hpp"
 
 #endif  // SHISEN_CPP__SHISEN_CPP_HPP_
