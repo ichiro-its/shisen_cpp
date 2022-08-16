@@ -26,15 +26,17 @@
 #include <memory>
 #include <string>
 
+#include "./image_provider.hpp"
 #include "../node.hpp"
+#include "../utility/capture_setting.hpp"
 
 namespace shisen_cpp
 {
 
-class CaptureSettingProvider : public CameraNode
+class CaptureSettingProvider : public ImageProvider
 {
 public:
-  struct Options : public virtual CameraNode::Options
+  struct Options : public virtual ImageProvider::Options
   {
   };
 

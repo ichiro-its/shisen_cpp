@@ -27,6 +27,7 @@
 #include <string>
 
 #include "../node.hpp"
+#include "../utility/mat_image.hpp"
 
 namespace shisen_cpp
 {
@@ -36,6 +37,12 @@ class ImageProvider : public CameraNode
 public:
   struct Options : public virtual CameraNode::Options
   {
+    int compression_quality;
+
+    Options()
+    : compression_quality(-1)
+    {
+    }
   };
 
   explicit ImageProvider(
@@ -43,13 +50,18 @@ public:
   ~ImageProvider();
 
   void set_image(const Image & image);
+  void set_mat(cv::Mat mat);
 
   const Image & get_image() const;
+  cv::Mat get_mat() const;
 
 private:
   typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
 
   Image current_image;
+  shisen_cpp::MatImage current_mat_image;
+
+  int compression_quality;
 };
 
 }  // namespace shisen_cpp

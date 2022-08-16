@@ -39,15 +39,27 @@ CameraConfigProvider::CameraConfigProvider(
   }
 
   // Initial data publish
-  set_camera_config(get_camera_config());
+  field_of_view = options.field_of_view;
+  // set_config(get_camera_config());
 }
 
 CameraConfigProvider::~CameraConfigProvider()
 {
 }
 
-void CameraConfigProvider::set_camera_config(const CameraConfig & config)
+void CameraConfigProvider::set_config(CameraConfig & config, int width, int height)
 {
+  float diagonal = pow(width * width + height * height, 0.5);
+  float depth = (diagonal / 2) / keisan::make_degree(field_of_view / 2).tan();
+
+  float view_h_angle =
+    2 * keisan::signed_arctan(static_cast<float>(width / 2), depth).degree();
+  float view_v_angle =
+    2 * keisan::signed_arctan(static_cast<float>(height / 2), depth).degree();
+
+  config.v_angle = view_v_angle;
+  config.h_angle = view_h_angle;
+
   camera_config = config;
 
   // Publish changes

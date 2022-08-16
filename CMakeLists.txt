@@ -15,6 +15,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(ament_cmake REQUIRED)
+find_package(keisan REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(shisen_interfaces REQUIRED)
 
@@ -23,6 +25,7 @@ install(DIRECTORY "include" DESTINATION ".")
 add_library(${PROJECT_NAME} SHARED
   "src/utility/capture_setting.cpp"
   "src/utility/interface.cpp"
+  "src/utility/mat_image.cpp"
   "src/consumer/capture_setting_consumer.cpp"
   "src/consumer/image_consumer.cpp"
   "src/node/camera_node.cpp"
@@ -34,7 +37,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
-ament_target_dependencies(${PROJECT_NAME} rclcpp shisen_interfaces)
+ament_target_dependencies(${PROJECT_NAME}
+  keisan OpenCV rclcpp shisen_interfaces)
 
 install(TARGETS ${PROJECT_NAME}
   EXPORT export_${PROJECT_NAME}
@@ -60,7 +64,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-ament_export_dependencies(shisen_interfaces)
+ament_export_dependencies(keisan OpenCV rclcpp shisen_interfaces)
 ament_export_include_directories("include")
 ament_export_libraries(${PROJECT_NAME})
 

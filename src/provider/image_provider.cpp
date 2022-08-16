@@ -25,7 +25,7 @@ namespace shisen_cpp
 
 ImageProvider::ImageProvider(
   rclcpp::Node::SharedPtr node, const ImageProvider::Options & options)
-: CameraNode(node, options)
+: CameraNode(node, options), compression_quality(options.compression_quality)
 {
   // Initialize the image publisher
   {
@@ -53,9 +53,26 @@ void ImageProvider::set_image(const Image & image)
   image_publisher->publish(get_image());
 }
 
+void ImageProvider::set_mat(cv::Mat mat)
+{
+  current_mat_image = mat;
+
+  // Set image according to the compression quality
+  if (compression_quality > 0) {
+    set_image(current_mat_image.compress(compression_quality));
+  } else {
+    set_image(current_mat_image);
+  }
+}
+
 const Image & ImageProvider::get_image() const
 {
   return current_image;
+}
+
+cv::Mat ImageProvider::get_mat() const
+{
+  return (cv::Mat)current_mat_image;
 }
 
 }  // namespace shisen_cpp

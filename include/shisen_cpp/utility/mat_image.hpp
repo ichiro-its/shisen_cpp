@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2020-2021 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,51 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
-#define SHISEN_CPP__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
+#ifndef SHISEN_CPP__UTILITY__MAT_IMAGE_HPP_
+#define SHISEN_CPP__UTILITY__MAT_IMAGE_HPP_
 
-#include <keisan/keisan.hpp>
-#include <rclcpp/rclcpp.hpp>
-
-#include <memory>
-#include <string>
-
-#include "shisen_interfaces/msg/camera_config.hpp"
-#include "../node.hpp"
+#include <shisen_interfaces/msg/image.hpp>
+#include <opencv2/core.hpp>
 
 namespace shisen_cpp
 {
-using CameraConfig = shisen_interfaces::msg::CameraConfig;
 
-class CameraConfigProvider : public CameraNode
+class MatImage
 {
 public:
-  struct Options : public virtual CameraNode::Options
-  {
-    int field_of_view;
+  using Image = shisen_interfaces::msg::Image;
 
-    Options()
-    : field_of_view(-1)
-    {
-    }
-  };
+  MatImage();
+  explicit MatImage(const Image & image);
+  explicit MatImage(cv::Mat mat);
 
-  explicit CameraConfigProvider(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~CameraConfigProvider();
+  operator Image() const;
+  operator cv::Mat() const;
 
-  void set_config(CameraConfig & config, int width, int height);
+  const MatImage & operator=(const Image & image);
+  const MatImage & operator=(cv::Mat mat);
 
-  const CameraConfig & get_camera_config() const;
+  Image compress(int quality);
 
 private:
-  rclcpp::Publisher<CameraConfig>::SharedPtr camera_config_publisher;
-
-  CameraConfig camera_config;
-  
-  int field_of_view;
+  cv::Mat mat;
 };
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
+#endif  // SHISEN_CPP__UTILITY__MAT_IMAGE_HPP_

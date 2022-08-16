@@ -25,7 +25,7 @@ namespace shisen_cpp
 
 CaptureSettingProvider::CaptureSettingProvider(
   rclcpp::Node::SharedPtr node, const CaptureSettingProvider::Options & options)
-: CameraNode(node, options)
+: ImageProvider(node, options)
 {
   // Initialize the capture setting event publisher
   {
