@@ -21,6 +21,7 @@
 #ifndef SHISEN_CPP__UTILITY__INTERFACE_HPP_
 #define SHISEN_CPP__UTILITY__INTERFACE_HPP_
 
+#include <shisen_interfaces/msg/camera_config.hpp>
 #include <shisen_interfaces/msg/image.hpp>
 #include <shisen_interfaces/srv/configure_capture_setting.hpp>
 

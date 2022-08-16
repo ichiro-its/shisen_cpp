@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2020-2021 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,47 +18,53 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
-#define SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
+#ifndef SHISEN_CPP__NODE__CAMERA_CAPTURE_HPP_
+#define SHISEN_CPP__NODE__CAMERA_CAPTURE_HPP_
 
+#include <opencv2/core.hpp>
+#include <opencv2/videoio.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include <memory>
 #include <string>
 
-#include "../node.hpp"
+#include "./camera_node.hpp"
 #include "../utility.hpp"
 
 namespace shisen_cpp
 {
 
-class ImageConsumer : public CameraNode
+class CameraCapture : public CameraNode
 {
 public:
-  using ImageCallback = std::function<void (const Image &)>;
-
   struct Options : public virtual CameraNode::Options
   {
+    std::string camera_file_name;
+    int capture_fps;
+
+    Options()
+    : camera_file_name("/dev/video0"),
+      capture_fps(60)
+    {
+    }
   };
 
-  explicit ImageConsumer(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
+  explicit CameraCapture(rclcpp::Node::SharedPtr node, const Options & options = Options());
+  ~CameraCapture();
 
-  ~ImageConsumer();
+  virtual void on_mat_captured(cv::Mat mat);
+  virtual void on_camera_config(
+    shisen_interfaces::msg::CameraConfig config,
+    int width, int height);
 
-  virtual void on_image_changed(const Image & image);
-  virtual void on_mat_changed(cv::Mat mat);
-
-  const Image & get_image() const;
-  cv::Mat get_mat() const;
+  std::shared_ptr<cv::VideoCapture> get_video_capture() const;
 
 private:
-  rclcpp::Subscription<Image>::SharedPtr image_subscription;
+  rclcpp::TimerBase::SharedPtr capture_timer;
 
-  Image current_image;
-  MatImage current_mat_image;
+  std::shared_ptr<cv::VideoCapture> video_capture;
 };
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
+#endif  // SHISEN_CPP__NODE__CAMERA_CAPTURE_HPP_

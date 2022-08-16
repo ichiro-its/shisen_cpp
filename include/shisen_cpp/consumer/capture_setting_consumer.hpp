@@ -28,16 +28,17 @@
 #include <string>
 
 #include "../node.hpp"
+#include "./image_consumer.hpp"
 
 namespace shisen_cpp
 {
 
-class CaptureSettingConsumer : public CameraNode
+class CaptureSettingConsumer : public ImageConsumer
 {
 public:
   using CaptureSettingCallback = std::function<void (const CaptureSetting &)>;
 
-  struct Options : public virtual CameraNode::Options
+  struct Options : public virtual ImageConsumer::Options
   {
   };
 

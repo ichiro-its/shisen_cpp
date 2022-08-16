@@ -27,7 +27,7 @@ namespace shisen_cpp
 
 CaptureSettingConsumer::CaptureSettingConsumer(
   rclcpp::Node::SharedPtr node, const CaptureSettingConsumer::Options & options)
-: CameraNode(node, options)
+: ImageConsumer(node, options)
 {
   // Initialize the capture setting event subscription
   {

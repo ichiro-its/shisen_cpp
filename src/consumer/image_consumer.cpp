@@ -48,13 +48,29 @@ ImageConsumer::~ImageConsumer()
 {
 }
 
-void ImageConsumer::on_image_changed(const Image & /*image*/)
+void ImageConsumer::on_image_changed(const shisen_cpp::Image & image)
+{
+  // Call parent's overridden function
+  shisen_cpp::ImageConsumer::on_image_changed(image);
+
+  current_mat_image = image;
+
+  // Call virtual callback
+  on_mat_changed(get_mat());
+}
+
+void ImageConsumer::on_mat_changed(cv::Mat /*mat*/)
 {
 }
 
 const Image & ImageConsumer::get_image() const
 {
   return current_image;
+}
+
+cv::Mat ImageConsumer::get_mat() const
+{
+  return (cv::Mat)current_mat_image;
 }
 
 }  // namespace shisen_cpp

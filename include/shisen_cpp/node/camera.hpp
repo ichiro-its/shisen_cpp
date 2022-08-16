@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2020-2021 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,47 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
-#define SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
+#ifndef SHISEN_CPP__NODE__CAMERA_HPP_
+#define SHISEN_CPP__NODE__CAMERA_HPP_
 
 #include <rclcpp/rclcpp.hpp>
 
-#include <memory>
-#include <string>
-
-#include "../node.hpp"
-#include "../utility.hpp"
+#include "../provider.hpp"
+#include "./camera_capture.hpp"
 
 namespace shisen_cpp
 {
 
-class ImageConsumer : public CameraNode
+class Camera : public CameraCapture, public CaptureSettingProvider, public CameraConfigProvider
 {
 public:
-  using ImageCallback = std::function<void (const Image &)>;
-
-  struct Options : public virtual CameraNode::Options
+  struct Options : public virtual CameraCapture::Options,
+    public virtual CaptureSettingProvider::Options, public virtual CameraConfigProvider::Options
   {
   };
 
-  explicit ImageConsumer(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
+  explicit Camera(rclcpp::Node::SharedPtr node, const Options & options = Options());
 
-  ~ImageConsumer();
+  void on_mat_captured(cv::Mat mat) override;
+  void on_camera_config(
+    shisen_interfaces::msg::CameraConfig config,
+    int width, int height) override;
 
-  virtual void on_image_changed(const Image & image);
-  virtual void on_mat_changed(cv::Mat mat);
-
-  const Image & get_image() const;
-  cv::Mat get_mat() const;
-
-private:
-  rclcpp::Subscription<Image>::SharedPtr image_subscription;
-
-  Image current_image;
-  MatImage current_mat_image;
+  shisen_cpp::CaptureSetting on_configure_capture_setting(
+    const shisen_cpp::CaptureSetting & capture_setting) override;
 };
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
+#endif  // SHISEN_CPP__NODE__CAMERA_HPP_

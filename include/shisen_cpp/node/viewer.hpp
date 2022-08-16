@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2020-2021 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,47 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
-#define SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
+#ifndef SHISEN_CPP__NODE__VIEWER_HPP_
+#define SHISEN_CPP__NODE__VIEWER_HPP_
 
+#include <opencv2/core.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include <memory>
-#include <string>
-
-#include "../node.hpp"
-#include "../utility.hpp"
+#include "../consumer.hpp"
 
 namespace shisen_cpp
 {
 
-class ImageConsumer : public CameraNode
+class Viewer : public ImageConsumer
 {
 public:
-  using ImageCallback = std::function<void (const Image &)>;
-
-  struct Options : public virtual CameraNode::Options
+  struct Options : public virtual ImageConsumer::Options
   {
   };
 
-  explicit ImageConsumer(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
+  Viewer(rclcpp::Node::SharedPtr node, const Options & options);
 
-  ~ImageConsumer();
-
-  virtual void on_image_changed(const Image & image);
-  virtual void on_mat_changed(cv::Mat mat);
-
-  const Image & get_image() const;
-  cv::Mat get_mat() const;
-
-private:
-  rclcpp::Subscription<Image>::SharedPtr image_subscription;
-
-  Image current_image;
-  MatImage current_mat_image;
+  void on_mat_changed(cv::Mat mat) override;
 };
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
+#endif  // SHISEN_CPP__NODE__VIEWER_HPP_
