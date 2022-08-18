@@ -50,9 +50,6 @@ ImageConsumer::~ImageConsumer()
 
 void ImageConsumer::on_image_changed(const shisen_cpp::Image & image)
 {
-  // Call parent's overridden function
-  shisen_cpp::ImageConsumer::on_image_changed(image);
-
   current_mat_image = image;
 
   // Call virtual callback
