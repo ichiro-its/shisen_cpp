@@ -26,7 +26,7 @@
 #include <memory>
 #include <string>
 
-#include "../node.hpp"
+#include "../node/camera_node.hpp"
 #include "../utility.hpp"
 
 namespace shisen_cpp

@@ -27,7 +27,6 @@
 #include <string>
 
 #include "./image_provider.hpp"
-#include "../node.hpp"
 #include "../utility/capture_setting.hpp"
 
 namespace shisen_cpp

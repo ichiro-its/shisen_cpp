@@ -28,7 +28,7 @@
 #include <string>
 
 #include "shisen_interfaces/msg/camera_config.hpp"
-#include "../node.hpp"
+#include "../node/camera_node.hpp"
 
 namespace shisen_cpp
 {
