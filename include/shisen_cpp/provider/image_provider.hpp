@@ -56,7 +56,7 @@ public:
   cv::Mat get_mat() const;
 
 private:
-  typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
+  rclcpp::Publisher<Image>::SharedPtr image_publisher;
 
   Image current_image;
   shisen_cpp::MatImage current_mat_image;

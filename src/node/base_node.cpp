@@ -18,13 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__UTILITY_HPP_
-#define SHISEN_CPP__UTILITY_HPP_
+#include <shisen_cpp/node/base_node.hpp>
+#include <string>
 
-#include "./utility/base_options.hpp"
-#include "./utility/capture_setting.hpp"
-#include "./utility/emptiable.hpp"
-#include "./utility/interface.hpp"
-#include "./utility/mat_image.hpp" 
+namespace shisen_cpp
+{
 
-#endif  // SHISEN_CPP__UTILITY_HPP_
+BaseNode::BaseNode(rclcpp::Node::SharedPtr node, const BaseOptions & options)
+: node(node),
+  camera_prefix(options.camera_prefix)
+{
+}
+
+BaseNode::~BaseNode()
+{
+}
+
+rclcpp::Node::SharedPtr BaseNode::get_node() const
+{
+  return node;
+}
+
+const std::string & BaseNode::get_camera_prefix() const
+{
+  return camera_prefix;
+}
+
+}  // namespace shisen_cpp

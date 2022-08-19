@@ -18,13 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__UTILITY_HPP_
-#define SHISEN_CPP__UTILITY_HPP_
+#include <shisen_cpp/camera/image/node/image_node.hpp>
 
-#include "./utility/base_options.hpp"
-#include "./utility/capture_setting.hpp"
-#include "./utility/emptiable.hpp"
-#include "./utility/interface.hpp"
-#include "./utility/mat_image.hpp" 
+namespace shisen_cpp
+{
 
-#endif  // SHISEN_CPP__UTILITY_HPP_
+ImageNode::ImageNode(
+  rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider)
+: image_provider(img_provider), BaseNode(node, image_provider->options)
+{
+  // Initialize the image publisher
+  {
+    image_publisher = get_node()->create_publisher<Image>(
+      get_camera_prefix() + IMAGE_SUFFIX, 10);
+
+    RCLCPP_INFO_STREAM(
+      get_node()->get_logger(),
+      "Image publisher initialized on `" << image_publisher->get_topic_name() << "`!");
+  }
+
+  // Initial data publish
+  update();
+}
+
+void ImageNode::update()
+{
+  image_provider->set_image(image_provider->get_image());
+  image_publisher->publish(image_provider->get_image());
+}
+
+}  // namespace shisen_cpp

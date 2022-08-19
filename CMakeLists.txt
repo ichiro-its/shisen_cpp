@@ -23,18 +23,12 @@ find_package(shisen_interfaces REQUIRED)
 install(DIRECTORY "include" DESTINATION ".")
 
 add_library(${PROJECT_NAME} SHARED
+  "src/camera/image/node/image_node.cpp"
+  "src/camera/image/provider/image_provider.cpp"
   "src/utility/capture_setting.cpp"
   "src/utility/interface.cpp"
   "src/utility/mat_image.cpp"
-  "src/consumer/capture_setting_consumer.cpp"
-  "src/consumer/image_consumer.cpp"
-  "src/node/camera.cpp"
-  "src/node/camera_node.cpp"
-  "src/node/camera_capture.cpp"
-  "src/node/viewer.cpp"
-  "src/provider/camera_config_provider.cpp"
-  "src/provider/capture_setting_provider.cpp"
-  "src/provider/image_provider.cpp")
+  "src/node/base_node.cpp")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -48,23 +42,6 @@ install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION "lib"
   LIBRARY DESTINATION "lib"
   RUNTIME DESTINATION "bin")
-
-add_executable(camera "bin/camera.cpp")
-target_include_directories(camera PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-target_link_libraries(camera ${PROJECT_NAME})
-
-add_executable(viewer "bin/viewer.cpp")
-target_include_directories(viewer PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-target_link_libraries(viewer ${PROJECT_NAME})
-
-install(TARGETS
-  camera
-  viewer
-  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)

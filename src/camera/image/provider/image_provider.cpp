@@ -18,30 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/node/camera_node.hpp>
-#include <string>
+#include <shisen_cpp/camera/image/provider/image_provider.hpp>
 
 namespace shisen_cpp
 {
+using Image = shisen_interfaces::msg::Image;
 
-CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const CameraNode::Options & options)
-: node(node),
-  camera_prefix(options.camera_prefix)
+ImageProvider::ImageProvider(const ImageProvider::Options & options)
+: options(options), compression_quality(options.compression_quality)
 {
 }
 
-CameraNode::~CameraNode()
+ImageProvider::~ImageProvider()
 {
 }
 
-rclcpp::Node::SharedPtr CameraNode::get_node() const
+void ImageProvider::set_image(const Image & image)
 {
-  return node;
+  current_image = image;
 }
 
-const std::string & CameraNode::get_camera_prefix() const
+void ImageProvider::set_mat(cv::Mat mat)
 {
-  return camera_prefix;
+  current_mat_image = mat;
+
+  // Set image according to the compression quality
+  if (compression_quality > 0) {
+    set_image(current_mat_image.compress(compression_quality));
+  } else {
+    set_image(current_mat_image);
+  }
+}
+
+const Image & ImageProvider::get_image() const
+{
+  return current_image;
+}
+
+cv::Mat ImageProvider::get_mat() const
+{
+  return (cv::Mat)current_mat_image;
 }
 
 }  // namespace shisen_cpp

@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__NODE__CAMERA_NODE_HPP_
-#define SHISEN_CPP__NODE__CAMERA_NODE_HPP_
+#ifndef SHISEN_CPP__NODE__BASE_NODE_HPP_
+#define SHISEN_CPP__NODE__BASE_NODE_HPP_
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -30,21 +30,11 @@
 namespace shisen_cpp
 {
 
-class CameraNode
+class BaseNode
 {
 public:
-  struct Options
-  {
-    std::string camera_prefix;
-
-    Options()
-    : camera_prefix("camera")
-    {
-    }
-  };
-
-  explicit CameraNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~CameraNode();
+  explicit BaseNode(rclcpp::Node::SharedPtr node, const BaseOptions & options = BaseOptions());
+  ~BaseNode();
 
   rclcpp::Node::SharedPtr get_node() const;
 
@@ -58,4 +48,4 @@ private:
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__NODE__CAMERA_NODE_HPP_
+#endif  // SHISEN_CPP__NODE__BASE_NODE_HPP_

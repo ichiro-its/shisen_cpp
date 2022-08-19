@@ -18,13 +18,52 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__UTILITY_HPP_
-#define SHISEN_CPP__UTILITY_HPP_
+#ifndef SHISEN_CPP__CAMERA__IMAGE__PROVIDER__IMAGE_PROVIDER_HPP_
+#define SHISEN_CPP__CAMERA__IMAGE__PROVIDER__IMAGE_PROVIDER_HPP_
 
-#include "./utility/base_options.hpp"
-#include "./utility/capture_setting.hpp"
-#include "./utility/emptiable.hpp"
-#include "./utility/interface.hpp"
-#include "./utility/mat_image.hpp" 
+#include <memory>
+#include <string>
 
-#endif  // SHISEN_CPP__UTILITY_HPP_
+#include "shisen_cpp/utility/base_options.hpp"
+#include "shisen_cpp/utility/mat_image.hpp"
+
+#include <shisen_interfaces/msg/image.hpp>
+
+namespace shisen_cpp
+{
+
+class ImageProvider
+{
+using Image = shisen_interfaces::msg::Image;
+
+public:
+  struct Options : public BaseOptions
+  {
+    int compression_quality;
+
+    Options()
+    : compression_quality(-1)
+    {
+    }
+  };
+  Options options;
+
+  explicit ImageProvider(const Options & options = Options());
+  ~ImageProvider();
+
+  void set_image(const Image & image);
+  void set_mat(cv::Mat mat);
+
+  const Image & get_image() const;
+  cv::Mat get_mat() const;
+
+private:
+  Image current_image;
+  shisen_cpp::MatImage current_mat_image;
+
+  int compression_quality;
+};
+
+}  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__CAMERA__IMAGE__PROVIDER__IMAGE_PROVIDER_HPP_

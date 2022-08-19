@@ -22,7 +22,7 @@
 #define SHISEN_CPP__NODE_HPP_
 
 #include "./node/camera_capture.hpp"
-#include "./node/camera_node.hpp"
+#include "./node/base_node.hpp"
 #include "./node/camera.hpp"
 #include "./node/viewer.hpp"
 

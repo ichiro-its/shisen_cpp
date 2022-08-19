@@ -18,13 +18,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__UTILITY_HPP_
-#define SHISEN_CPP__UTILITY_HPP_
+#ifndef SHISEN_CPP__UTILITY__BASE_OPTIONS_HPP_
+#define SHISEN_CPP__UTILITY__BASE_OPTIONS_HPP_
 
-#include "./utility/base_options.hpp"
-#include "./utility/capture_setting.hpp"
-#include "./utility/emptiable.hpp"
-#include "./utility/interface.hpp"
-#include "./utility/mat_image.hpp" 
+#include <string>
 
-#endif  // SHISEN_CPP__UTILITY_HPP_
+namespace shisen_cpp
+{
+
+struct BaseOptions
+{
+  std::string camera_prefix;
+
+  BaseOptions()
+  : camera_prefix("camera")
+  {
+  }
+};
+
+}  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__NODE__BASE_OPTIONS_HPP_
