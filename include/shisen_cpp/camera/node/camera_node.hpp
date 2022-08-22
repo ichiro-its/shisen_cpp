@@ -18,46 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/camera/image/provider/image_provider.hpp>
+#ifndef SHISEN_CPP__CAMERA__NODE__CAMERA_NODE_HPP_
+#define SHISEN_CPP__CAMERA__NODE__CAMERA_NODE_HPP_
+
+#include <rclcpp/rclcpp.hpp>
+
+#include <memory>
+#include <string>
+
+#include "shisen_cpp/camera/provider/image_provider.hpp"
+#include "shisen_cpp/node/base_node.hpp"
 
 namespace shisen_cpp
 {
-using Image = shisen_interfaces::msg::Image;
 
-ImageProvider::ImageProvider(const ImageProvider::Options & options)
-: options(options), compression_quality(options.compression_quality)
+class CameraNode : public BaseNode
 {
-}
+public:
+  explicit CameraNode(
+    rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider);
+  ~CameraNode();
 
-ImageProvider::~ImageProvider()
-{
-}
+  void update();
 
-void ImageProvider::set_image(const Image & image)
-{
-  current_image = image;
-}
+private:
+  rclcpp::Publisher<Image>::SharedPtr image_publisher;
 
-void ImageProvider::set_mat(cv::Mat mat)
-{
-  current_mat_image = mat;
+  std::shared_ptr<ImageProvider> image_provider;
 
-  // Set image according to the compression quality
-  if (compression_quality > 0) {
-    set_image(current_mat_image.compress(compression_quality));
-  } else {
-    set_image(current_mat_image);
-  }
-}
-
-const Image & ImageProvider::get_image() const
-{
-  return current_image;
-}
-
-cv::Mat ImageProvider::get_mat() const
-{
-  return (cv::Mat)current_mat_image;
-}
+  rclcpp::TimerBase::SharedPtr node_timer;
+};
 
 }  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__CAMERA__NODE__CAMERA_NODE_HPP_

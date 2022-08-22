@@ -18,56 +18,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/consumer/image_consumer.hpp>
+#include <shisen_cpp/camera/provider/image_provider.hpp>
 
 namespace shisen_cpp
 {
+using Image = shisen_interfaces::msg::Image;
 
-ImageConsumer::ImageConsumer(
-  rclcpp::Node::SharedPtr node, const ImageConsumer::Options & options)
-: CameraNode(node, options)
+ImageProvider::ImageProvider(const ImageProvider::Options & options)
+: options(options), compression_quality(options.compression_quality),
+  video_capture(std::make_shared<cv::VideoCapture>())
 {
-  // Initialize the image subscription
-  {
-    image_subscription = get_node()->template create_subscription<Image>(
-      get_camera_prefix() + IMAGE_SUFFIX, 10,
-      [this](const Image::SharedPtr msg) {
-        current_image = *msg;
+}
 
-        // Call callback after image changed
-        on_image_changed(get_image());
-      });
+ImageProvider::~ImageProvider()
+{
+}
 
-    RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
-      "Image subscription initialized on `" << image_subscription->get_topic_name() << "`!");
+void ImageProvider::set_image(const Image & image)
+{
+  current_image_msg = image;
+}
+
+void ImageProvider::set_mat(cv::Mat mat)
+{
+  current_mat_image = mat;
+
+  // Set image according to the compression quality
+  if (options.publish_image) {
+    if (compression_quality > 0) {
+      set_image(current_mat_image.compress(compression_quality));
+    } else {
+      set_image(current_mat_image);
+    }
   }
 }
 
-ImageConsumer::~ImageConsumer()
+const Image & ImageProvider::get_image() const
 {
+  return current_image_msg;
 }
 
-void ImageConsumer::on_image_changed(const shisen_cpp::Image & image)
-{
-  current_mat_image = image;
-
-  // Call virtual callback
-  on_mat_changed(get_mat());
-}
-
-void ImageConsumer::on_mat_changed(cv::Mat /*mat*/)
-{
-}
-
-const Image & ImageConsumer::get_image() const
-{
-  return current_image;
-}
-
-cv::Mat ImageConsumer::get_mat() const
+cv::Mat ImageProvider::get_mat() const
 {
   return (cv::Mat)current_mat_image;
+}
+
+std::shared_ptr<cv::VideoCapture> ImageProvider::get_video_capture() const
+{
+  return video_capture;
 }
 
 }  // namespace shisen_cpp

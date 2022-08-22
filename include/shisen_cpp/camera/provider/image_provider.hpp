@@ -18,35 +18,64 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CAMERA__IMAGE__NODE__IMAGE_NODE_HPP_
-#define SHISEN_CPP__CAMERA__IMAGE__NODE__IMAGE_NODE_HPP_
+#ifndef SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
+#define SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 
-#include <rclcpp/rclcpp.hpp>
-
+#include <opencv2/core.hpp>
+#include <opencv2/videoio.hpp>
 #include <memory>
 #include <string>
 
-#include "shisen_cpp/camera/image/provider/image_provider.hpp"
-#include "shisen_cpp/node/base_node.hpp"
+#include "shisen_cpp/utility/base_options.hpp"
+#include "shisen_cpp/utility/mat_image.hpp"
+
+#include <shisen_interfaces/msg/image.hpp>
 
 namespace shisen_cpp
 {
 
-class ImageNode : public BaseNode
+class ImageProvider
 {
-public:
-  explicit ImageNode(
-    rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider);
-  ~ImageNode();
+using Image = shisen_interfaces::msg::Image;
 
-  void update();
+public:
+  struct Options : public BaseOptions
+  {
+    std::string camera_file_name;
+    int capture_fps;
+    int compression_quality;
+    bool publish_image;
+
+    Options()
+    : camera_file_name("/dev/video0"),
+      capture_fps(60),
+      compression_quality(-1),
+      publish_image(false)
+    {
+    }
+  };
+  Options options;
+
+  explicit ImageProvider(const Options & options = Options());
+  ~ImageProvider();
+
+  void set_image(const Image & image);
+  void set_mat(cv::Mat mat);
+
+  const Image & get_image() const;
+  cv::Mat get_mat() const;
+
+  std::shared_ptr<cv::VideoCapture> get_video_capture() const;
 
 private:
-  rclcpp::Publisher<Image>::SharedPtr image_publisher;
+  Image current_image_msg;
+  shisen_cpp::MatImage current_mat_image;
 
-  std::shared_ptr<ImageProvider> image_provider;
+  int compression_quality;
+
+  std::shared_ptr<cv::VideoCapture> video_capture;
 };
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__CAMERA__IMAGE__NODE__IMAGE_NODE_HPP_
+#endif  // SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_

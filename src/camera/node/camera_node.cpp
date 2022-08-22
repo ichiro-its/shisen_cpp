@@ -18,12 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/camera/image/node/image_node.hpp>
+#include <shisen_cpp/camera/node/camera_node.hpp>
 
 namespace shisen_cpp
 {
 
-ImageNode::ImageNode(
+using namespace std::chrono_literals;
+
+CameraNode::CameraNode(
   rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider)
 : image_provider(img_provider), BaseNode(node, image_provider->options)
 {
@@ -37,14 +39,44 @@ ImageNode::ImageNode(
       "Image publisher initialized on `" << image_publisher->get_topic_name() << "`!");
   }
 
-  // Initial data publish
-  update();
+  // Try to open the camera
+  if (!image_provider->get_video_capture()->open(image_provider->options.camera_file_name)) {
+    throw std::runtime_error("unable to open camera on `" + image_provider->options.camera_file_name + "`");
+  }
+
+  RCLCPP_INFO_STREAM(
+    get_node()->get_logger(),
+    "Camera capture opened on `" << image_provider->options.camera_file_name << "`!");
+  
+    // Initialize the capture timer
+  node_timer = get_node()->create_wall_timer(
+    1s / image_provider->options.capture_fps, [this]() {
+      update();
+    });
 }
 
-void ImageNode::update()
+void CameraNode::update()
 {
-  image_provider->set_image(image_provider->get_image());
-  image_publisher->publish(image_provider->get_image());
+  // Ensure the camera is opened
+  if (!image_provider->get_video_capture()->isOpened()) {
+    RCLCPP_WARN_ONCE(get_node()->get_logger(), "Once, camera capture had not been opened!");
+    return;
+  }
+
+  // Read captured mat
+  cv::Mat captured_mat;
+  image_provider->get_video_capture()->read(captured_mat);
+
+  shisen_interfaces::msg::CameraConfig config;
+
+  // Ensure the captured mat is not empty
+  if (!captured_mat.empty()) {
+    image_provider->set_mat(captured_mat);
+    // on_mat_captured(captured_mat);
+    // on_camera_config(config, captured_mat.cols, captured_mat.rows);
+  } else {
+    RCLCPP_WARN_ONCE(get_node()->get_logger(), "Once, captured an empty mat!");
+  }
 }
 
 }  // namespace shisen_cpp

@@ -23,8 +23,8 @@ find_package(shisen_interfaces REQUIRED)
 install(DIRECTORY "include" DESTINATION ".")
 
 add_library(${PROJECT_NAME} SHARED
-  "src/camera/image/node/image_node.cpp"
-  "src/camera/image/provider/image_provider.cpp"
+  "src/camera/node/camera_node.cpp"
+  "src/camera/provider/image_provider.cpp"
   "src/utility/capture_setting.cpp"
   "src/utility/interface.cpp"
   "src/utility/mat_image.cpp"
@@ -43,23 +43,23 @@ install(TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION "lib"
   RUNTIME DESTINATION "bin")
 
-if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
-  find_package(ament_lint_auto REQUIRED)
+# if(BUILD_TESTING)
+#   find_package(ament_cmake_gtest REQUIRED)
+#   find_package(ament_lint_auto REQUIRED)
 
-  ament_add_gtest(${PROJECT_NAME}_tests
-    "test/capture_setting_test.cpp"
-    "test/compile_test.cpp"
-    "test/emptiable_test.cpp")
+#   ament_add_gtest(${PROJECT_NAME}_tests
+#     "test/capture_setting_test.cpp"
+#     "test/compile_test.cpp"
+#     "test/emptiable_test.cpp")
 
-  target_include_directories(${PROJECT_NAME}_tests PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>)
+#   target_include_directories(${PROJECT_NAME}_tests PUBLIC
+#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#     $<INSTALL_INTERFACE:include>)
 
-  target_link_libraries(${PROJECT_NAME}_tests ${PROJECT_NAME})
+#   target_link_libraries(${PROJECT_NAME}_tests ${PROJECT_NAME})
 
-  ament_lint_auto_find_test_dependencies()
-endif()
+#   ament_lint_auto_find_test_dependencies()
+# endif()
 
 ament_export_dependencies(keisan OpenCV rclcpp shisen_interfaces)
 ament_export_include_directories("include")
