@@ -18,39 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CAMERA__NODE__CAMERA_NODE_HPP_
-#define SHISEN_CPP__CAMERA__NODE__CAMERA_NODE_HPP_
+#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
+#define SHISEN_CPP__SHISEN_CPP_HPP_
 
-#include <rclcpp/rclcpp.hpp>
+#include "./camera/node/camera_node.hpp"
+#include "./camera/provider/image_provider.hpp"
 
-#include <memory>
-#include <string>
+#include "./utility.hpp"
 
-#include "shisen_cpp/camera/provider/image_provider.hpp"
-#include "shisen_cpp/node/base_node.hpp"
-
-namespace shisen_cpp
-{
-
-class CameraNode : public BaseNode
-{
-public:
-  explicit CameraNode(
-    rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider);
-  ~CameraNode();
-
-  void update();
-  void on_mat_captured(cv::Mat mat);
-
-  cv::Mat get_mat();
-
-private:
-  rclcpp::Publisher<Image>::SharedPtr image_publisher;
-  std::shared_ptr<ImageProvider> image_provider;
-
-  rclcpp::TimerBase::SharedPtr node_timer;
-};
-
-}  // namespace shisen_cpp
-
-#endif  // SHISEN_CPP__CAMERA__NODE__CAMERA_NODE_HPP_
+#endif  // SHISEN_CPP__SHISEN_CPP_HPP_

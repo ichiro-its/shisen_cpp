@@ -27,10 +27,10 @@ using namespace std::chrono_literals;
 
 CameraNode::CameraNode(
   rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider)
-: image_provider(img_provider), BaseNode(node, image_provider->options)
+: BaseNode(node, img_provider->options), image_provider(img_provider)
 {
   // Initialize the image publisher
-  {
+  if (image_provider->options.publish_image) {
     image_publisher = get_node()->create_publisher<Image>(
       get_camera_prefix() + IMAGE_SUFFIX, 10);
 
@@ -49,10 +49,14 @@ CameraNode::CameraNode(
     "Camera capture opened on `" << image_provider->options.camera_file_name << "`!");
   
     // Initialize the capture timer
-  node_timer = get_node()->create_wall_timer(
-    1s / image_provider->options.capture_fps, [this]() {
-      update();
-    });
+  // node_timer = get_node()->create_wall_timer(
+  //   1s / image_provider->options.capture_fps, [this]() {
+  //     update();
+  //   });
+}
+
+CameraNode::~CameraNode()
+{
 }
 
 void CameraNode::update()
@@ -71,12 +75,26 @@ void CameraNode::update()
 
   // Ensure the captured mat is not empty
   if (!captured_mat.empty()) {
-    image_provider->set_mat(captured_mat);
-    // on_mat_captured(captured_mat);
+    on_mat_captured(captured_mat);
     // on_camera_config(config, captured_mat.cols, captured_mat.rows);
   } else {
     RCLCPP_WARN_ONCE(get_node()->get_logger(), "Once, captured an empty mat!");
   }
+}
+
+void CameraNode::on_mat_captured(cv::Mat mat)
+{
+  image_provider->set_mat(mat);
+
+  if (image_provider->options.publish_image) {
+    image_publisher->publish(image_provider->get_image());
+  }
+}
+
+cv::Mat CameraNode::get_mat()
+{
+  update();
+  return image_provider->get_mat();
 }
 
 }  // namespace shisen_cpp

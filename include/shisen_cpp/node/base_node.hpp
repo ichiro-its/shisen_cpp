@@ -22,7 +22,6 @@
 #define SHISEN_CPP__NODE__BASE_NODE_HPP_
 
 #include <rclcpp/rclcpp.hpp>
-
 #include <string>
 
 #include "../utility.hpp"
