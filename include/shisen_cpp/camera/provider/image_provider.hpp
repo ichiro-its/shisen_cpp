@@ -26,7 +26,7 @@
 #include <memory>
 #include <string>
 
-#include "shisen_cpp/utility/base_options.hpp"
+#include "shisen_cpp/utility/options.hpp"
 #include "shisen_cpp/utility/mat_image.hpp"
 
 #include <shisen_interfaces/msg/image.hpp>
@@ -39,21 +39,6 @@ class ImageProvider
 using Image = shisen_interfaces::msg::Image;
 
 public:
-  struct Options : public BaseOptions
-  {
-    std::string camera_file_name;
-    int capture_fps;
-    int compression_quality;
-    bool publish_image;
-
-    Options()
-    : camera_file_name("/dev/video0"),
-      capture_fps(60),
-      compression_quality(-1),
-      publish_image(false)
-    {
-    }
-  };
   Options options;
 
   explicit ImageProvider(const Options & options = Options());

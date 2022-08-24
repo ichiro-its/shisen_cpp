@@ -24,10 +24,14 @@ namespace shisen_cpp
 {
 using Image = shisen_interfaces::msg::Image;
 
-ImageProvider::ImageProvider(const ImageProvider::Options & options)
+ImageProvider::ImageProvider(const Options & options)
 : options(options), compression_quality(options.compression_quality),
   video_capture(std::make_shared<cv::VideoCapture>())
 {
+  // Try to open the camera
+  if (!get_video_capture()->open(options.camera_file_name)) {
+    throw std::runtime_error("unable to open camera on `" + options.camera_file_name + "`");
+  }
 }
 
 ImageProvider::~ImageProvider()

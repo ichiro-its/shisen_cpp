@@ -21,10 +21,10 @@
 #ifndef SHISEN_CPP__UTILITY_HPP_
 #define SHISEN_CPP__UTILITY_HPP_
 
-#include "./utility/base_options.hpp"
 #include "./utility/capture_setting.hpp"
 #include "./utility/emptiable.hpp"
 #include "./utility/interface.hpp"
 #include "./utility/mat_image.hpp" 
+#include "./utility/options.hpp"
 
 #endif  // SHISEN_CPP__UTILITY_HPP_

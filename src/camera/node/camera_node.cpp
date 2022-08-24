@@ -23,8 +23,6 @@
 namespace shisen_cpp
 {
 
-using namespace std::chrono_literals;
-
 CameraNode::CameraNode(
   rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider)
 : BaseNode(node, img_provider->options), image_provider(img_provider)
@@ -39,20 +37,10 @@ CameraNode::CameraNode(
       "Image publisher initialized on `" << image_publisher->get_topic_name() << "`!");
   }
 
-  // Try to open the camera
-  if (!image_provider->get_video_capture()->open(image_provider->options.camera_file_name)) {
-    throw std::runtime_error("unable to open camera on `" + image_provider->options.camera_file_name + "`");
-  }
-
+  // Logging for opening camera
   RCLCPP_INFO_STREAM(
     get_node()->get_logger(),
     "Camera capture opened on `" << image_provider->options.camera_file_name << "`!");
-  
-    // Initialize the capture timer
-  // node_timer = get_node()->create_wall_timer(
-  //   1s / image_provider->options.capture_fps, [this]() {
-  //     update();
-  //   });
 }
 
 CameraNode::~CameraNode()

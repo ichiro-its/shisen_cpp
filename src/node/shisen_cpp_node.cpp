@@ -18,33 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__NODE__BASE_NODE_HPP_
-#define SHISEN_CPP__NODE__BASE_NODE_HPP_
-
-#include <rclcpp/rclcpp.hpp>
-#include <string>
-
-#include "../utility.hpp"
+#include <shisen_cpp/node/shisen_cpp_node.hpp>
 
 namespace shisen_cpp
 {
+using namespace std::chrono_literals;
 
-class BaseNode
+ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const Options & options)
+: node(node)
 {
-public:
-  explicit BaseNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~BaseNode();
+  auto image_provider = std::make_shared<shisen_cpp::ImageProvider>(options);
+  camera_node = std::make_shared<shisen_cpp::CameraNode>(node, image_provider);
 
-  rclcpp::Node::SharedPtr get_node() const;
+  node_timer = node->create_wall_timer(
+    1s / camera_node->image_provider->options.capture_fps,
+    [this]() {
+      camera_node->update();
+    }
+  );
+}
 
-  const std::string & get_camera_prefix() const;
-
-private:
-  rclcpp::Node::SharedPtr node;
-
-  std::string camera_prefix;
-};
+ShisenCppNode::~ShisenCppNode()
+{
+}
 
 }  // namespace shisen_cpp
-
-#endif  // SHISEN_CPP__NODE__BASE_NODE_HPP_

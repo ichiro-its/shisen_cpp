@@ -28,7 +28,8 @@ add_library(${PROJECT_NAME} SHARED
   "src/utility/capture_setting.cpp"
   "src/utility/interface.cpp"
   "src/utility/mat_image.cpp"
-  "src/node/base_node.cpp")
+  "src/node/base_node.cpp"
+  "src/node/shisen_cpp_node.cpp")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -42,6 +43,15 @@ install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION "lib"
   LIBRARY DESTINATION "lib"
   RUNTIME DESTINATION "bin")
+
+add_executable(camera "src/shisen_cpp_camera.cpp")
+target_include_directories(camera PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_link_libraries(camera ${PROJECT_NAME})
+
+install(TARGETS camera
+  DESTINATION lib/${PROJECT_NAME})
 
 # if(BUILD_TESTING)
 #   find_package(ament_cmake_gtest REQUIRED)

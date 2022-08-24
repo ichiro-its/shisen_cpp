@@ -24,7 +24,7 @@
 namespace shisen_cpp
 {
 
-BaseNode::BaseNode(rclcpp::Node::SharedPtr node, const BaseOptions & options)
+BaseNode::BaseNode(rclcpp::Node::SharedPtr node, const Options & options)
 : node(node),
   camera_prefix(options.camera_prefix)
 {

@@ -44,11 +44,9 @@ public:
 
   cv::Mat get_mat();
 
+  std::shared_ptr<ImageProvider> image_provider;
 private:
   rclcpp::Publisher<Image>::SharedPtr image_publisher;
-  std::shared_ptr<ImageProvider> image_provider;
-
-  rclcpp::TimerBase::SharedPtr node_timer;
 };
 
 }  // namespace shisen_cpp

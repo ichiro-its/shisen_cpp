@@ -18,24 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__UTILITY__BASE_OPTIONS_HPP_
-#define SHISEN_CPP__UTILITY__BASE_OPTIONS_HPP_
+#ifndef SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_
+#define SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_
 
-#include <string>
+#include <rclcpp/rclcpp.hpp>
+
+#include "shisen_cpp/camera/node/camera_node.hpp"
+#include "../utility.hpp"
 
 namespace shisen_cpp
 {
 
-struct BaseOptions
+class ShisenCppNode
 {
-  std::string camera_prefix;
+public:
+  explicit ShisenCppNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
+  ~ShisenCppNode();
 
-  BaseOptions()
-  : camera_prefix("camera")
-  {
-  }
+private:
+  rclcpp::Node::SharedPtr node;
+  rclcpp::TimerBase::SharedPtr node_timer;
+
+  std::shared_ptr<CameraNode> camera_node;
 };
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__NODE__BASE_OPTIONS_HPP_
+#endif  // SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_
