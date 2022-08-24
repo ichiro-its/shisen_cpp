@@ -30,6 +30,7 @@ int main(int argc, char ** argv)
 
   shisen_cpp::Options options;
   options.publish_image = true;
+  options.field_of_view = 78;
 
   const char * help_message =
     "Usage: ros2 run shisen_cpp camera [options] [--camera-prefix prefix]\n"

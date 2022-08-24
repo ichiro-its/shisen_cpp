@@ -26,27 +26,41 @@
 #include <memory>
 #include <string>
 
+#include "shisen_cpp/camera/provider/camera_config_provider.hpp"
 #include "shisen_cpp/camera/provider/image_provider.hpp"
-#include "shisen_cpp/node/base_node.hpp"
+
+#include "shisen_cpp/utility.hpp"
 
 namespace shisen_cpp
 {
+using CameraConfig = shisen_interfaces::msg::CameraConfig;
 
-class CameraNode : public BaseNode
+class CameraNode
 {
 public:
-  explicit CameraNode(
-    rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider);
+  explicit CameraNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
   ~CameraNode();
 
   void update();
   void on_mat_captured(cv::Mat mat);
+  void on_camera_config(int width, int height);
 
   cv::Mat get_mat();
+  const std::string & get_camera_prefix() const;
+
+  void set_provider(
+    std::shared_ptr<ImageProvider> img_provider, 
+    std::shared_ptr<CameraConfigProvider> cam_config_provider);
 
   std::shared_ptr<ImageProvider> image_provider;
+  std::shared_ptr<CameraConfigProvider> camera_config_provider;
+
 private:
+  rclcpp::Node::SharedPtr node;
+  Options options;
+
   rclcpp::Publisher<Image>::SharedPtr image_publisher;
+  rclcpp::Publisher<CameraConfig>::SharedPtr camera_config_publisher;
 };
 
 }  // namespace shisen_cpp

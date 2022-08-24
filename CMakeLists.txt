@@ -24,11 +24,11 @@ install(DIRECTORY "include" DESTINATION ".")
 
 add_library(${PROJECT_NAME} SHARED
   "src/camera/node/camera_node.cpp"
+  "src/camera/provider/camera_config_provider.cpp"
   "src/camera/provider/image_provider.cpp"
   "src/utility/capture_setting.cpp"
   "src/utility/interface.cpp"
   "src/utility/mat_image.cpp"
-  "src/node/base_node.cpp"
   "src/node/shisen_cpp_node.cpp")
 
 target_include_directories(${PROJECT_NAME} PUBLIC

@@ -27,8 +27,10 @@ using namespace std::chrono_literals;
 ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const Options & options)
 : node(node)
 {
+  camera_node = std::make_shared<shisen_cpp::CameraNode>(node, options);
   auto image_provider = std::make_shared<shisen_cpp::ImageProvider>(options);
-  camera_node = std::make_shared<shisen_cpp::CameraNode>(node, image_provider);
+  auto camera_config_provider = std::make_shared<shisen_cpp::CameraConfigProvider>(options);
+  camera_node->set_provider(image_provider, camera_config_provider);
 
   node_timer = node->create_wall_timer(
     1s / camera_node->image_provider->options.capture_fps,

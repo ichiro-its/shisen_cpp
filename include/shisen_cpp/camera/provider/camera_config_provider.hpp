@@ -18,33 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__NODE__BASE_NODE_HPP_
-#define SHISEN_CPP__NODE__BASE_NODE_HPP_
+#ifndef SHISEN_CPP__CAMERA__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
+#define SHISEN_CPP__CAMERA__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
 
-#include <rclcpp/rclcpp.hpp>
+#include <keisan/keisan.hpp>
+
+#include <memory>
 #include <string>
 
-#include "../utility.hpp"
+#include "shisen_cpp/utility/options.hpp"
+#include "shisen_interfaces/msg/camera_config.hpp"
 
 namespace shisen_cpp
 {
+using CameraConfig = shisen_interfaces::msg::CameraConfig;
 
-class BaseNode
+class CameraConfigProvider
 {
 public:
-  explicit BaseNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~BaseNode();
+  explicit CameraConfigProvider(const Options & options = Options());
+  ~CameraConfigProvider();
 
-  rclcpp::Node::SharedPtr get_node() const;
+  void set_config(int width, int height);
 
-  const std::string & get_camera_prefix() const;
+  const CameraConfig & get_camera_config() const;
 
 private:
-  rclcpp::Node::SharedPtr node;
-
-  std::string camera_prefix;
+  CameraConfig camera_config;
+  
+  int field_of_view;
 };
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__NODE__BASE_NODE_HPP_
+#endif  // SHISEN_CPP__CAMERA__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_

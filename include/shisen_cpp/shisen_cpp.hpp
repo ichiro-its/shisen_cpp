@@ -23,7 +23,7 @@
 
 #include "./camera/node/camera_node.hpp"
 #include "./camera/provider/image_provider.hpp"
-#include "./node/base_node.hpp"
+#include "./camera/provider/camera_config_provider.hpp"
 #include "./node/shisen_cpp_node.hpp"
 
 #include "./utility.hpp"

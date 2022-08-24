@@ -39,8 +39,6 @@ class ImageProvider
 using Image = shisen_interfaces::msg::Image;
 
 public:
-  Options options;
-
   explicit ImageProvider(const Options & options = Options());
   ~ImageProvider();
 
@@ -51,6 +49,8 @@ public:
   cv::Mat get_mat() const;
 
   std::shared_ptr<cv::VideoCapture> get_video_capture() const;
+
+  Options options;
 
 private:
   Image current_image_msg;

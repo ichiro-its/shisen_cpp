@@ -23,24 +23,9 @@
 namespace shisen_cpp
 {
 
-CameraNode::CameraNode(
-  rclcpp::Node::SharedPtr node, std::shared_ptr<ImageProvider> img_provider)
-: BaseNode(node, img_provider->options), image_provider(img_provider)
+CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const Options & options)
+: node(node), options(options)
 {
-  // Initialize the image publisher
-  if (image_provider->options.publish_image) {
-    image_publisher = get_node()->create_publisher<Image>(
-      get_camera_prefix() + IMAGE_SUFFIX, 10);
-
-    RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
-      "Image publisher initialized on `" << image_publisher->get_topic_name() << "`!");
-  }
-
-  // Logging for opening camera
-  RCLCPP_INFO_STREAM(
-    get_node()->get_logger(),
-    "Camera capture opened on `" << image_provider->options.camera_file_name << "`!");
 }
 
 CameraNode::~CameraNode()
@@ -51,7 +36,7 @@ void CameraNode::update()
 {
   // Ensure the camera is opened
   if (!image_provider->get_video_capture()->isOpened()) {
-    RCLCPP_WARN_ONCE(get_node()->get_logger(), "Once, camera capture had not been opened!");
+    RCLCPP_WARN_ONCE(node->get_logger(), "Once, camera capture had not been opened!");
     return;
   }
 
@@ -59,14 +44,12 @@ void CameraNode::update()
   cv::Mat captured_mat;
   image_provider->get_video_capture()->read(captured_mat);
 
-  shisen_interfaces::msg::CameraConfig config;
-
   // Ensure the captured mat is not empty
   if (!captured_mat.empty()) {
     on_mat_captured(captured_mat);
-    // on_camera_config(config, captured_mat.cols, captured_mat.rows);
+    on_camera_config(captured_mat.cols, captured_mat.rows);
   } else {
-    RCLCPP_WARN_ONCE(get_node()->get_logger(), "Once, captured an empty mat!");
+    RCLCPP_WARN_ONCE(node->get_logger(), "Once, captured an empty mat!");
   }
 }
 
@@ -79,10 +62,54 @@ void CameraNode::on_mat_captured(cv::Mat mat)
   }
 }
 
+void CameraNode::on_camera_config(int width, int height)
+{
+  camera_config_provider->set_config(width, height);
+  camera_config_publisher->publish(camera_config_provider->get_camera_config());
+}
+
 cv::Mat CameraNode::get_mat()
 {
   update();
   return image_provider->get_mat();
+}
+
+const std::string & CameraNode::get_camera_prefix() const
+{
+  return options.camera_prefix;
+}
+
+void CameraNode::set_provider(
+  std::shared_ptr<ImageProvider> img_provider, 
+  std::shared_ptr<CameraConfigProvider> cam_config_provider)
+{
+  image_provider = img_provider;
+  camera_config_provider = cam_config_provider;
+
+  // Initialize the image publisher
+  if (image_provider->options.publish_image) {
+    image_publisher = node->create_publisher<Image>(
+      get_camera_prefix() + IMAGE_SUFFIX, 10);
+
+    RCLCPP_INFO_STREAM(
+      node->get_logger(),
+      "Image publisher initialized on `" << image_publisher->get_topic_name() << "`!");
+  }
+  // Logging for opening camera
+  RCLCPP_INFO_STREAM(
+    node->get_logger(),
+    "Camera capture opened on `" << image_provider->options.camera_file_name << "`!");
+
+  // Initialize the camera config publisher
+  {
+    camera_config_publisher = node->create_publisher<CameraConfig>(
+      get_camera_prefix() + CAMERA_CONFIG_SUFFIX, 10);
+
+    RCLCPP_INFO_STREAM(
+      node->get_logger(),
+      "Camera Config publisher initialized on `" << camera_config_publisher->get_topic_name() <<
+        "`!");
+  }
 }
 
 }  // namespace shisen_cpp
