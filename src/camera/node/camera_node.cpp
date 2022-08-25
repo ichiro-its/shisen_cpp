@@ -110,6 +110,93 @@ void CameraNode::set_provider(
       "Camera Config publisher initialized on `" << camera_config_publisher->get_topic_name() <<
         "`!");
   }
+
+  // Initialize the capture setting event publisher
+  {
+    capture_setting_event_publisher = node->create_publisher<CaptureSettingMsg>(
+      get_camera_prefix() + CAPTURE_SETTING_EVENT_SUFFIX, 10);
+
+    RCLCPP_INFO_STREAM(
+      node->get_logger(),
+      "Capture setting event publisher initialized on `" <<
+        capture_setting_event_publisher->get_topic_name() << "`!");
+  }
+
+  // Initialize the configure capture setting service
+  {
+    configure_capture_setting_service = node->create_service<ConfigureCaptureSetting>(
+      get_camera_prefix() + CONFIGURE_CAPTURE_SETTING_SUFFIX,
+      [this](ConfigureCaptureSetting::Request::SharedPtr request,
+      ConfigureCaptureSetting::Response::SharedPtr response) {
+        // Configure capture setting if exist
+        if (request->capture_setting.size() > 0) {
+          configure_capture_setting((const CaptureSetting &)request->capture_setting.front());
+        }
+
+        response->capture_setting.push_back(image_provider->get_capture_setting());
+      });
+
+    RCLCPP_INFO_STREAM(
+      node->get_logger(),
+      "Configure capture setting service initialized on `" <<
+        configure_capture_setting_service->get_service_name() << "`!");
+  }
+  // image_provider->get_video_capture()->set(cv::CAP_PROP_FRAME_WIDTH, 320);
+  // image_provider->get_video_capture()->set(cv::CAP_PROP_FRAME_HEIGHT, 240);
+}
+
+CaptureSetting CameraNode::on_configure_capture_setting(
+  const CaptureSetting & capture_setting)
+{
+  auto new_capture_setting = capture_setting;
+
+  auto video_capture = image_provider->get_video_capture();
+
+  // Set the capture setting to the camera
+  {
+    if (new_capture_setting.brightness.is_not_empty()) {
+      std::cout << "new_capture_setting.brightness: " << new_capture_setting.brightness << std::endl;
+      video_capture->set(cv::CAP_PROP_BRIGHTNESS, new_capture_setting.brightness);
+    }
+
+    if (new_capture_setting.contrast.is_not_empty()) {
+      video_capture->set(cv::CAP_PROP_CONTRAST, new_capture_setting.contrast);
+    }
+
+    if (new_capture_setting.saturation.is_not_empty()) {
+      video_capture->set(cv::CAP_PROP_SATURATION, new_capture_setting.saturation);
+    }
+
+    if (new_capture_setting.temperature.is_not_empty()) {
+      video_capture->set(cv::CAP_PROP_TEMPERATURE, new_capture_setting.temperature);
+    }
+
+    if (new_capture_setting.hue.is_not_empty()) {
+      video_capture->set(cv::CAP_PROP_HUE, new_capture_setting.hue);
+    }
+
+    if (new_capture_setting.gain.is_not_empty()) {
+      video_capture->set(cv::CAP_PROP_GAIN, new_capture_setting.gain);
+    }
+  }
+
+  // Get new capture setting from the camera
+  new_capture_setting.brightness = video_capture->get(cv::CAP_PROP_BRIGHTNESS);
+  new_capture_setting.contrast = video_capture->get(cv::CAP_PROP_CONTRAST);
+  new_capture_setting.saturation = video_capture->get(cv::CAP_PROP_SATURATION);
+  new_capture_setting.temperature = video_capture->get(cv::CAP_PROP_TEMPERATURE);
+  new_capture_setting.hue = video_capture->get(cv::CAP_PROP_HUE);
+  new_capture_setting.gain = video_capture->get(cv::CAP_PROP_GAIN);
+
+  return new_capture_setting;
+}
+
+void CameraNode::configure_capture_setting(const CaptureSetting & capture_setting)
+{
+  // Update with configured data
+  auto current_capture_setting = image_provider->get_capture_setting();
+  current_capture_setting.update_with(on_configure_capture_setting(capture_setting));
+  capture_setting_event_publisher->publish(image_provider->get_capture_setting());
 }
 
 }  // namespace shisen_cpp

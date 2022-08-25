@@ -45,6 +45,8 @@ void CameraConfigProvider::set_config(int width, int height)
   float view_h_angle =
     2 * keisan::signed_arctan(static_cast<float>(width / 2), depth).degree();
 
+  config.width = width;
+  config.height = height;
   config.v_angle = view_v_angle;
   config.h_angle = view_h_angle;
 

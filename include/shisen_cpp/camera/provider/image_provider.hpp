@@ -26,8 +26,7 @@
 #include <memory>
 #include <string>
 
-#include "shisen_cpp/utility/options.hpp"
-#include "shisen_cpp/utility/mat_image.hpp"
+#include "shisen_cpp/utility.hpp"
 
 #include <shisen_interfaces/msg/image.hpp>
 
@@ -49,6 +48,7 @@ public:
   cv::Mat get_mat() const;
 
   std::shared_ptr<cv::VideoCapture> get_video_capture() const;
+  const CaptureSetting & get_capture_setting() const;
 
   Options options;
 
@@ -59,6 +59,7 @@ private:
   int compression_quality;
 
   std::shared_ptr<cv::VideoCapture> video_capture;
+  CaptureSetting current_capture_setting;
 };
 
 }  // namespace shisen_cpp

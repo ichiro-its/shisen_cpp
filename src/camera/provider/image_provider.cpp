@@ -72,4 +72,9 @@ std::shared_ptr<cv::VideoCapture> ImageProvider::get_video_capture() const
   return video_capture;
 }
 
+const CaptureSetting & ImageProvider::get_capture_setting() const
+{
+  return current_capture_setting;
+}
+
 }  // namespace shisen_cpp

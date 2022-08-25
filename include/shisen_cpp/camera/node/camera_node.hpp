@@ -44,6 +44,8 @@ public:
   void update();
   void on_mat_captured(cv::Mat mat);
   void on_camera_config(int width, int height);
+  CaptureSetting on_configure_capture_setting(const CaptureSetting & capture_setting);
+  void configure_capture_setting(const CaptureSetting & capture_setting = CaptureSetting());
 
   cv::Mat get_mat();
   const std::string & get_camera_prefix() const;
@@ -61,6 +63,9 @@ private:
 
   rclcpp::Publisher<Image>::SharedPtr image_publisher;
   rclcpp::Publisher<CameraConfig>::SharedPtr camera_config_publisher;
+
+  rclcpp::Publisher<CaptureSettingMsg>::SharedPtr capture_setting_event_publisher;
+  rclcpp::Service<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_service;
 };
 
 }  // namespace shisen_cpp
