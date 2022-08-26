@@ -130,10 +130,10 @@ void CameraNode::set_provider(
       ConfigureCaptureSetting::Response::SharedPtr response) {
         // Configure capture setting if exist
         if (request->capture_setting.size() > 0) {
-          configure_capture_setting((const CaptureSetting &)request->capture_setting.front());
+          configure_capture_setting(((CaptureSetting)request->capture_setting.front()));
         }
 
-        response->capture_setting.push_back(image_provider->get_capture_setting());
+        response->capture_setting.push_back(image_provider->current_capture_setting);
       });
 
     RCLCPP_INFO_STREAM(
@@ -141,8 +141,6 @@ void CameraNode::set_provider(
       "Configure capture setting service initialized on `" <<
         configure_capture_setting_service->get_service_name() << "`!");
   }
-  // image_provider->get_video_capture()->set(cv::CAP_PROP_FRAME_WIDTH, 320);
-  // image_provider->get_video_capture()->set(cv::CAP_PROP_FRAME_HEIGHT, 240);
 }
 
 CaptureSetting CameraNode::on_configure_capture_setting(
@@ -155,7 +153,6 @@ CaptureSetting CameraNode::on_configure_capture_setting(
   // Set the capture setting to the camera
   {
     if (new_capture_setting.brightness.is_not_empty()) {
-      std::cout << "new_capture_setting.brightness: " << new_capture_setting.brightness << std::endl;
       video_capture->set(cv::CAP_PROP_BRIGHTNESS, new_capture_setting.brightness);
     }
 
@@ -194,9 +191,8 @@ CaptureSetting CameraNode::on_configure_capture_setting(
 void CameraNode::configure_capture_setting(const CaptureSetting & capture_setting)
 {
   // Update with configured data
-  auto current_capture_setting = image_provider->get_capture_setting();
-  current_capture_setting.update_with(on_configure_capture_setting(capture_setting));
-  capture_setting_event_publisher->publish(image_provider->get_capture_setting());
+  image_provider->current_capture_setting.update_with(on_configure_capture_setting(capture_setting));
+  capture_setting_event_publisher->publish(image_provider->current_capture_setting);
 }
 
 }  // namespace shisen_cpp

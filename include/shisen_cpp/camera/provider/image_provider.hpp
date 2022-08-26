@@ -48,9 +48,9 @@ public:
   cv::Mat get_mat() const;
 
   std::shared_ptr<cv::VideoCapture> get_video_capture() const;
-  const CaptureSetting & get_capture_setting() const;
 
   Options options;
+  CaptureSetting current_capture_setting;
 
 private:
   Image current_image_msg;
@@ -59,7 +59,6 @@ private:
   int compression_quality;
 
   std::shared_ptr<cv::VideoCapture> video_capture;
-  CaptureSetting current_capture_setting;
 };
 
 }  // namespace shisen_cpp
