@@ -18,17 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#include <shisen_cpp/node/shisen_cpp_viewer_node.hpp>
 
-#include "./camera/node/camera_node.hpp"
-#include "./camera/provider/image_provider.hpp"
-#include "./camera/provider/camera_config_provider.hpp"
-#include "./node/shisen_cpp_node.hpp"
-#include "./node/shisen_cpp_viewer_node.hpp"
-#include "./viewer/consumer/image_consumer.hpp"
-#include "./viewer/node/viewer_node.hpp"
+namespace shisen_cpp
+{
+using namespace std::chrono_literals;
 
-#include "./utility.hpp"
+ShisenCppViewerNode::ShisenCppViewerNode(rclcpp::Node::SharedPtr node, const Options & options)
+: node(node)
+{
+  viewer_node = std::make_shared<shisen_cpp::ViewerNode>(node, options);
+  auto image_consumer = std::make_shared<shisen_cpp::ImageConsumer>();
+  viewer_node->set_consumer(image_consumer);
+}
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+ShisenCppViewerNode::~ShisenCppViewerNode()
+{
+}
+
+}  // namespace shisen_cpp

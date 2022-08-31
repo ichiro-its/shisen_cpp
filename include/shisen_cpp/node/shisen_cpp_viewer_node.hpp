@@ -18,17 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#ifndef SHISEN_CPP__NODE__SHISEN_CPP_VIEWER_NODE_HPP_
+#define SHISEN_CPP__NODE__SHISEN_CPP_VIEWER_NODE_HPP_
 
-#include "./camera/node/camera_node.hpp"
-#include "./camera/provider/image_provider.hpp"
-#include "./camera/provider/camera_config_provider.hpp"
-#include "./node/shisen_cpp_node.hpp"
-#include "./node/shisen_cpp_viewer_node.hpp"
-#include "./viewer/consumer/image_consumer.hpp"
-#include "./viewer/node/viewer_node.hpp"
+#include <rclcpp/rclcpp.hpp>
 
-#include "./utility.hpp"
+#include "shisen_cpp/viewer/node/viewer_node.hpp"
+#include "../utility.hpp"
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+namespace shisen_cpp
+{
+
+class ShisenCppViewerNode
+{
+public:
+  explicit ShisenCppViewerNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
+  ~ShisenCppViewerNode();
+
+private:
+  rclcpp::Node::SharedPtr node;
+  std::shared_ptr<ViewerNode> viewer_node;
+};
+
+}  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__NODE__SHISEN_CPP_VIEWER_NODE_HPP_

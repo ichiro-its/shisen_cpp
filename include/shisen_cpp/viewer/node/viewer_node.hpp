@@ -18,17 +18,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#ifndef SHISEN_CPP__VIEWER__CONSUMER__VIEWER_NODE_HPP_
+#define SHISEN_CPP__VIEWER__CONSUMER__VIEWER_NODE_HPP_
 
-#include "./camera/node/camera_node.hpp"
-#include "./camera/provider/image_provider.hpp"
-#include "./camera/provider/camera_config_provider.hpp"
-#include "./node/shisen_cpp_node.hpp"
-#include "./node/shisen_cpp_viewer_node.hpp"
-#include "./viewer/consumer/image_consumer.hpp"
-#include "./viewer/node/viewer_node.hpp"
+#include <rclcpp/rclcpp.hpp>
+#include <memory>
+#include <string>
 
-#include "./utility.hpp"
+#include "shisen_cpp/utility.hpp"
+#include "shisen_cpp/viewer/consumer/image_consumer.hpp"
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+#include <shisen_interfaces/msg/image.hpp>
+
+namespace shisen_cpp
+{
+using Image = shisen_interfaces::msg::Image;
+
+class ViewerNode
+{
+public:
+  explicit ViewerNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
+  ~ViewerNode();
+
+  const std::string & get_camera_prefix() const;
+
+  void set_consumer(
+    std::shared_ptr<ImageConsumer> img_consumer);
+
+private:
+  rclcpp::Node::SharedPtr node;
+  rclcpp::Subscription<Image>::SharedPtr image_subscription;
+
+  std::shared_ptr<ImageConsumer> image_consumer;
+
+  Options options;
+};
+
+}  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__VIEWER__CONSUMER__VIEWER_NODE_HPP_

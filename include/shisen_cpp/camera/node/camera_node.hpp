@@ -59,13 +59,14 @@ public:
 
 private:
   rclcpp::Node::SharedPtr node;
-  Options options;
 
   rclcpp::Publisher<Image>::SharedPtr image_publisher;
   rclcpp::Publisher<CameraConfig>::SharedPtr camera_config_publisher;
 
   rclcpp::Publisher<CaptureSettingMsg>::SharedPtr capture_setting_event_publisher;
   rclcpp::Service<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_service;
+
+  Options options;
 };
 
 }  // namespace shisen_cpp

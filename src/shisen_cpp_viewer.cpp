@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
 
-  shisen_cpp::Viewer::Options options;
+  shisen_cpp::Options options;
 
   const char * help_message =
     "Usage: ros2 run shisen_cpp viewer [options] [--camera-prefix prefix]\n"
@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
   auto node = std::make_shared<rclcpp::Node>("viewer");
 
   try {
-    auto viewer = std::make_shared<shisen_cpp::Viewer>(node, options);
+    auto viewer = std::make_shared<shisen_cpp::ShisenCppViewerNode>(node, options);
     rclcpp::spin(node);
   } catch (const std::exception & e) {
     RCLCPP_ERROR_STREAM(node->get_logger(), "Exception! " << e.what());

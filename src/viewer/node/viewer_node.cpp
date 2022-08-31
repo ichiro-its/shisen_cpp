@@ -18,17 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#include <shisen_cpp/viewer/node/viewer_node.hpp>
 
-#include "./camera/node/camera_node.hpp"
-#include "./camera/provider/image_provider.hpp"
-#include "./camera/provider/camera_config_provider.hpp"
-#include "./node/shisen_cpp_node.hpp"
-#include "./node/shisen_cpp_viewer_node.hpp"
-#include "./viewer/consumer/image_consumer.hpp"
-#include "./viewer/node/viewer_node.hpp"
+namespace shisen_cpp
+{
 
-#include "./utility.hpp"
+ViewerNode::ViewerNode(rclcpp::Node::SharedPtr node, const Options & options)
+: node(node), options(options)
+{
+}
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+ViewerNode::~ViewerNode()
+{
+}
+
+const std::string & ViewerNode::get_camera_prefix() const
+{
+  return options.camera_prefix;
+}
+
+void ViewerNode::set_consumer(
+  std::shared_ptr<ImageConsumer> img_consumer)
+{
+  image_consumer = img_consumer;
+
+  // Initialize the image subscription
+  {
+    image_subscription = node->create_subscription<Image>(
+      get_camera_prefix() + IMAGE_SUFFIX, 10,
+      [this](const Image::SharedPtr msg) {
+        auto current_image = *msg;
+
+        // Call callback after image changed
+        image_consumer->on_image_changed(current_image);
+      });
+
+    RCLCPP_INFO_STREAM(
+      node->get_logger(),
+      "Image subscription initialized on `" << image_subscription->get_topic_name() << "`!");
+  }
+}
+
+}  // namespace shisen_cpp

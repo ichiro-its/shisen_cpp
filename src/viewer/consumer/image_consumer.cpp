@@ -18,17 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#include <shisen_cpp/viewer/consumer/image_consumer.hpp>
 
-#include "./camera/node/camera_node.hpp"
-#include "./camera/provider/image_provider.hpp"
-#include "./camera/provider/camera_config_provider.hpp"
-#include "./node/shisen_cpp_node.hpp"
-#include "./node/shisen_cpp_viewer_node.hpp"
-#include "./viewer/consumer/image_consumer.hpp"
-#include "./viewer/node/viewer_node.hpp"
+namespace shisen_cpp
+{
 
-#include "./utility.hpp"
+ImageConsumer::ImageConsumer()
+{
+}
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+ImageConsumer::~ImageConsumer()
+{
+}
+
+void ImageConsumer::on_image_changed(const shisen_cpp::Image & image)
+{
+  current_mat_image = image;
+  if (!get_mat().empty()) {
+    cv::imshow("viewer", get_mat());
+    cv::waitKey(1);
+  } else {
+    throw std::runtime_error("Once, received an empty mat!");
+  }
+}
+
+const Image & ImageConsumer::get_image() const
+{
+  return current_image;
+}
+
+cv::Mat ImageConsumer::get_mat() const
+{
+  return (cv::Mat)current_mat_image;
+}
+
+}  // namespace shisen_cpp

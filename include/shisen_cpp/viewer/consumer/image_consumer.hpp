@@ -18,17 +18,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__SHISEN_CPP_HPP_
-#define SHISEN_CPP__SHISEN_CPP_HPP_
+#ifndef SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
+#define SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 
-#include "./camera/node/camera_node.hpp"
-#include "./camera/provider/image_provider.hpp"
-#include "./camera/provider/camera_config_provider.hpp"
-#include "./node/shisen_cpp_node.hpp"
-#include "./node/shisen_cpp_viewer_node.hpp"
-#include "./viewer/consumer/image_consumer.hpp"
-#include "./viewer/node/viewer_node.hpp"
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <memory>
+#include <string>
 
-#include "./utility.hpp"
+#include "shisen_cpp/utility.hpp"
 
-#endif  // SHISEN_CPP__SHISEN_CPP_HPP_
+#include <shisen_interfaces/msg/image.hpp>
+
+namespace shisen_cpp
+{
+using Image = shisen_interfaces::msg::Image;
+
+class ImageConsumer
+{
+public:
+  explicit ImageConsumer();
+
+  ~ImageConsumer();
+
+  virtual void on_image_changed(const Image & image);
+
+  const Image & get_image() const;
+  cv::Mat get_mat() const;
+
+private:
+  Image current_image;
+  MatImage current_mat_image;
+};
+
+}  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
