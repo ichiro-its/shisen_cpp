@@ -43,6 +43,7 @@ public:
 
   void set_image(const Image & image);
   void set_mat(cv::Mat mat);
+  void update_mat();
 
   const Image & get_image() const;
   cv::Mat get_mat() const;

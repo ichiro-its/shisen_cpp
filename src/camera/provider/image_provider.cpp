@@ -29,7 +29,7 @@ ImageProvider::ImageProvider(const Options & options)
   video_capture(std::make_shared<cv::VideoCapture>())
 {
   // Try to open the camera
-  if (!get_video_capture()->open(options.camera_file_name)) {
+  if (!video_capture->open(options.camera_file_name)) {
     throw std::runtime_error("unable to open camera on `" + options.camera_file_name + "`");
   }
 }
@@ -43,17 +43,35 @@ void ImageProvider::set_image(const Image & image)
   current_image_msg = image;
 }
 
+void ImageProvider::update_mat()
+{
+  // Ensure the camera is opened
+  if (!video_capture->isOpened()) {
+    throw std::runtime_error("Once, camera capture had not been opened!");
+    return;
+  }
+
+  // Read captured mat
+  cv::Mat captured_mat;
+  video_capture->read(captured_mat);
+
+  // Ensure the captured mat is not empty
+  if (!captured_mat.empty()) {
+    set_mat(captured_mat);
+  } else {
+    throw std::runtime_error("Once, captured an empty mat!");
+  }
+}
+
 void ImageProvider::set_mat(cv::Mat mat)
 {
   current_mat_image = mat;
 
   // Set image according to the compression quality
-  if (options.publish_image) {
-    if (compression_quality > 0) {
-      set_image(current_mat_image.compress(compression_quality));
-    } else {
-      set_image(current_mat_image);
-    }
+  if (compression_quality > 0) {
+    set_image(current_mat_image.compress(compression_quality));
+  } else {
+    set_image(current_mat_image);
   }
 }
 

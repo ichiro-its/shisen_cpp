@@ -29,7 +29,6 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
 
   shisen_cpp::Options options;
-  options.publish_image = true;
   options.field_of_view = 78;
 
   const char * help_message =

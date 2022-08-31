@@ -34,15 +34,11 @@ CameraNode::~CameraNode()
 
 void CameraNode::update()
 {
-  // Ensure the camera is opened
-  if (!image_provider->get_video_capture()->isOpened()) {
-    RCLCPP_WARN_ONCE(node->get_logger(), "Once, camera capture had not been opened!");
-    return;
-  }
+  image_provider->update_mat();
 
-  // Read captured mat
+  // Get captured mat
   cv::Mat captured_mat;
-  image_provider->get_video_capture()->read(captured_mat);
+  captured_mat = image_provider->get_mat();
 
   // Ensure the captured mat is not empty
   if (!captured_mat.empty()) {
@@ -55,11 +51,7 @@ void CameraNode::update()
 
 void CameraNode::on_mat_captured(cv::Mat mat)
 {
-  image_provider->set_mat(mat);
-
-  if (image_provider->options.publish_image) {
-    image_publisher->publish(image_provider->get_image());
-  }
+  image_publisher->publish(image_provider->get_image());
 }
 
 void CameraNode::on_camera_config(int width, int height)
@@ -87,7 +79,7 @@ void CameraNode::set_provider(
   camera_config_provider = cam_config_provider;
 
   // Initialize the image publisher
-  if (image_provider->options.publish_image) {
+  {
     image_publisher = node->create_publisher<Image>(
       get_camera_prefix() + IMAGE_SUFFIX, 10);
 

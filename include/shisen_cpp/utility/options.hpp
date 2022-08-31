@@ -40,8 +40,7 @@ struct Options
     camera_prefix("camera"),
     capture_fps(60),
     compression_quality(-1),
-    field_of_view(-1),
-    publish_image(false)
+    field_of_view(-1)
   {
   }
 };
