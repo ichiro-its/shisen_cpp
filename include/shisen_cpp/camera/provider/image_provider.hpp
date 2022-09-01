@@ -51,7 +51,6 @@ public:
   std::shared_ptr<cv::VideoCapture> get_video_capture() const;
 
   Options options;
-  CaptureSetting current_capture_setting;
 
 private:
   Image current_image_msg;

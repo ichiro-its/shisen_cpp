@@ -59,6 +59,7 @@ public:
 
 private:
   rclcpp::Node::SharedPtr node;
+  CaptureSetting current_capture_setting;
 
   rclcpp::Publisher<Image>::SharedPtr image_publisher;
   rclcpp::Publisher<CameraConfig>::SharedPtr camera_config_publisher;
