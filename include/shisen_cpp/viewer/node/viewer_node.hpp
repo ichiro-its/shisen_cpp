@@ -37,21 +37,42 @@ using Image = shisen_interfaces::msg::Image;
 class ViewerNode
 {
 public:
+  using CaptureSettingCallback = std::function<void (const CaptureSetting &)>;
+
   explicit ViewerNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
   ~ViewerNode();
 
   const std::string & get_camera_prefix() const;
 
-  void set_consumer(
-    std::shared_ptr<ImageConsumer> img_consumer);
+  void set_consumer(std::shared_ptr<ImageConsumer> img_consumer);
+  
+  virtual void on_capture_setting_changed(const CaptureSetting & capture_setting);
+
+  void request_to_configure_capture_setting(
+    ConfigureCaptureSetting::Request::SharedPtr request,
+    const CaptureSettingCallback & callback = {});
+
+  void configure_capture_setting(
+    const CaptureSetting & capture_setting, const CaptureSettingCallback & callback = {});
+
+  void fetch_capture_setting(const CaptureSettingCallback & callback = {});
+
+  const CaptureSetting & get_capture_setting() const;
 
 private:
+  void change_capture_setting(const CaptureSetting & capture_setting);
+
   rclcpp::Node::SharedPtr node;
+
   rclcpp::Subscription<Image>::SharedPtr image_subscription;
+  rclcpp::Subscription<CaptureSettingMsg>::SharedPtr capture_setting_event_subscription;
+
+  rclcpp::Client<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_client;
 
   std::shared_ptr<ImageConsumer> image_consumer;
 
   Options options;
+  CaptureSetting current_capture_setting;
 };
 
 }  // namespace shisen_cpp
