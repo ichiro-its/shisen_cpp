@@ -22,6 +22,7 @@
 #define SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_
 
 #include <rclcpp/rclcpp.hpp>
+#include <memory>
 
 #include "shisen_cpp/camera/node/camera_node.hpp"
 #include "../utility.hpp"
@@ -39,7 +40,7 @@ private:
   rclcpp::Node::SharedPtr node;
   rclcpp::TimerBase::SharedPtr node_timer;
 
-  std::shared_ptr<CameraNode> camera_node;
+  std::shared_ptr<camera::CameraNode> camera_node;
 };
 
 }  // namespace shisen_cpp

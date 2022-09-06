@@ -21,16 +21,17 @@
 #ifndef SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
 #define SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
 
+#include <shisen_interfaces/msg/image.hpp>
+
+#include <rclcpp/rclcpp.hpp>
 #include <memory>
 #include <string>
-#include <rclcpp/rclcpp.hpp>
 
 #include "shisen_cpp/utility.hpp"
 #include "shisen_cpp/viewer/consumer/image_consumer.hpp"
 
-#include <shisen_interfaces/msg/image.hpp>
 
-namespace shisen_cpp
+namespace shisen_cpp::viewer
 {
 using Image = shisen_interfaces::msg::Image;
 
@@ -75,6 +76,6 @@ private:
   CaptureSetting current_capture_setting;
 };
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::viewer
 
 #endif  // SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_

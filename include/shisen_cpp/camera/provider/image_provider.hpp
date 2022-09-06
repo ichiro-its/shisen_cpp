@@ -21,6 +21,8 @@
 #ifndef SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 #define SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 
+#include <shisen_interfaces/msg/image.hpp>
+
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
 #include <memory>
@@ -28,14 +30,12 @@
 
 #include "shisen_cpp/utility.hpp"
 
-#include <shisen_interfaces/msg/image.hpp>
-
-namespace shisen_cpp
+namespace shisen_cpp::camera
 {
 
 class ImageProvider
 {
-using Image = shisen_interfaces::msg::Image;
+  using Image = shisen_interfaces::msg::Image;
 
 public:
   explicit ImageProvider(const Options & options = Options());
@@ -54,13 +54,13 @@ public:
 
 private:
   Image current_image_msg;
-  shisen_cpp::MatImage current_mat_image;
+  MatImage current_mat_image;
 
   int compression_quality;
 
   std::shared_ptr<cv::VideoCapture> video_capture;
 };
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::camera
 
 #endif  // SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_

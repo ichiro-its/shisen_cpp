@@ -20,10 +20,10 @@
 
 #include <shisen_cpp/viewer/consumer/image_consumer.hpp>
 
-namespace shisen_cpp
+namespace shisen_cpp::viewer
 {
 
-void ImageConsumer::on_image_changed(const shisen_cpp::Image & image)
+void ImageConsumer::on_image_changed(const Image & image)
 {
   current_mat_image = image;
   if (!get_mat().empty()) {
@@ -44,4 +44,4 @@ cv::Mat ImageConsumer::get_mat() const
   return (cv::Mat)current_mat_image;
 }
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::viewer

@@ -31,7 +31,7 @@
 
 #include "shisen_cpp/utility.hpp"
 
-namespace shisen_cpp
+namespace shisen_cpp::camera
 {
 using CameraConfig = shisen_interfaces::msg::CameraConfig;
 
@@ -70,6 +70,6 @@ private:
   Options options;
 };
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::camera
 
 #endif  // SHISEN_CPP__CAMERA__NODE__CAMERA_NODE_HPP_

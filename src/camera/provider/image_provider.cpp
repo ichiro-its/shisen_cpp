@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <memory>
-
 #include <shisen_cpp/camera/provider/image_provider.hpp>
 
-namespace shisen_cpp
+#include <memory>
+
+namespace shisen_cpp::camera
 {
 using Image = shisen_interfaces::msg::Image;
 
@@ -92,4 +92,4 @@ std::shared_ptr<cv::VideoCapture> ImageProvider::get_video_capture() const
   return video_capture;
 }
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::camera

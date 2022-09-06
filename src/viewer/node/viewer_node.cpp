@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <shisen_cpp/viewer/node/viewer_node.hpp>
+
 #include <memory>
 #include <string>
 
-#include <shisen_cpp/viewer/node/viewer_node.hpp>
-
-namespace shisen_cpp
+namespace shisen_cpp::viewer
 {
 
 ViewerNode::ViewerNode(rclcpp::Node::SharedPtr node, const Options & options)
@@ -149,4 +149,4 @@ void ViewerNode::change_capture_setting(const CaptureSetting & capture_setting)
   on_capture_setting_changed(get_capture_setting());
 }
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::viewer

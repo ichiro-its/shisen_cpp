@@ -29,7 +29,7 @@
 #include "shisen_cpp/utility/options.hpp"
 #include "shisen_interfaces/msg/camera_config.hpp"
 
-namespace shisen_cpp
+namespace shisen_cpp::camera
 {
 using CameraConfig = shisen_interfaces::msg::CameraConfig;
 
@@ -49,6 +49,6 @@ private:
   int field_of_view;
 };
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::camera
 
 #endif  // SHISEN_CPP__CAMERA__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_

@@ -22,6 +22,7 @@
 #define SHISEN_CPP__NODE__SHISEN_CPP_VIEWER_NODE_HPP_
 
 #include <rclcpp/rclcpp.hpp>
+#include <memory>
 
 #include "shisen_cpp/viewer/node/viewer_node.hpp"
 #include "../utility.hpp"
@@ -37,7 +38,7 @@ public:
 
 private:
   rclcpp::Node::SharedPtr node;
-  std::shared_ptr<ViewerNode> viewer_node;
+  std::shared_ptr<viewer::ViewerNode> viewer_node;
 };
 
 }  // namespace shisen_cpp

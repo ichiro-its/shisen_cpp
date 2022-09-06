@@ -21,23 +21,23 @@
 #ifndef SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 #define SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 
-#include <memory>
-#include <string>
+#include <shisen_interfaces/msg/image.hpp>
+
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
+#include <memory>
+#include <string>
 
 #include "shisen_cpp/utility.hpp"
 
-#include <shisen_interfaces/msg/image.hpp>
 
-namespace shisen_cpp
+namespace shisen_cpp::viewer
 {
 using Image = shisen_interfaces::msg::Image;
 
 class ImageConsumer
 {
 public:
-
   virtual void on_image_changed(const Image & image);
 
   const Image & get_image() const;
@@ -48,6 +48,6 @@ private:
   MatImage current_mat_image;
 };
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::viewer
 
 #endif  // SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_

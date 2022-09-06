@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <shisen_cpp/camera/node/camera_node.hpp>
+
 #include <memory>
 #include <string>
 
-#include <shisen_cpp/camera/node/camera_node.hpp>
-
-namespace shisen_cpp
+namespace shisen_cpp::camera
 {
 
 CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const Options & options)
@@ -190,4 +190,4 @@ void CameraNode::configure_capture_setting(const CaptureSetting & capture_settin
   capture_setting_event_publisher->publish(current_capture_setting);
 }
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::camera

@@ -20,7 +20,7 @@
 
 #include <shisen_cpp/camera/provider/camera_config_provider.hpp>
 
-namespace shisen_cpp
+namespace shisen_cpp::camera
 {
 
 CameraConfigProvider::CameraConfigProvider(const Options & options)
@@ -58,4 +58,4 @@ const CameraConfig & CameraConfigProvider::get_camera_config() const
   return camera_config;
 }
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::camera
