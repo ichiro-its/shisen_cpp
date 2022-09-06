@@ -51,7 +51,7 @@ public:
   const std::string & get_camera_prefix() const;
 
   void set_provider(
-    std::shared_ptr<ImageProvider> img_provider, 
+    std::shared_ptr<ImageProvider> img_provider,
     std::shared_ptr<CameraConfigProvider> cam_config_provider);
 
   std::shared_ptr<ImageProvider> image_provider;

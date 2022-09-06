@@ -21,10 +21,10 @@
 #ifndef SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 #define SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
 #include <memory>
 #include <string>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 
 #include "shisen_cpp/utility.hpp"
 
@@ -37,9 +37,6 @@ using Image = shisen_interfaces::msg::Image;
 class ImageConsumer
 {
 public:
-  explicit ImageConsumer();
-
-  ~ImageConsumer();
 
   virtual void on_image_changed(const Image & image);
 

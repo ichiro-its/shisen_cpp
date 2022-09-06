@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <memory>
+
 #include <shisen_cpp/node/shisen_cpp_viewer_node.hpp>
 
 namespace shisen_cpp

@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__VIEWER__CONSUMER__VIEWER_NODE_HPP_
-#define SHISEN_CPP__VIEWER__CONSUMER__VIEWER_NODE_HPP_
+#ifndef SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
+#define SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
 
-#include <rclcpp/rclcpp.hpp>
 #include <memory>
 #include <string>
+#include <rclcpp/rclcpp.hpp>
 
 #include "shisen_cpp/utility.hpp"
 #include "shisen_cpp/viewer/consumer/image_consumer.hpp"
@@ -45,7 +45,7 @@ public:
   const std::string & get_camera_prefix() const;
 
   void set_consumer(std::shared_ptr<ImageConsumer> img_consumer);
-  
+
   virtual void on_capture_setting_changed(const CaptureSetting & capture_setting);
 
   void request_to_configure_capture_setting(
@@ -77,4 +77,4 @@ private:
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__VIEWER__CONSUMER__VIEWER_NODE_HPP_
+#endif  // SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_

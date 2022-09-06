@@ -18,6 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <memory>
+#include <string>
+
 #include <shisen_cpp/camera/node/camera_node.hpp>
 
 namespace shisen_cpp
@@ -72,7 +75,7 @@ const std::string & CameraNode::get_camera_prefix() const
 }
 
 void CameraNode::set_provider(
-  std::shared_ptr<ImageProvider> img_provider, 
+  std::shared_ptr<ImageProvider> img_provider,
   std::shared_ptr<CameraConfigProvider> cam_config_provider)
 {
   image_provider = img_provider;

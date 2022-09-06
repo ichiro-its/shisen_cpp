@@ -23,14 +23,6 @@
 namespace shisen_cpp
 {
 
-ImageConsumer::ImageConsumer()
-{
-}
-
-ImageConsumer::~ImageConsumer()
-{
-}
-
 void ImageConsumer::on_image_changed(const shisen_cpp::Image & image)
 {
   current_mat_image = image;

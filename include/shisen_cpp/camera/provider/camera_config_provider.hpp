@@ -45,7 +45,7 @@ public:
 
 private:
   CameraConfig camera_config;
-  
+
   int field_of_view;
 };
 
