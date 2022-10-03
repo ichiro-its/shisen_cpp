@@ -39,7 +39,7 @@ class ImageConsumer
 public:
   using Image = shisen_interfaces::msg::Image;
 
-  virtual void on_image_changed(const Image & image);
+  void on_image_changed(const Image & image);
 
   const Image & get_image() const;
   cv::Mat get_mat() const;

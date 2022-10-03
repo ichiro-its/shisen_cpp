@@ -47,15 +47,13 @@ public:
 
   void set_consumer(std::shared_ptr<ImageConsumer> img_consumer);
 
-  virtual void on_capture_setting_changed(const CaptureSetting & capture_setting);
+  void on_capture_setting_changed(const CaptureSetting & capture_setting);
 
   void request_to_configure_capture_setting(
     ConfigureCaptureSetting::Request::SharedPtr request,
     const CaptureSettingCallback & callback = {});
-
   void configure_capture_setting(
     const CaptureSetting & capture_setting, const CaptureSettingCallback & callback = {});
-
   void fetch_capture_setting(const CaptureSettingCallback & callback = {});
 
   const CaptureSetting & get_capture_setting() const;
