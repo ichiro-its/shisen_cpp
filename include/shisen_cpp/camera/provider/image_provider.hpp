@@ -35,7 +35,6 @@ namespace shisen_cpp::camera
 
 class ImageProvider
 {
-
 public:
   using Image = shisen_interfaces::msg::Image;
 
