@@ -53,7 +53,7 @@ void CameraConfigProvider::set_config(int width, int height)
   camera_config = config;
 }
 
-const CameraConfig & CameraConfigProvider::get_camera_config() const
+const shisen_interfaces::msg::CameraConfig & CameraConfigProvider::get_camera_config() const
 {
   return camera_config;
 }

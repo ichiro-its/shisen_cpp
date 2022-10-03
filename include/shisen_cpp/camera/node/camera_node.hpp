@@ -33,11 +33,12 @@
 
 namespace shisen_cpp::camera
 {
-using CameraConfig = shisen_interfaces::msg::CameraConfig;
 
 class CameraNode
 {
 public:
+  using CameraConfig = shisen_interfaces::msg::CameraConfig;
+
   explicit CameraNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
   ~CameraNode();
 

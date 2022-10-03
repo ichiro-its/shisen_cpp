@@ -31,11 +31,12 @@
 
 namespace shisen_cpp::camera
 {
-using CameraConfig = shisen_interfaces::msg::CameraConfig;
 
 class CameraConfigProvider
 {
 public:
+  using CameraConfig = shisen_interfaces::msg::CameraConfig;
+
   explicit CameraConfigProvider(const Options & options = Options());
   ~CameraConfigProvider();
 

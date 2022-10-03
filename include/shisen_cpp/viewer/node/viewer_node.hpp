@@ -33,11 +33,11 @@
 
 namespace shisen_cpp::viewer
 {
-using Image = shisen_interfaces::msg::Image;
 
 class ViewerNode
 {
 public:
+  using Image = shisen_interfaces::msg::Image;
   using CaptureSettingCallback = std::function<void (const CaptureSetting &)>;
 
   explicit ViewerNode(rclcpp::Node::SharedPtr node, const Options & options = Options());

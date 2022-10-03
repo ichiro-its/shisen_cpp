@@ -35,9 +35,10 @@ namespace shisen_cpp::camera
 
 class ImageProvider
 {
-  using Image = shisen_interfaces::msg::Image;
 
 public:
+  using Image = shisen_interfaces::msg::Image;
+
   explicit ImageProvider(const Options & options = Options());
   ~ImageProvider();
 
