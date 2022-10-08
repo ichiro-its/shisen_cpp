@@ -26,7 +26,6 @@
 namespace shisen_cpp
 {
 
-
 MatImage::MatImage()
 {
 }

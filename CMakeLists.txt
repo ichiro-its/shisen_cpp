@@ -47,13 +47,13 @@ install(TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION "lib"
   RUNTIME DESTINATION "bin")
 
-add_executable(camera "src/shisen_cpp_camera.cpp")
+add_executable(camera "src/shisen_cpp_camera_main.cpp")
 target_include_directories(camera PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(camera ${PROJECT_NAME})
 
-add_executable(viewer "src/shisen_cpp_viewer.cpp")
+add_executable(viewer "src/shisen_cpp_viewer_main.cpp")
 target_include_directories(viewer PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)

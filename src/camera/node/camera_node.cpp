@@ -40,8 +40,7 @@ void CameraNode::update()
   image_provider->update_mat();
 
   // Get captured mat
-  cv::Mat captured_mat;
-  captured_mat = image_provider->get_mat();
+  cv::Mat captured_mat = image_provider->get_mat();
 
   // Ensure the captured mat is not empty
   if (!captured_mat.empty()) {

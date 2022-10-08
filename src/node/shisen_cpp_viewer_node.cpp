@@ -27,9 +27,8 @@ namespace shisen_cpp
 using namespace std::chrono_literals;
 
 ShisenCppViewerNode::ShisenCppViewerNode(rclcpp::Node::SharedPtr node, const Options & options)
-: node(node)
+: node(node), viewer_node(std::make_shared<viewer::ViewerNode>(node, options))
 {
-  viewer_node = std::make_shared<viewer::ViewerNode>(node, options);
   auto image_consumer = std::make_shared<viewer::ImageConsumer>();
   viewer_node->set_consumer(image_consumer);
 }

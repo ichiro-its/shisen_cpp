@@ -27,9 +27,8 @@ namespace shisen_cpp
 using namespace std::chrono_literals;
 
 ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const Options & options)
-: node(node)
+: node(node), camera_node(std::make_shared<camera::CameraNode>(node, options))
 {
-  camera_node = std::make_shared<camera::CameraNode>(node, options);
   auto image_provider = std::make_shared<camera::ImageProvider>(options);
   auto camera_config_provider = std::make_shared<camera::CameraConfigProvider>(options);
   camera_node->set_provider(image_provider, camera_config_provider);
