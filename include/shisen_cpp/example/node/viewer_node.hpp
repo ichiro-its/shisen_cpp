@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
-#define SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
+#ifndef SHISEN_CPP__EXAMPLE__NODE__VIEWER_NODE_HPP_
+#define SHISEN_CPP__EXAMPLE__NODE__VIEWER_NODE_HPP_
 
 #include <shisen_interfaces/msg/image.hpp>
 
@@ -28,7 +28,7 @@
 #include <string>
 
 #include "shisen_cpp/utility.hpp"
-#include "shisen_cpp/viewer/consumer/image_consumer.hpp"
+#include "shisen_cpp/example/consumer/image_consumer.hpp"
 
 
 namespace shisen_cpp::viewer
@@ -76,4 +76,4 @@ private:
 
 }  // namespace shisen_cpp::viewer
 
-#endif  // SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
+#endif  // SHISEN_CPP__EXAMPLE__NODE__VIEWER_NODE_HPP_

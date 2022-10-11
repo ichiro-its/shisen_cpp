@@ -25,9 +25,8 @@
 #include "./camera/provider/image_provider.hpp"
 #include "./camera/provider/camera_config_provider.hpp"
 #include "./node/shisen_cpp_node.hpp"
-#include "./node/shisen_cpp_viewer_node.hpp"
-#include "./viewer/consumer/image_consumer.hpp"
-#include "./viewer/node/viewer_node.hpp"
+#include "./example/consumer/image_consumer.hpp"
+#include "./example/node/viewer_node.hpp"
 
 #include "./utility.hpp"
 

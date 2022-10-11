@@ -62,7 +62,10 @@ int main(int argc, char ** argv)
   auto node = std::make_shared<rclcpp::Node>("viewer");
 
   try {
-    auto viewer = std::make_shared<shisen_cpp::ShisenCppViewerNode>(node, options);
+    // auto viewer = std::make_shared<shisen_cpp::ShisenCppViewerNode>(node, options);
+    auto image_consumer = std::make_shared<shisen_cpp::viewer::ImageConsumer>();
+    auto viewer_node = std::make_shared<shisen_cpp::viewer::ViewerNode>(node, options);
+    viewer_node->set_consumer(image_consumer);
     rclcpp::spin(node);
   } catch (const std::exception & e) {
     RCLCPP_ERROR_STREAM(node->get_logger(), "Exception! " << e.what());

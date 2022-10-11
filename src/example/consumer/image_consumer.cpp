@@ -18,29 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__NODE__SHISEN_CPP_VIEWER_NODE_HPP_
-#define SHISEN_CPP__NODE__SHISEN_CPP_VIEWER_NODE_HPP_
+#include <shisen_cpp/example/consumer/image_consumer.hpp>
 
-#include <rclcpp/rclcpp.hpp>
-#include <memory>
-
-#include "shisen_cpp/viewer/node/viewer_node.hpp"
-#include "../utility.hpp"
-
-namespace shisen_cpp
+namespace shisen_cpp::viewer
 {
 
-class ShisenCppViewerNode
+void ImageConsumer::on_image_changed(const Image & image)
 {
-public:
-  explicit ShisenCppViewerNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~ShisenCppViewerNode();
+  current_mat_image = image;
+  if (!get_mat().empty()) {
+    cv::imshow("viewer", get_mat());
+    cv::waitKey(1);
+  } else {
+    throw std::runtime_error("Once, received an empty mat!");
+  }
+}
 
-private:
-  rclcpp::Node::SharedPtr node;
-  std::shared_ptr<viewer::ViewerNode> viewer_node;
-};
+const Image & ImageConsumer::get_image() const
+{
+  return current_image;
+}
 
-}  // namespace shisen_cpp
+cv::Mat ImageConsumer::get_mat() const
+{
+  return (cv::Mat)current_mat_image;
+}
 
-#endif  // SHISEN_CPP__NODE__SHISEN_CPP_VIEWER_NODE_HPP_
+}  // namespace shisen_cpp::viewer

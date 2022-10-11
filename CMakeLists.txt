@@ -30,9 +30,8 @@ add_library(${PROJECT_NAME} SHARED
   "src/utility/interface.cpp"
   "src/utility/mat_image.cpp"
   "src/node/shisen_cpp_node.cpp"
-  "src/node/shisen_cpp_viewer_node.cpp"
-  "src/viewer/consumer/image_consumer.cpp"
-  "src/viewer/node/viewer_node.cpp")
+  "src/example/consumer/image_consumer.cpp"
+  "src/example/node/viewer_node.cpp")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -53,7 +52,7 @@ target_include_directories(camera PUBLIC
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(camera ${PROJECT_NAME})
 
-add_executable(viewer "src/shisen_cpp_viewer_main.cpp")
+add_executable(viewer "example/viewer_main.cpp")
 target_include_directories(viewer PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)

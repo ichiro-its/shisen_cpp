@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/viewer/node/viewer_node.hpp>
+#include <shisen_cpp/example/node/viewer_node.hpp>
 
 #include <memory>
 #include <string>

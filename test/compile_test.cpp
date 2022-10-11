@@ -30,20 +30,6 @@ TEST(CompileTest, Interface) {
   shisen_cpp::Image();
 }
 
-TEST(CompileTest, Viewer) {
-  try {
-    auto node = std::make_shared<rclcpp::Node>("compile_test");
-
-    {
-      shisen_cpp::Options options;
-      options.camera_prefix = "foo";
-
-      std::make_shared<shisen_cpp::ShisenCppViewerNode>(node, options);
-    }
-  } catch (...) {
-  }
-}
-
 TEST(CompileTest, Camera) {
   try {
     auto node = std::make_shared<rclcpp::Node>("compile_test");
