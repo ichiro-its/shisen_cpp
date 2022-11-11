@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/example/node/viewer_node.hpp>
+#include <shisen_cpp/viewer/node/viewer_node.hpp>
 
 #include <memory>
 #include <string>
@@ -49,7 +49,8 @@ void ViewerNode::set_consumer(
   {
     image_subscription = node->create_subscription<Image>(
       get_camera_prefix() + IMAGE_SUFFIX, 10,
-      [this](const Image::SharedPtr msg) {
+      [this](const Image::SharedPtr msg)
+      {
         auto current_image = *msg;
 
         // Call callback after image changed
@@ -65,7 +66,8 @@ void ViewerNode::set_consumer(
   {
     capture_setting_event_subscription = node->create_subscription<CaptureSettingMsg>(
       get_camera_prefix() + CAPTURE_SETTING_EVENT_SUFFIX, 10,
-      [this](const CaptureSettingMsg::SharedPtr msg) {
+      [this](const CaptureSettingMsg::SharedPtr msg)
+      {
         change_capture_setting((const CaptureSetting &)*msg);
       });
 
@@ -104,7 +106,8 @@ void ViewerNode::request_to_configure_capture_setting(
   ConfigureCaptureSetting::Request::SharedPtr request, const CaptureSettingCallback & callback)
 {
   configure_capture_setting_client->async_send_request(
-    request, [this, callback](rclcpp::Client<ConfigureCaptureSetting>::SharedFuture future) {
+    request, [this, callback](rclcpp::Client<ConfigureCaptureSetting>::SharedFuture future)
+    {
       auto response = future.get();
       if (response->capture_setting.size() > 0) {
         change_capture_setting((const CaptureSetting &)response->capture_setting.front());

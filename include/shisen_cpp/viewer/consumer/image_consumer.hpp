@@ -18,30 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/example/consumer/image_consumer.hpp>
+#ifndef SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
+#define SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
+
+#include <shisen_interfaces/msg/image.hpp>
+
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <memory>
+#include <string>
+
+#include "shisen_cpp/utility.hpp"
 
 namespace shisen_cpp::viewer
 {
 
-void ImageConsumer::on_image_changed(const Image & image)
+class ImageConsumer
 {
-  current_mat_image = image;
-  if (!get_mat().empty()) {
-    cv::imshow("viewer", get_mat());
-    cv::waitKey(1);
-  } else {
-    throw std::runtime_error("Once, received an empty mat!");
-  }
-}
+public:
+  using Image = shisen_interfaces::msg::Image;
 
-const Image & ImageConsumer::get_image() const
-{
-  return current_image;
-}
+  void on_image_changed(const Image & image);
 
-cv::Mat ImageConsumer::get_mat() const
-{
-  return (cv::Mat)current_mat_image;
-}
+  const Image & get_image() const;
+  cv::Mat get_mat() const;
+
+private:
+  Image current_image;
+  MatImage current_mat_image;
+};
 
 }  // namespace shisen_cpp::viewer
+
+#endif  // SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_

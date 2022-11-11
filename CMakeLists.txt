@@ -23,15 +23,15 @@ find_package(shisen_interfaces REQUIRED)
 install(DIRECTORY "include" DESTINATION ".")
 
 add_library(${PROJECT_NAME} SHARED
-  "src/camera/node/camera_node.cpp"
-  "src/camera/provider/camera_config_provider.cpp"
-  "src/camera/provider/image_provider.cpp"
-  "src/utility/capture_setting.cpp"
-  "src/utility/interface.cpp"
-  "src/utility/mat_image.cpp"
-  "src/node/shisen_cpp_node.cpp"
-  "src/example/consumer/image_consumer.cpp"
-  "src/example/node/viewer_node.cpp")
+  "src/${PROJECT_NAME}/camera/node/camera_node.cpp"
+  "src/${PROJECT_NAME}/camera/provider/camera_config_provider.cpp"
+  "src/${PROJECT_NAME}/camera/provider/image_provider.cpp"
+  "src/${PROJECT_NAME}/utility/capture_setting.cpp"
+  "src/${PROJECT_NAME}/utility/interface.cpp"
+  "src/${PROJECT_NAME}/utility/mat_image.cpp"
+  "src/${PROJECT_NAME}/node/shisen_cpp_node.cpp"
+  "src/${PROJECT_NAME}/viewer/consumer/image_consumer.cpp"
+  "src/${PROJECT_NAME}/viewer/node/viewer_node.cpp")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -46,13 +46,13 @@ install(TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION "lib"
   RUNTIME DESTINATION "bin")
 
-add_executable(camera "src/shisen_cpp_camera_main.cpp")
+add_executable(camera "src/shisen_cpp_main.cpp")
 target_include_directories(camera PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(camera ${PROJECT_NAME})
 
-add_executable(viewer "example/viewer_main.cpp")
+add_executable(viewer "src/viewer_main.cpp")
 target_include_directories(viewer PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
