@@ -18,43 +18,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CONSUMER__CAPTURE_SETTING_CONSUMER_HPP_
-#define SHISEN_CPP__CONSUMER__CAPTURE_SETTING_CONSUMER_HPP_
+#ifndef SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
+#define SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
+
+#include <shisen_interfaces/msg/image.hpp>
 
 #include <rclcpp/rclcpp.hpp>
-
-#include <future>
 #include <memory>
 #include <string>
 
-#include "../node.hpp"
+#include "shisen_cpp/utility.hpp"
+#include "shisen_cpp/viewer/consumer/image_consumer.hpp"
 
-namespace shisen_cpp
+namespace shisen_cpp::viewer
 {
 
-class CaptureSettingConsumer : public CameraNode
+class ViewerNode
 {
 public:
+  using Image = shisen_interfaces::msg::Image;
   using CaptureSettingCallback = std::function<void (const CaptureSetting &)>;
 
-  struct Options : public virtual CameraNode::Options
-  {
-  };
+  explicit ViewerNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
+  ~ViewerNode();
 
-  explicit CaptureSettingConsumer(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
+  const std::string & get_camera_prefix() const;
 
-  ~CaptureSettingConsumer();
+  void set_consumer(std::shared_ptr<ImageConsumer> img_consumer);
 
-  virtual void on_capture_setting_changed(const CaptureSetting & capture_setting);
+  void on_capture_setting_changed(const CaptureSetting & capture_setting);
 
   void request_to_configure_capture_setting(
     ConfigureCaptureSetting::Request::SharedPtr request,
     const CaptureSettingCallback & callback = {});
-
   void configure_capture_setting(
     const CaptureSetting & capture_setting, const CaptureSettingCallback & callback = {});
-
   void fetch_capture_setting(const CaptureSettingCallback & callback = {});
 
   const CaptureSetting & get_capture_setting() const;
@@ -62,12 +60,19 @@ public:
 private:
   void change_capture_setting(const CaptureSetting & capture_setting);
 
+  rclcpp::Node::SharedPtr node;
+
+  rclcpp::Subscription<Image>::SharedPtr image_subscription;
   rclcpp::Subscription<CaptureSettingMsg>::SharedPtr capture_setting_event_subscription;
+
   rclcpp::Client<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_client;
 
+  std::shared_ptr<ImageConsumer> image_consumer;
+
+  Options options;
   CaptureSetting current_capture_setting;
 };
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::viewer
 
-#endif  // SHISEN_CPP__CONSUMER__CAPTURE_SETTING_CONSUMER_HPP_
+#endif  // SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_

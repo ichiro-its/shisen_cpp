@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2020-2021 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,44 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/provider/image_provider.hpp>
+#ifndef SHISEN_CPP__UTILITY__MAT_IMAGE_HPP_
+#define SHISEN_CPP__UTILITY__MAT_IMAGE_HPP_
+
+#include <shisen_interfaces/msg/image.hpp>
+#include <opencv2/core.hpp>
 
 namespace shisen_cpp
 {
 
-ImageProvider::ImageProvider(
-  rclcpp::Node::SharedPtr node, const ImageProvider::Options & options)
-: CameraNode(node, options)
+class MatImage
 {
-  // Initialize the image publisher
-  {
-    image_publisher = get_node()->template create_publisher<Image>(
-      get_camera_prefix() + IMAGE_SUFFIX, 10);
+public:
+  using Image = shisen_interfaces::msg::Image;
 
-    RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
-      "Image publisher initialized on `" << image_publisher->get_topic_name() << "`!");
-  }
+  MatImage();
+  explicit MatImage(const Image & image);
+  explicit MatImage(cv::Mat mat);
 
-  // Initial data publish
-  set_image(get_image());
-}
+  operator Image() const;
+  operator cv::Mat() const;
 
-ImageProvider::~ImageProvider()
-{
-}
+  const MatImage & operator=(const Image & image);
+  const MatImage & operator=(cv::Mat mat);
 
-void ImageProvider::set_image(const Image & image)
-{
-  current_image = image;
+  Image compress(int quality);
 
-  // Publish changes
-  image_publisher->publish(get_image());
-}
-
-const Image & ImageProvider::get_image() const
-{
-  return current_image;
-}
+private:
+  cv::Mat mat;
+};
 
 }  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__UTILITY__MAT_IMAGE_HPP_

@@ -30,43 +30,15 @@ TEST(CompileTest, Interface) {
   shisen_cpp::Image();
 }
 
-TEST(CompileTest, Consumer) {
+TEST(CompileTest, Camera) {
   try {
     auto node = std::make_shared<rclcpp::Node>("compile_test");
 
     {
-      shisen_cpp::CaptureSettingConsumer::Options options;
+      shisen_cpp::Options options;
       options.camera_prefix = "foo";
 
-      std::make_shared<shisen_cpp::CaptureSettingConsumer>(node, options);
-    }
-
-    {
-      shisen_cpp::ImageConsumer::Options options;
-      options.camera_prefix = "foo";
-
-      std::make_shared<shisen_cpp::ImageConsumer>(node, options);
-    }
-  } catch (...) {
-  }
-}
-
-TEST(CompileTest, Provider) {
-  try {
-    auto node = std::make_shared<rclcpp::Node>("compile_test");
-
-    {
-      shisen_cpp::CaptureSettingProvider::Options options;
-      options.camera_prefix = "foo";
-
-      std::make_shared<shisen_cpp::CaptureSettingProvider>(node, options);
-    }
-
-    {
-      shisen_cpp::ImageProvider::Options options;
-      options.camera_prefix = "foo";
-
-      std::make_shared<shisen_cpp::ImageProvider>(node, options);
+      std::make_shared<shisen_cpp::ShisenCppNode>(node, options);
     }
   } catch (...) {
   }

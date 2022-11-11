@@ -18,40 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
-#define SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
+#ifndef SHISEN_CPP__CAMERA__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
+#define SHISEN_CPP__CAMERA__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_
 
-#include <rclcpp/rclcpp.hpp>
+#include <keisan/keisan.hpp>
 
 #include <memory>
 #include <string>
 
-#include "../node.hpp"
+#include "shisen_cpp/utility/options.hpp"
+#include "shisen_interfaces/msg/camera_config.hpp"
 
-namespace shisen_cpp
+namespace shisen_cpp::camera
 {
 
-class ImageProvider : public CameraNode
+class CameraConfigProvider
 {
 public:
-  struct Options : public virtual CameraNode::Options
-  {
-  };
+  using CameraConfig = shisen_interfaces::msg::CameraConfig;
 
-  explicit ImageProvider(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~ImageProvider();
+  explicit CameraConfigProvider(const Options & options = Options());
+  ~CameraConfigProvider();
 
-  void set_image(const Image & image);
+  void set_config(int width, int height);
 
-  const Image & get_image() const;
+  const CameraConfig & get_camera_config() const;
 
 private:
-  typename rclcpp::Publisher<Image>::SharedPtr image_publisher;
+  CameraConfig camera_config;
 
-  Image current_image;
+  int field_of_view;
 };
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::camera
 
-#endif  // SHISEN_CPP__PROVIDER__IMAGE_PROVIDER_HPP_
+#endif  // SHISEN_CPP__CAMERA__PROVIDER__CAMERA_CONFIG_PROVIDER_HPP_

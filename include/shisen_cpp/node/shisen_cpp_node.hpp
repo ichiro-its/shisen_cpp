@@ -18,44 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__PROVIDER__CAPTURE_SETTING_PROVIDER_HPP_
-#define SHISEN_CPP__PROVIDER__CAPTURE_SETTING_PROVIDER_HPP_
+#ifndef SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_
+#define SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_
 
 #include <rclcpp/rclcpp.hpp>
-
 #include <memory>
-#include <string>
 
-#include "../node.hpp"
+#include "shisen_cpp/camera/node/camera_node.hpp"
+#include "../utility.hpp"
 
 namespace shisen_cpp
 {
 
-class CaptureSettingProvider : public CameraNode
+class ShisenCppNode
 {
 public:
-  struct Options : public virtual CameraNode::Options
-  {
-  };
-
-  explicit CaptureSettingProvider(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
-  ~CaptureSettingProvider();
-
-  virtual CaptureSetting on_configure_capture_setting(
-    const CaptureSetting & capture_setting);
-
-  void configure_capture_setting(const CaptureSetting & capture_setting = CaptureSetting());
-
-  const CaptureSetting & get_capture_setting() const;
+  explicit ShisenCppNode(rclcpp::Node::SharedPtr node, const Options & options = Options());
+  ~ShisenCppNode();
 
 private:
-  rclcpp::Publisher<CaptureSettingMsg>::SharedPtr capture_setting_event_publisher;
-  rclcpp::Service<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_service;
+  rclcpp::Node::SharedPtr node;
+  rclcpp::TimerBase::SharedPtr node_timer;
 
-  CaptureSetting current_capture_setting;
+  std::shared_ptr<camera::CameraNode> camera_node;
 };
 
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__PROVIDER__CAPTURE_SETTING_PROVIDER_HPP_
+#endif  // SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_

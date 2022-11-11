@@ -18,43 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/consumer/image_consumer.hpp>
+#ifndef SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
+#define SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 
-namespace shisen_cpp
+#include <shisen_interfaces/msg/image.hpp>
+
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <memory>
+#include <string>
+
+#include "shisen_cpp/utility.hpp"
+
+namespace shisen_cpp::viewer
 {
 
-ImageConsumer::ImageConsumer(
-  rclcpp::Node::SharedPtr node, const ImageConsumer::Options & options)
-: CameraNode(node, options)
+class ImageConsumer
 {
-  // Initialize the image subscription
-  {
-    image_subscription = get_node()->template create_subscription<Image>(
-      get_camera_prefix() + IMAGE_SUFFIX, 10,
-      [this](const Image::SharedPtr msg) {
-        current_image = *msg;
+public:
+  using Image = shisen_interfaces::msg::Image;
 
-        // Call callback after image changed
-        on_image_changed(get_image());
-      });
+  void on_image_changed(const Image & image);
 
-    RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
-      "Image subscription initialized on `" << image_subscription->get_topic_name() << "`!");
-  }
-}
+  const Image & get_image() const;
+  cv::Mat get_mat() const;
 
-ImageConsumer::~ImageConsumer()
-{
-}
+private:
+  Image current_image;
+  MatImage current_mat_image;
+};
 
-void ImageConsumer::on_image_changed(const Image & /*image*/)
-{
-}
+}  // namespace shisen_cpp::viewer
 
-const Image & ImageConsumer::get_image() const
-{
-  return current_image;
-}
-
-}  // namespace shisen_cpp
+#endif  // SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_

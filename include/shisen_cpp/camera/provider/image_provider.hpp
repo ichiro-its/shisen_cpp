@@ -18,45 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/provider/camera_config_provider.hpp>
+#ifndef SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
+#define SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 
-namespace shisen_cpp
+#include <shisen_interfaces/msg/image.hpp>
+
+#include <opencv2/core.hpp>
+#include <opencv2/videoio.hpp>
+#include <memory>
+#include <string>
+
+#include "shisen_cpp/utility.hpp"
+
+namespace shisen_cpp::camera
 {
 
-CameraConfigProvider::CameraConfigProvider(
-  rclcpp::Node::SharedPtr node, const CameraConfigProvider::Options & options)
-: CameraNode(node, options)
+class ImageProvider
 {
-  // Initialize the camera config publisher
-  {
-    camera_config_publisher = get_node()->template create_publisher<CameraConfig>(
-      get_camera_prefix() + CAMERA_CONFIG_SUFFIX, 10);
+public:
+  using Image = shisen_interfaces::msg::Image;
 
-    RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
-      "Camera Config publisher initialized on `" << camera_config_publisher->get_topic_name() <<
-        "`!");
-  }
+  explicit ImageProvider(const Options & options = Options());
+  ~ImageProvider();
 
-  // Initial data publish
-  set_camera_config(get_camera_config());
-}
+  void set_image(const Image & image);
+  void set_mat(cv::Mat mat);
+  void update_mat();
 
-CameraConfigProvider::~CameraConfigProvider()
-{
-}
+  const Image & get_image() const;
+  cv::Mat get_mat() const;
 
-void CameraConfigProvider::set_camera_config(const CameraConfig & config)
-{
-  camera_config = config;
+  std::shared_ptr<cv::VideoCapture> get_video_capture() const;
 
-  // Publish changes
-  camera_config_publisher->publish(get_camera_config());
-}
+  Options options;
 
-const CameraConfig & CameraConfigProvider::get_camera_config() const
-{
-  return camera_config;
-}
+private:
+  Image current_image_msg;
+  MatImage current_mat_image;
 
-}  // namespace shisen_cpp
+  int compression_quality;
+
+  std::shared_ptr<cv::VideoCapture> video_capture;
+};
+
+}  // namespace shisen_cpp::camera
+
+#endif  // SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_

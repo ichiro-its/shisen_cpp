@@ -18,9 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__NODE_HPP_
-#define SHISEN_CPP__NODE_HPP_
+#include <shisen_cpp/node/shisen_cpp_node.hpp>
 
-#include "./node/camera_node.hpp"
+#include <memory>
 
-#endif  // SHISEN_CPP__NODE_HPP_
+namespace shisen_cpp
+{
+using namespace std::chrono_literals;
+
+ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const Options & options)
+: node(node), camera_node(std::make_shared<camera::CameraNode>(node, options))
+{
+  auto image_provider = std::make_shared<camera::ImageProvider>(options);
+  auto camera_config_provider = std::make_shared<camera::CameraConfigProvider>(options);
+  camera_node->set_provider(image_provider, camera_config_provider);
+
+  node_timer = node->create_wall_timer(
+    1s / camera_node->image_provider->options.capture_fps,
+    [this]() {
+      camera_node->update();
+    }
+  );
+}
+
+ShisenCppNode::~ShisenCppNode()
+{
+}
+
+}  // namespace shisen_cpp

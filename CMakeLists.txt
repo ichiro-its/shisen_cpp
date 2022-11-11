@@ -15,32 +15,51 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(ament_cmake REQUIRED)
+find_package(keisan REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(shisen_interfaces REQUIRED)
 
 install(DIRECTORY "include" DESTINATION ".")
 
 add_library(${PROJECT_NAME} SHARED
-  "src/utility/capture_setting.cpp"
-  "src/utility/interface.cpp"
-  "src/consumer/capture_setting_consumer.cpp"
-  "src/consumer/image_consumer.cpp"
-  "src/node/camera_node.cpp"
-  "src/provider/camera_config_provider.cpp"
-  "src/provider/capture_setting_provider.cpp"
-  "src/provider/image_provider.cpp")
+  "src/${PROJECT_NAME}/camera/node/camera_node.cpp"
+  "src/${PROJECT_NAME}/camera/provider/camera_config_provider.cpp"
+  "src/${PROJECT_NAME}/camera/provider/image_provider.cpp"
+  "src/${PROJECT_NAME}/utility/capture_setting.cpp"
+  "src/${PROJECT_NAME}/utility/interface.cpp"
+  "src/${PROJECT_NAME}/utility/mat_image.cpp"
+  "src/${PROJECT_NAME}/node/shisen_cpp_node.cpp"
+  "src/${PROJECT_NAME}/viewer/consumer/image_consumer.cpp"
+  "src/${PROJECT_NAME}/viewer/node/viewer_node.cpp")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
-ament_target_dependencies(${PROJECT_NAME} rclcpp shisen_interfaces)
+ament_target_dependencies(${PROJECT_NAME}
+  keisan OpenCV rclcpp shisen_interfaces)
 
 install(TARGETS ${PROJECT_NAME}
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION "lib"
   LIBRARY DESTINATION "lib"
   RUNTIME DESTINATION "bin")
+
+add_executable(camera "src/shisen_cpp_main.cpp")
+target_include_directories(camera PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_link_libraries(camera ${PROJECT_NAME})
+
+add_executable(viewer "src/viewer_main.cpp")
+target_include_directories(viewer PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_link_libraries(viewer ${PROJECT_NAME})
+
+install(TARGETS camera viewer
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
@@ -49,7 +68,8 @@ if(BUILD_TESTING)
   ament_add_gtest(${PROJECT_NAME}_tests
     "test/capture_setting_test.cpp"
     "test/compile_test.cpp"
-    "test/emptiable_test.cpp")
+    "test/emptiable_test.cpp"
+    "test/mat_image_test.cpp")
 
   target_include_directories(${PROJECT_NAME}_tests PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -60,7 +80,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-ament_export_dependencies(shisen_interfaces)
+ament_export_dependencies(keisan OpenCV rclcpp shisen_interfaces)
 ament_export_include_directories("include")
 ament_export_libraries(${PROJECT_NAME})
 

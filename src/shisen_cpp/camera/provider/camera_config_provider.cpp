@@ -18,30 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/node/camera_node.hpp>
-#include <string>
+#include <shisen_cpp/camera/provider/camera_config_provider.hpp>
 
-namespace shisen_cpp
+namespace shisen_cpp::camera
 {
 
-CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const CameraNode::Options & options)
-: node(node),
-  camera_prefix(options.camera_prefix)
+CameraConfigProvider::CameraConfigProvider(const Options & options)
+{
+  // Initial data publish
+  field_of_view = options.field_of_view;
+}
+
+CameraConfigProvider::~CameraConfigProvider()
 {
 }
 
-CameraNode::~CameraNode()
+void CameraConfigProvider::set_config(int width, int height)
 {
+  CameraConfig config;
+
+  float diagonal = pow(width * width + height * height, 0.5);
+  float depth = (diagonal / 2) / keisan::make_degree(field_of_view / 2).tan();
+
+  float view_v_angle =
+    2 * keisan::signed_arctan(static_cast<float>(height / 2), depth).degree();
+  float view_h_angle =
+    2 * keisan::signed_arctan(static_cast<float>(width / 2), depth).degree();
+
+  config.width = width;
+  config.height = height;
+  config.v_angle = view_v_angle;
+  config.h_angle = view_h_angle;
+
+  camera_config = config;
 }
 
-rclcpp::Node::SharedPtr CameraNode::get_node() const
+const shisen_interfaces::msg::CameraConfig & CameraConfigProvider::get_camera_config() const
 {
-  return node;
+  return camera_config;
 }
 
-const std::string & CameraNode::get_camera_prefix() const
-{
-  return camera_prefix;
-}
-
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::camera

@@ -18,43 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
-#define SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
+#include <shisen_cpp/viewer/consumer/image_consumer.hpp>
 
-#include <rclcpp/rclcpp.hpp>
-
-#include <memory>
-#include <string>
-
-#include "../node.hpp"
-
-namespace shisen_cpp
+namespace shisen_cpp::viewer
 {
 
-class ImageConsumer : public CameraNode
+void ImageConsumer::on_image_changed(const Image & image)
 {
-public:
-  using ImageCallback = std::function<void (const Image &)>;
+  current_mat_image = image;
+  if (!get_mat().empty()) {
+    cv::imshow("viewer", get_mat());
+    cv::waitKey(1);
+  } else {
+    throw std::runtime_error("Once, received an empty mat!");
+  }
+}
 
-  struct Options : public virtual CameraNode::Options
-  {
-  };
+const Image & ImageConsumer::get_image() const
+{
+  return current_image;
+}
 
-  explicit ImageConsumer(
-    rclcpp::Node::SharedPtr node, const Options & options = Options());
+cv::Mat ImageConsumer::get_mat() const
+{
+  return (cv::Mat)current_mat_image;
+}
 
-  ~ImageConsumer();
-
-  virtual void on_image_changed(const Image & image);
-
-  const Image & get_image() const;
-
-private:
-  rclcpp::Subscription<Image>::SharedPtr image_subscription;
-
-  Image current_image;
-};
-
-}  // namespace shisen_cpp
-
-#endif  // SHISEN_CPP__CONSUMER__IMAGE_CONSUMER_HPP_
+}  // namespace shisen_cpp::viewer

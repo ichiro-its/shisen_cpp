@@ -18,44 +18,78 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/consumer/capture_setting_consumer.hpp>
+#include <shisen_cpp/viewer/node/viewer_node.hpp>
 
 #include <memory>
+#include <string>
 
-namespace shisen_cpp
+namespace shisen_cpp::viewer
 {
 
-CaptureSettingConsumer::CaptureSettingConsumer(
-  rclcpp::Node::SharedPtr node, const CaptureSettingConsumer::Options & options)
-: CameraNode(node, options)
+ViewerNode::ViewerNode(rclcpp::Node::SharedPtr node, const Options & options)
+: node(node), options(options)
 {
+}
+
+ViewerNode::~ViewerNode()
+{
+}
+
+const std::string & ViewerNode::get_camera_prefix() const
+{
+  return options.camera_prefix;
+}
+
+void ViewerNode::set_consumer(
+  std::shared_ptr<ImageConsumer> img_consumer)
+{
+  image_consumer = img_consumer;
+
+  // Initialize the image subscription
+  {
+    image_subscription = node->create_subscription<Image>(
+      get_camera_prefix() + IMAGE_SUFFIX, 10,
+      [this](const Image::SharedPtr msg)
+      {
+        auto current_image = *msg;
+
+        // Call callback after image changed
+        image_consumer->on_image_changed(current_image);
+      });
+
+    RCLCPP_INFO_STREAM(
+      node->get_logger(),
+      "Image subscription initialized on `" << image_subscription->get_topic_name() << "`!");
+  }
+
   // Initialize the capture setting event subscription
   {
-    capture_setting_event_subscription = get_node()->create_subscription<CaptureSettingMsg>(
+    capture_setting_event_subscription = node->create_subscription<CaptureSettingMsg>(
       get_camera_prefix() + CAPTURE_SETTING_EVENT_SUFFIX, 10,
-      [this](const CaptureSettingMsg::SharedPtr msg) {
+      [this](const CaptureSettingMsg::SharedPtr msg)
+      {
         change_capture_setting((const CaptureSetting &)*msg);
       });
 
     RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
+      node->get_logger(),
       "Capture setting event subscription initialized on `" <<
         capture_setting_event_subscription->get_topic_name() << "`!");
   }
 
   // Initialize the configure capture setting client
   {
-    configure_capture_setting_client = get_node()->create_client<ConfigureCaptureSetting>(
+    configure_capture_setting_client = node->create_client<ConfigureCaptureSetting>(
       get_camera_prefix() + CONFIGURE_CAPTURE_SETTING_SUFFIX);
 
-    RCLCPP_INFO(get_node()->get_logger(), "Waiting for configure capture setting server...");
+    RCLCPP_INFO(node->get_logger(), "Waiting for configure capture setting server...");
     if (!configure_capture_setting_client->wait_for_service(std::chrono::seconds(3))) {
-      RCLCPP_ERROR(get_node()->get_logger(), "Configure capture setting server is not ready!");
+      RCLCPP_ERROR(node->get_logger(), "Configure capture setting server is not ready!");
       throw std::runtime_error("configure capture setting server is not ready");
     }
 
     RCLCPP_INFO_STREAM(
-      get_node()->get_logger(),
+      node->get_logger(),
       "Configure capture setting client initialized on `" <<
         configure_capture_setting_client->get_service_name() << "`!");
   }
@@ -64,19 +98,16 @@ CaptureSettingConsumer::CaptureSettingConsumer(
   fetch_capture_setting();
 }
 
-CaptureSettingConsumer::~CaptureSettingConsumer()
+void ViewerNode::on_capture_setting_changed(const CaptureSetting & /*capture_setting*/)
 {
 }
 
-void CaptureSettingConsumer::on_capture_setting_changed(const CaptureSetting & /*capture_setting*/)
-{
-}
-
-void CaptureSettingConsumer::request_to_configure_capture_setting(
+void ViewerNode::request_to_configure_capture_setting(
   ConfigureCaptureSetting::Request::SharedPtr request, const CaptureSettingCallback & callback)
 {
   configure_capture_setting_client->async_send_request(
-    request, [this, callback](rclcpp::Client<ConfigureCaptureSetting>::SharedFuture future) {
+    request, [this, callback](rclcpp::Client<ConfigureCaptureSetting>::SharedFuture future)
+    {
       auto response = future.get();
       if (response->capture_setting.size() > 0) {
         change_capture_setting((const CaptureSetting &)response->capture_setting.front());
@@ -87,13 +118,13 @@ void CaptureSettingConsumer::request_to_configure_capture_setting(
         }
       } else {
         RCLCPP_WARN(
-          get_node()->get_logger(),
+          node->get_logger(),
           "Configure capture setting service response is empty!");
       }
     });
 }
 
-void CaptureSettingConsumer::configure_capture_setting(
+void ViewerNode::configure_capture_setting(
   const CaptureSetting & capture_setting, const CaptureSettingCallback & callback)
 {
   auto request = std::make_shared<ConfigureCaptureSetting::Request>();
@@ -102,18 +133,18 @@ void CaptureSettingConsumer::configure_capture_setting(
   request_to_configure_capture_setting(request, callback);
 }
 
-void CaptureSettingConsumer::fetch_capture_setting(const CaptureSettingCallback & callback)
+void ViewerNode::fetch_capture_setting(const CaptureSettingCallback & callback)
 {
   request_to_configure_capture_setting(
     std::make_shared<ConfigureCaptureSetting::Request>(), callback);
 }
 
-const CaptureSetting & CaptureSettingConsumer::get_capture_setting() const
+const CaptureSetting & ViewerNode::get_capture_setting() const
 {
   return current_capture_setting;
 }
 
-void CaptureSettingConsumer::change_capture_setting(const CaptureSetting & capture_setting)
+void ViewerNode::change_capture_setting(const CaptureSetting & capture_setting)
 {
   current_capture_setting = capture_setting;
 
@@ -121,4 +152,4 @@ void CaptureSettingConsumer::change_capture_setting(const CaptureSetting & captu
   on_capture_setting_changed(get_capture_setting());
 }
 
-}  // namespace shisen_cpp
+}  // namespace shisen_cpp::viewer
