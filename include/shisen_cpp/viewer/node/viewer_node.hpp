@@ -21,7 +21,8 @@
 #ifndef SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
 #define SHISEN_CPP__VIEWER__NODE__VIEWER_NODE_HPP_
 
-#include <shisen_interfaces/msg/image.hpp>
+// #include <shisen_interfaces/msg/image.hpp>
+#include "sensor_msgs/msg/image.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 #include <memory>
@@ -36,7 +37,7 @@ namespace shisen_cpp::viewer
 class ViewerNode
 {
 public:
-  using Image = shisen_interfaces::msg::Image;
+  using Image = sensor_msgs::msg::Image;
   using CaptureSettingCallback = std::function<void (const CaptureSetting &)>;
 
   explicit ViewerNode(rclcpp::Node::SharedPtr node, const Options & options = Options());

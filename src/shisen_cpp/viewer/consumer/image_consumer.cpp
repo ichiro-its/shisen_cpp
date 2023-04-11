@@ -25,7 +25,9 @@ namespace shisen_cpp::viewer
 
 void ImageConsumer::on_image_changed(const Image & image)
 {
-  current_mat_image = image;
+  cv_bridge::CvImagePtr cv_ptr;
+  cv_ptr = cv_bridge::toCvCopy(image, sensor_msgs::image_encodings::BGR8);
+  current_mat_image = cv_ptr->image;
   if (!get_mat().empty()) {
     cv::imshow("viewer", get_mat());
     cv::waitKey(1);
