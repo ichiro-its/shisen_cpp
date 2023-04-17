@@ -21,6 +21,7 @@ find_package(OpenCV REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(shisen_interfaces REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 
 install(DIRECTORY "include" DESTINATION ".")
 
@@ -39,7 +40,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<INSTALL_INTERFACE:include>)
 
 ament_target_dependencies(${PROJECT_NAME}
-  keisan OpenCV rclcpp shisen_interfaces sensor_msgs cv_bridge)
+  keisan OpenCV rclcpp shisen_interfaces sensor_msgs cv_bridge std_msgs)
 
 install(TARGETS ${PROJECT_NAME}
   EXPORT export_${PROJECT_NAME}
@@ -80,7 +81,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-ament_export_dependencies(keisan OpenCV rclcpp shisen_interfaces sensor_msgs cv_bridge)
+ament_export_dependencies(keisan OpenCV rclcpp shisen_interfaces sensor_msgs cv_bridge std_msgs)
 ament_export_include_directories("include")
 ament_export_libraries(${PROJECT_NAME})
 

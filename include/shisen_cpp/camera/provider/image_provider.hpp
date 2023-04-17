@@ -23,6 +23,8 @@
 
 // #include <shisen_interfaces/msg/image.hpp>
 #include "sensor_msgs/msg/image.hpp"
+#include "std_msgs/msg/header.hpp"
+#include <cv_bridge/cv_bridge.h>
 
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
@@ -56,7 +58,6 @@ public:
 private:
   Image current_image_msg;
   cv::Mat current_mat_image;
-  // MatImage current_mat_image;
 
   int compression_quality;
 
