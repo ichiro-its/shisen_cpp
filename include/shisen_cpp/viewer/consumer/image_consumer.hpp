@@ -21,7 +21,6 @@
 #ifndef SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 #define SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 
-// #include <shisen_interfaces/msg/image.hpp>
 #include "sensor_msgs/msg/image.hpp"
 
 #include <cv_bridge/cv_bridge.h>

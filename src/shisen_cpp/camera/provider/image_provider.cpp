@@ -68,8 +68,8 @@ void ImageProvider::update_mat()
 void ImageProvider::set_mat(cv::Mat mat)
 {
   current_mat_image = mat;
-  set_image(*(cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", mat)
-                  .toImageMsg()));
+  const auto ptr = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", mat);
+  set_image(*(ptr.toImageMsg()));
 }
 
 const Image & ImageProvider::get_image() const
