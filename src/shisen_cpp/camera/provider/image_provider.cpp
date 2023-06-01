@@ -24,7 +24,7 @@
 
 namespace shisen_cpp::camera
 {
-using Image = shisen_interfaces::msg::Image;
+using Image = sensor_msgs::msg::Image;
 
 ImageProvider::ImageProvider(const Options & options)
 : options(options), compression_quality(options.compression_quality),
@@ -68,13 +68,8 @@ void ImageProvider::update_mat()
 void ImageProvider::set_mat(cv::Mat mat)
 {
   current_mat_image = mat;
-
-  // Set image according to the compression quality
-  if (compression_quality > 0) {
-    set_image(current_mat_image.compress(compression_quality));
-  } else {
-    set_image(current_mat_image);
-  }
+  const auto ptr = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", mat);
+  set_image(*(ptr.toImageMsg()));
 }
 
 const Image & ImageProvider::get_image() const

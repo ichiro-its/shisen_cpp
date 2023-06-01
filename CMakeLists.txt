@@ -15,10 +15,13 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(ament_cmake REQUIRED)
+find_package(cv_bridge REQUIRED)
 find_package(keisan REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(shisen_interfaces REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 
 install(DIRECTORY "include" DESTINATION ".")
 
@@ -28,7 +31,6 @@ add_library(${PROJECT_NAME} SHARED
   "src/${PROJECT_NAME}/camera/provider/image_provider.cpp"
   "src/${PROJECT_NAME}/utility/capture_setting.cpp"
   "src/${PROJECT_NAME}/utility/interface.cpp"
-  "src/${PROJECT_NAME}/utility/mat_image.cpp"
   "src/${PROJECT_NAME}/node/shisen_cpp_node.cpp"
   "src/${PROJECT_NAME}/viewer/consumer/image_consumer.cpp"
   "src/${PROJECT_NAME}/viewer/node/viewer_node.cpp")
@@ -38,7 +40,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<INSTALL_INTERFACE:include>)
 
 ament_target_dependencies(${PROJECT_NAME}
-  keisan OpenCV rclcpp shisen_interfaces)
+  keisan OpenCV rclcpp shisen_interfaces sensor_msgs cv_bridge std_msgs)
 
 install(TARGETS ${PROJECT_NAME}
   EXPORT export_${PROJECT_NAME}
@@ -68,8 +70,7 @@ if(BUILD_TESTING)
   ament_add_gtest(${PROJECT_NAME}_tests
     "test/capture_setting_test.cpp"
     "test/compile_test.cpp"
-    "test/emptiable_test.cpp"
-    "test/mat_image_test.cpp")
+    "test/emptiable_test.cpp")
 
   target_include_directories(${PROJECT_NAME}_tests PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -80,7 +81,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-ament_export_dependencies(keisan OpenCV rclcpp shisen_interfaces)
+ament_export_dependencies(keisan OpenCV rclcpp shisen_interfaces sensor_msgs cv_bridge std_msgs)
 ament_export_include_directories("include")
 ament_export_libraries(${PROJECT_NAME})
 

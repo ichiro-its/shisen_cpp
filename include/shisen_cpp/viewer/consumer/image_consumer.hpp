@@ -21,8 +21,9 @@
 #ifndef SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 #define SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 
-#include <shisen_interfaces/msg/image.hpp>
+#include "sensor_msgs/msg/image.hpp"
 
+#include <cv_bridge/cv_bridge.h>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <memory>
@@ -36,7 +37,7 @@ namespace shisen_cpp::viewer
 class ImageConsumer
 {
 public:
-  using Image = shisen_interfaces::msg::Image;
+  using Image = sensor_msgs::msg::Image;
 
   void on_image_changed(const Image & image);
 
@@ -45,7 +46,7 @@ public:
 
 private:
   Image current_image;
-  MatImage current_mat_image;
+  cv::Mat current_mat_image;
 };
 
 }  // namespace shisen_cpp::viewer

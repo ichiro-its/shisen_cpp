@@ -21,12 +21,14 @@
 #ifndef SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 #define SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 
-#include <shisen_interfaces/msg/image.hpp>
-
+#include <cv_bridge/cv_bridge.h>
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
 #include <memory>
 #include <string>
+
+#include "sensor_msgs/msg/image.hpp"
+#include "std_msgs/msg/header.hpp"
 
 #include "shisen_cpp/utility.hpp"
 
@@ -36,7 +38,7 @@ namespace shisen_cpp::camera
 class ImageProvider
 {
 public:
-  using Image = shisen_interfaces::msg::Image;
+  using Image = sensor_msgs::msg::Image;
 
   explicit ImageProvider(const Options & options = Options());
   ~ImageProvider();
@@ -54,7 +56,7 @@ public:
 
 private:
   Image current_image_msg;
-  MatImage current_mat_image;
+  cv::Mat current_mat_image;
 
   int compression_quality;
 
