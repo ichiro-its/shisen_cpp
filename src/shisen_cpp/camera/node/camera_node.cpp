@@ -186,7 +186,7 @@ void CameraNode::configure_capture_setting(const CaptureSetting & capture_settin
 {
   // Update with configured data
   current_capture_setting.update_with(on_configure_capture_setting(capture_setting));
-  capture_setting_event_publisher->publish(current_capture_setting);
+  capture_setting_event_publisher->publish(static_cast<CaptureSettingMsg>(current_capture_setting));
 }
 
 }  // namespace shisen_cpp::camera
