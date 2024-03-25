@@ -27,7 +27,7 @@ TEST(CaptureSettingTest, FromMsg) {
   msg.brightness.push_back(10);
   msg.contrast.push_back(20);
   msg.temperature.push_back(30);
-  msg.hue.push_back(40);
+  msg.exposure.push_back(40);
 
   shisen_cpp::CaptureSetting capture_setting(msg);
 
@@ -35,13 +35,13 @@ TEST(CaptureSettingTest, FromMsg) {
   ASSERT_TRUE(capture_setting.contrast.is_not_empty());
   ASSERT_TRUE(capture_setting.saturation.is_empty());
   ASSERT_TRUE(capture_setting.temperature.is_not_empty());
-  ASSERT_TRUE(capture_setting.hue.is_not_empty());
+  ASSERT_TRUE(capture_setting.exposure.is_not_empty());
   ASSERT_TRUE(capture_setting.gain.is_empty());
 
   ASSERT_EQ(10, capture_setting.brightness);
   ASSERT_EQ(20, capture_setting.contrast);
   ASSERT_EQ(30, capture_setting.temperature);
-  ASSERT_EQ(40, capture_setting.hue);
+  ASSERT_EQ(40, capture_setting.exposure);
 }
 
 TEST(CaptureSettingTest, ToMsg) {
@@ -58,7 +58,7 @@ TEST(CaptureSettingTest, ToMsg) {
   ASSERT_EQ(1u, msg.contrast.size());
   ASSERT_EQ(1u, msg.saturation.size());
   ASSERT_EQ(0u, msg.temperature.size());
-  ASSERT_EQ(0u, msg.hue.size());
+  ASSERT_EQ(0u, msg.exposure.size());
   ASSERT_EQ(1u, msg.gain.size());
 
   ASSERT_EQ(10, msg.brightness.front());
@@ -73,7 +73,7 @@ TEST(CaptureSettingTest, UpdateWith) {
   a.brightness = 10;
   a.contrast = 20;
   a.temperature = 30;
-  a.hue = 40;
+  a.exposure = 40;
 
   shisen_cpp::CaptureSetting b;
 
@@ -88,6 +88,6 @@ TEST(CaptureSettingTest, UpdateWith) {
   ASSERT_EQ(30, a.contrast);
   ASSERT_EQ(20, a.saturation);
   ASSERT_EQ(30, a.temperature);
-  ASSERT_EQ(40, a.hue);
+  ASSERT_EQ(40, a.exposure);
   ASSERT_EQ(10, a.gain);
 }

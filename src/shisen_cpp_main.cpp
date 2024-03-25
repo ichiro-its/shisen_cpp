@@ -30,9 +30,10 @@ int main(int argc, char ** argv)
 
   shisen_cpp::Options options;
   options.field_of_view = 78;
+  std::string path = "";
 
   const char * help_message =
-    "Usage: ros2 run shisen_cpp camera [options] [--camera-prefix prefix]\n"
+    "Usage: ros2 run shisen_cpp camera [path] [options] [--camera-prefix prefix]\n"
     "       [--compression quality] [--captured-fps fps] [camera_file_name]\n"
     "\n"
     "Positional arguments:\n"
@@ -68,8 +69,8 @@ int main(int argc, char ** argv)
           return 1;
         }
       } else if (pos == 0) {
-        options.camera_file_name = arg;
-        ++pos;
+        path = arg;
+        pos++;
       }
     }
   } catch (...) {
@@ -80,7 +81,7 @@ int main(int argc, char ** argv)
   auto node = std::make_shared<rclcpp::Node>("camera");
 
   try {
-    auto camera = std::make_shared<shisen_cpp::ShisenCppNode>(node, options);
+    auto camera = std::make_shared<shisen_cpp::ShisenCppNode>(node, path, options);
     rclcpp::spin(node);
   } catch (const std::exception & e) {
     RCLCPP_ERROR_STREAM(node->get_logger(), "Exception! " << e.what());

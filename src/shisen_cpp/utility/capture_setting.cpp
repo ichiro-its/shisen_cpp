@@ -50,8 +50,8 @@ const CaptureSetting & CaptureSetting::operator=(const CaptureSettingMsg & msg)
     temperature = msg.temperature.front();
   }
 
-  if (msg.hue.size() > 0) {
-    hue = msg.hue.front();
+  if (msg.exposure.size() > 0) {
+    exposure = msg.exposure.front();
   }
 
   if (msg.gain.size() > 0) {
@@ -81,8 +81,8 @@ CaptureSetting::operator CaptureSettingMsg() const
     msg.temperature.push_back(temperature);
   }
 
-  if (hue.is_not_empty()) {
-    msg.hue.push_back(hue);
+  if (exposure.is_not_empty()) {
+    msg.exposure.push_back(exposure);
   }
 
   if (gain.is_not_empty()) {
@@ -110,8 +110,8 @@ void CaptureSetting::update_with(const CaptureSetting & capture_setting)
     temperature = capture_setting.temperature;
   }
 
-  if (capture_setting.hue.is_not_empty()) {
-    hue = capture_setting.hue;
+  if (capture_setting.exposure.is_not_empty()) {
+    exposure = capture_setting.exposure;
   }
 
   if (capture_setting.gain.is_not_empty()) {
