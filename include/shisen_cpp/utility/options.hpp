@@ -30,6 +30,8 @@ struct Options
 {
   std::string camera_file_name;
   std::string camera_prefix;
+  int width;
+  int height;
   int capture_fps;
   int compression_quality;
   int field_of_view;
@@ -38,9 +40,11 @@ struct Options
   Options()
   : camera_file_name("/dev/video0"),
     camera_prefix("camera"),
+    width(320),
+    height(240),
     capture_fps(60),
-    compression_quality(-1),
-    field_of_view(-1)
+    compression_quality(80),
+    field_of_view(78)
   {
   }
 };
