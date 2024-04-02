@@ -1,32 +1,29 @@
 #include "shisen_cpp/config/grpc/call_data_get_capture_setting.hpp"
 
 #include "shisen_cpp/config/utils/config.hpp"
-#include "aruku_interfaces/aruku.grpc.pb.h"
-#include "aruku_interfaces/aruku.pb.h"
+#include "shisen_interfaces/shisen.grpc.pb.h"
+#include "shisen_interfaces/shisen.pb.h"
 #include "rclcpp/rclcpp.hpp"
 
-namespace aruku
-{
-CallDataGetConfig::CallDataGetConfig(
-  aruku_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-  const std::string & path)
-: CallData(service, cq, path)
-{
-  Proceed();
+namespace shisen {
+CallDataGetCaptureSetting::CallDataGetCaptureSetting(
+    shisen_interfaces::proto::Config::AsyncService* service,
+    grpc::ServerCompletionQueue* cq, const std::string& path)
+    : CallData(service, cq, path) {
+    Proceed();
 }
 
-void CallDataGetConfig::AddNextToCompletionQueue() { new CallDataGetConfig(service_, cq_, path_); }
-
-void CallDataGetConfig::WaitForRequest()
-{
-  service_->RequestGetConfig(&ctx_, &request_, &responder_, cq_, cq_, this);
+void CallDataGetCaptureSetting::AddNextToCompletionQueue() {
+    new CallDataGetCaptureSetting(service_, cq_, path_);
 }
 
-void CallDataGetConfig::HandleRequest()
-{
-  Config config(path_);
-  reply_.set_json_kinematic(config.get_config("kinematic"));
-  reply_.set_json_walking(config.get_config("walking"));
-  RCLCPP_INFO(rclcpp::get_logger("Get config"), "config has been sent!");
+void CallDataGetCaptureSetting::WaitForRequest() {
+    service_->RequestGetCaptureSetting(&ctx_, &request_, &responder_, cq_, cq_, this);
 }
-}  // namespace aruku
+
+void CallDataGetCaptureSetting::HandleRequest() {
+    Config config(path_);
+    reply_.set_json_capture(config.get_config("capture"));
+    RCLCPP_INFO(rclcpp::get_logger("Get config"), "config has been sent!");
+}
+}  // namespace shisen

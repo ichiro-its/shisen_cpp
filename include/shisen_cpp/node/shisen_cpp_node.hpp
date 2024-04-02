@@ -24,6 +24,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <memory>
 
+#include "shisen_cpp/config/grpc/config.hpp"
 #include "shisen_cpp/camera/node/camera_node.hpp"
 #include "../utility.hpp"
 
@@ -39,6 +40,8 @@ public:
 private:
   rclcpp::Node::SharedPtr node;
   rclcpp::TimerBase::SharedPtr node_timer;
+
+  ConfigGrpc config_grpc;
 
   std::shared_ptr<camera::CameraNode> camera_node;
 };

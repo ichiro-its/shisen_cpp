@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 #include <shisen_cpp/node/shisen_cpp_node.hpp>
+#include "shisen_cpp/config/grpc/config.hpp"
 
 #include <memory>
 
@@ -41,6 +42,9 @@ ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & p
       camera_node->update();
     }
   );
+
+  config_grpc.Run(5050, path, node);
+  RCLCPP_INFO(rclcpp::get_logger("GrpcServers"), "grpc running");
 }
 
 ShisenCppNode::~ShisenCppNode()
