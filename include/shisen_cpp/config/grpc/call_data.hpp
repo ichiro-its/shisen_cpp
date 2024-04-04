@@ -27,7 +27,7 @@
 #include "grpc/support/log.h"
 #include "grpcpp/grpcpp.h"
 
-namespace shisen
+namespace shisen_cpp
 {
 template <class ConfigRequest, class ConfigReply>
 class CallData : public CallDataBase
@@ -82,6 +82,6 @@ void CallData<ConfigRequest, ConfigReply>::Proceed()
   }
 }
 
-}  // namespace shisen
+}  // namespace shisen_cpp
 
 #endif  // __SHISEN_CPP__CONFIG__GRPC__CALL_DATA_HPP__

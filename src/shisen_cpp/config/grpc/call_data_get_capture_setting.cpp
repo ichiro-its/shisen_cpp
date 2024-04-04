@@ -5,25 +5,30 @@
 #include "shisen_interfaces/shisen.pb.h"
 #include "rclcpp/rclcpp.hpp"
 
-namespace shisen {
+namespace shisen_cpp
+{
 CallDataGetCaptureSetting::CallDataGetCaptureSetting(
-    shisen_interfaces::proto::Config::AsyncService* service,
-    grpc::ServerCompletionQueue* cq, const std::string& path)
-    : CallData(service, cq, path) {
-    Proceed();
+  shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
+  const std::string & path)
+: CallData(service, cq, path)
+{
+  Proceed();
 }
 
-void CallDataGetCaptureSetting::AddNextToCompletionQueue() {
-    new CallDataGetCaptureSetting(service_, cq_, path_);
+void CallDataGetCaptureSetting::AddNextToCompletionQueue()
+{
+  new CallDataGetCaptureSetting(service_, cq_, path_);
 }
 
-void CallDataGetCaptureSetting::WaitForRequest() {
-    service_->RequestGetCaptureSetting(&ctx_, &request_, &responder_, cq_, cq_, this);
+void CallDataGetCaptureSetting::WaitForRequest()
+{
+  service_->RequestGetCaptureSetting(&ctx_, &request_, &responder_, cq_, cq_, this);
 }
 
-void CallDataGetCaptureSetting::HandleRequest() {
-    Config config(path_);
-    reply_.set_json_capture(config.get_config("capture"));
-    RCLCPP_INFO(rclcpp::get_logger("Get config"), "config has been sent!");
+void CallDataGetCaptureSetting::HandleRequest()
+{
+  Config config(path_);
+  reply_.set_json_capture(config.get_capture_setting("capture"));
+  RCLCPP_INFO(rclcpp::get_logger("Get config"), "config has been sent!");
 }
-}  // namespace shisen
+}  // namespace shisen_cpp

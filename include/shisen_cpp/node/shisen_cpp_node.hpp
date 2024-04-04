@@ -24,6 +24,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <memory>
 
+#include "shisen_cpp/config/utils/config.hpp"
 #include "shisen_cpp/config/grpc/config.hpp"
 #include "shisen_cpp/camera/node/camera_node.hpp"
 #include "../utility.hpp"
@@ -34,7 +35,8 @@ namespace shisen_cpp
 class ShisenCppNode
 {
 public:
-  explicit ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & path, const Options & options = Options());
+  explicit ShisenCppNode(
+    rclcpp::Node::SharedPtr node, const std::string & path, const Options & options = Options());
   ~ShisenCppNode();
 
 private:
@@ -43,7 +45,7 @@ private:
 
   ConfigGrpc config_grpc;
 
-  std::shared_ptr<camera::CameraNode> camera_node;
+  std::shared_ptr<shisen_cpp::camera::CameraNode> camera_node;
 };
 
 }  // namespace shisen_cpp

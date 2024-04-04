@@ -18,7 +18,8 @@
 // #include "shisen_cpp/walking/process/kinematic.hpp"
 #include "shisen_interfaces/shisen.grpc.pb.h"
 #include "shisen_interfaces/shisen.pb.h"
-#include "shisen_interfaces/msg/set_capture.hpp"
+#include "shisen_interfaces/msg/capture_setting.hpp"
+#include "shisen_interfaces/msg/camera_config.hpp"
 #include "grpc/support/log.h"
 #include "grpcpp/grpcpp.h"
 #include "nlohmann/json.hpp"
@@ -26,7 +27,7 @@
 
 using shisen_interfaces::proto::Config;
 
-namespace shisen
+namespace shisen_cpp
 {
 class ConfigGrpc
 {
@@ -48,6 +49,6 @@ private:
   shisen_interfaces::proto::Config::AsyncService service_;
 };
 
-}  // namespace shisen
+}  // namespace shisen_cpp
 
 #endif  // SHISEN_CPP__CONFIG__GRPC__CONFIG_HPP_

@@ -4,8 +4,9 @@
 #include "shisen_interfaces/shisen.grpc.pb.h"
 #include "shisen_interfaces/shisen.pb.h"
 #include "rclcpp/rclcpp.hpp"
+#include "nlohmann/json.hpp"
 
-namespace shisen
+namespace shisen_cpp
 {
 CallDataSaveCaptureSetting::CallDataSaveCaptureSetting(
   shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
@@ -22,7 +23,7 @@ void CallDataSaveCaptureSetting::AddNextToCompletionQueue()
 
 void CallDataSaveCaptureSetting::WaitForRequest()
 {
-  service_->RequestSaveConfig(&ctx_, &request_, &responder_, cq_, cq_, this);
+  service_->RequestSaveCaptureSetting(&ctx_, &request_, &responder_, cq_, cq_, this);
 }
 
 void CallDataSaveCaptureSetting::HandleRequest()
@@ -30,10 +31,10 @@ void CallDataSaveCaptureSetting::HandleRequest()
   Config config(path_);
   try {
     nlohmann::json capture_data = nlohmann::json::parse(request_.json_capture());
-    config.save_config(capture_data);
+    config.save_capture_setting(capture_data);
     RCLCPP_INFO(rclcpp::get_logger("Save config"), " config has been saved!  ");
-  } catch (nlohmann::json::exception e) {
+  } catch (nlohmann::json::exception & e) {
     RCLCPP_ERROR(rclcpp::get_logger("Save config"), e.what());
   }
 }
-}  // namespace shisen
+}  // namespace shisen_cpp

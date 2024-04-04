@@ -28,6 +28,7 @@ message(STATUS "Using protobuf ${Protobuf_VERSION}")
 install(DIRECTORY "include" DESTINATION ".")
 
 add_library(${PROJECT_NAME} SHARED
+  "src/${PROJECT_NAME}/config/utils/config.cpp"
   "src/${PROJECT_NAME}/camera/node/camera_node.cpp"
   "src/${PROJECT_NAME}/camera/provider/camera_config_provider.cpp"
   "src/${PROJECT_NAME}/camera/provider/image_provider.cpp"

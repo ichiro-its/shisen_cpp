@@ -1,4 +1,4 @@
-// #include "aruku/config/utils/config.hpp"
+#include "shisen_cpp/config/utils/config.hpp"
 
 #include <chrono>
 #include <csignal>
@@ -15,7 +15,7 @@
 using grpc::ServerBuilder;
 using namespace std::chrono_literals;
 
-namespace shisen
+namespace shisen_cpp
 {
 ConfigGrpc::ConfigGrpc() {}
 ConfigGrpc::ConfigGrpc(const std::string & path) : path(path) {}
@@ -64,4 +64,4 @@ void ConfigGrpc::Run(uint16_t port, const std::string & path, rclcpp::Node::Shar
   std::this_thread::sleep_for(200ms);
 }
 
-}  // namespace shisen
+}  // namespace shisen_cpp
