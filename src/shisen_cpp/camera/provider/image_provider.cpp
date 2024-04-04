@@ -28,7 +28,8 @@ namespace shisen_cpp::camera
 using Image = sensor_msgs::msg::Image;
 
 ImageProvider::ImageProvider(const Options & options)
-: options(options), compression_quality(options.compression_quality),
+: options(options),
+  compression_quality(options.compression_quality),
   video_capture(std::make_shared<cv::VideoCapture>())
 {
   // Try to open the camera
@@ -40,14 +41,9 @@ ImageProvider::ImageProvider(const Options & options)
   video_capture->set(cv::CAP_PROP_FRAME_HEIGHT, options.height);
 }
 
-ImageProvider::~ImageProvider()
-{
-}
+ImageProvider::~ImageProvider() {}
 
-void ImageProvider::set_image(const Image & image)
-{
-  current_image_msg = image;
-}
+void ImageProvider::set_image(const Image & image) { current_image_msg = image; }
 
 void ImageProvider::update_mat()
 {
@@ -76,19 +72,10 @@ void ImageProvider::set_mat(cv::Mat mat)
   set_image(*(ptr.toImageMsg()));
 }
 
-const Image & ImageProvider::get_image() const
-{
-  return current_image_msg;
-}
+const Image & ImageProvider::get_image() const { return current_image_msg; }
 
-cv::Mat ImageProvider::get_mat() const
-{
-  return (cv::Mat)current_mat_image;
-}
+cv::Mat ImageProvider::get_mat() const { return (cv::Mat)current_mat_image; }
 
-std::shared_ptr<cv::VideoCapture> ImageProvider::get_video_capture() const
-{
-  return video_capture;
-}
+std::shared_ptr<cv::VideoCapture> ImageProvider::get_video_capture() const { return video_capture; }
 
 }  // namespace shisen_cpp::camera

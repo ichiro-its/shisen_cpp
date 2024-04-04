@@ -45,7 +45,7 @@ private:
 
   ConfigGrpc config_grpc;
 
-  std::shared_ptr<shisen_cpp::camera::CameraNode> camera_node;
+  std::shared_ptr<camera::CameraNode> camera_node;
 };
 
 }  // namespace shisen_cpp
