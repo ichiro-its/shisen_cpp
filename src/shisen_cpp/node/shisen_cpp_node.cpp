@@ -33,7 +33,6 @@ ShisenCppNode::ShisenCppNode(
 {
   auto image_provider = std::make_shared<camera::ImageProvider>(options);
   auto camera_config_provider = std::make_shared<camera::CameraConfigProvider>(options);
-  camera_node->load_configuration(path);
   camera_node->set_provider(image_provider, camera_config_provider);
   camera_node->load_configuration(path);
 
