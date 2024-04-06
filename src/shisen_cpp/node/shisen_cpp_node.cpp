@@ -39,7 +39,7 @@ ShisenCppNode::ShisenCppNode(
   node_timer = node->create_wall_timer(
     1s / camera_node->image_provider->options.capture_fps, [this]() { camera_node->update(); });
 
-  config_grpc.Run(5050, path, node);
+  config_grpc.Run(5757, path, node);
   RCLCPP_INFO(rclcpp::get_logger("GrpcServers"), "grpc running");
 }
 

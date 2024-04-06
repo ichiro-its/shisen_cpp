@@ -30,7 +30,12 @@ void CallDataSaveCaptureSetting::HandleRequest()
 {
   Config config(path_);
   try {
-    nlohmann::json capture_data = nlohmann::json::parse(request_.json_capture());
+    // nlohmann::json capture_data = nlohmann::json::parse(request_.json_capture());
+
+    std::string json_string = request_.json_capture();
+    std::replace(json_string.begin(), json_string.end(), '\\', ' ');
+    nlohmann::json capture_data = nlohmann::json::parse(json_string);
+
     config.save_capture_setting(capture_data);
     RCLCPP_INFO(rclcpp::get_logger("Save config"), " config has been saved!  ");
   } catch (nlohmann::json::exception & e) {

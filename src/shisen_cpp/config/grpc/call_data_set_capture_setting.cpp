@@ -70,7 +70,7 @@ void CallDataSetCaptureSetting::HandleRequest()
     set_capture_publisher_->publish(msg);
     RCLCPP_INFO(
       rclcpp::get_logger("Publish capture setting config"),
-      "capture setting config has been saved!");
+      "capture setting config has been applied!");
   } catch (nlohmann::json::exception e) {
     RCLCPP_ERROR(rclcpp::get_logger("Publish config"), e.what());
   }
