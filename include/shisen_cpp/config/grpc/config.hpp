@@ -15,7 +15,6 @@
 #include "absl/strings/str_format.h"
 #include "shisen_cpp/config/grpc/call_data.hpp"
 #include "shisen_cpp/config/grpc/call_data_base.hpp"
-// #include "shisen_cpp/walking/process/kinematic.hpp"
 #include "shisen_interfaces/shisen.grpc.pb.h"
 #include "shisen_interfaces/shisen.pb.h"
 #include "shisen_interfaces/msg/capture_setting.hpp"

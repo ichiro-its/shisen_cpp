@@ -30,8 +30,6 @@ void CallDataSaveCaptureSetting::HandleRequest()
 {
   Config config(path_);
   try {
-    // nlohmann::json capture_data = nlohmann::json::parse(request_.json_capture());
-
     std::string json_string = request_.json_capture();
     std::replace(json_string.begin(), json_string.end(), '\\', ' ');
     nlohmann::json capture_data = nlohmann::json::parse(json_string);
