@@ -70,7 +70,10 @@ int main(int argc, char ** argv)
         }
       } else if (pos == 0) {
         path = arg;
-        pos++;
+        ++pos;
+      }else if (pos == 1) {
+        options.camera_file_name = arg;
+        ++pos;
       }
     }
   } catch (...) {

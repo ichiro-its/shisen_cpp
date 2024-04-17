@@ -27,8 +27,7 @@ namespace shisen_cpp
 {
 using namespace std::chrono_literals;
 
-ShisenCppNode::ShisenCppNode(
-  rclcpp::Node::SharedPtr node, const std::string & path, const Options & options)
+ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & path, const Options & options)
 : node(node), camera_node(std::make_shared<camera::CameraNode>(node, options))
 {
   auto image_provider = std::make_shared<camera::ImageProvider>(options);
@@ -37,12 +36,18 @@ ShisenCppNode::ShisenCppNode(
   camera_node->load_configuration(path);
 
   node_timer = node->create_wall_timer(
-    1s / camera_node->image_provider->options.capture_fps, [this]() { camera_node->update(); });
+    1s / camera_node->image_provider->options.capture_fps,
+    [this]() {
+      camera_node->update(); 
+    }
+  );
 
   config_grpc.Run(5757, path, node);
   RCLCPP_INFO(rclcpp::get_logger("GrpcServers"), "grpc running");
 }
 
-ShisenCppNode::~ShisenCppNode() {}
+ShisenCppNode::~ShisenCppNode()
+{
+}
 
 }  // namespace shisen_cpp

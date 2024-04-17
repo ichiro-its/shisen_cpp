@@ -18,13 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/camera/node/camera_node.hpp>
-
-#include <nlohmann/json.hpp>
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <memory>
+#include <nlohmann/json.hpp>
+#include <shisen_cpp/camera/node/camera_node.hpp>
 #include <string>
 
 namespace shisen_cpp::camera
@@ -35,7 +34,9 @@ CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const Options & options)
 {
 }
 
-CameraNode::~CameraNode() {}
+CameraNode::~CameraNode() 
+{
+}
 
 void CameraNode::update()
 {
@@ -70,7 +71,10 @@ cv::Mat CameraNode::get_mat()
   return image_provider->get_mat();
 }
 
-const std::string & CameraNode::get_camera_prefix() const { return options.camera_prefix; }
+const std::string & CameraNode::get_camera_prefix() const 
+{ 
+  return options.camera_prefix;
+}
 
 void CameraNode::set_provider(
   std::shared_ptr<ImageProvider> img_provider,
@@ -81,7 +85,8 @@ void CameraNode::set_provider(
 
   // Initialize the image publisher
   {
-    image_publisher = node->create_publisher<Image>(get_camera_prefix() + IMAGE_SUFFIX, 10);
+    image_publisher = node->create_publisher<Image>(
+      get_camera_prefix() + IMAGE_SUFFIX, 10);
 
     RCLCPP_INFO_STREAM(
       node->get_logger(),
@@ -94,12 +99,13 @@ void CameraNode::set_provider(
 
   // Initialize the camera config publisher
   {
-    camera_config_publisher =
-      node->create_publisher<CameraConfig>(get_camera_prefix() + CAMERA_CONFIG_SUFFIX, 10);
+    camera_config_publisher = node->create_publisher<CameraConfig>(
+      get_camera_prefix() + CAMERA_CONFIG_SUFFIX, 10);
 
     RCLCPP_INFO_STREAM(
-      node->get_logger(), "Camera Config publisher initialized on `"
-                            << camera_config_publisher->get_topic_name() << "`!");
+      node->get_logger(),
+      "Camera Config publisher initialized on `" << camera_config_publisher->get_topic_name() <<
+        "`!");
   }
 
   // Initialize the capture setting event publisher
@@ -108,16 +114,16 @@ void CameraNode::set_provider(
       get_camera_prefix() + CAPTURE_SETTING_EVENT_SUFFIX, 10);
 
     RCLCPP_INFO_STREAM(
-      node->get_logger(), "Capture setting event publisher initialized on `"
-                            << capture_setting_event_publisher->get_topic_name() << "`!");
+      node->get_logger(),
+      "Capture setting event publisher initialized on `" <<
+        capture_setting_event_publisher->get_topic_name() << "`!");
   }
 
   // Initialize the configure capture setting service
   {
     configure_capture_setting_service = node->create_service<ConfigureCaptureSetting>(
       get_camera_prefix() + CONFIGURE_CAPTURE_SETTING_SUFFIX,
-      [this](
-        ConfigureCaptureSetting::Request::SharedPtr request,
+      [this](ConfigureCaptureSetting::Request::SharedPtr request,
         ConfigureCaptureSetting::Response::SharedPtr response) {
         // Configure capture setting if exist
         if (request->capture_setting.size() > 0) {
@@ -128,12 +134,14 @@ void CameraNode::set_provider(
       });
 
     RCLCPP_INFO_STREAM(
-      node->get_logger(), "Configure capture setting service initialized on `"
-                            << configure_capture_setting_service->get_service_name() << "`!");
+      node->get_logger(),
+      "Configure capture setting service initialized on `" <<
+        configure_capture_setting_service->get_service_name() << "`!");
   }
 }
 
-CaptureSetting CameraNode::on_configure_capture_setting(const CaptureSetting & capture_setting)
+CaptureSetting CameraNode::on_configure_capture_setting(
+  const CaptureSetting & capture_setting)
 {
   auto new_capture_setting = capture_setting;
 
