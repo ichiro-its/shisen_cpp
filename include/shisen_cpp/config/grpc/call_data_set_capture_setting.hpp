@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP_CONFIG__GRPC__CALL_DATA_SET_CAPTURE_SETTING_HPP__
-#define SHISEN_CPP_CONFIG__GRPC__CALL_DATA_SET_CAPTURE_SETTING_HPP__
+#ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_SET_CAPTURE_SETTING_HPP__
+#define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_SET_CAPTURE_SETTING_HPP__
 
+#include "rclcpp/rclcpp.hpp"
 #include "shisen_cpp/config/grpc/call_data.hpp"
 #include "shisen_interfaces/msg/capture_setting.hpp"
-#include "rclcpp/rclcpp.hpp"
 
 namespace shisen_cpp
 {

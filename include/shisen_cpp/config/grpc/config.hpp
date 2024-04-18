@@ -21,6 +21,20 @@
 #ifndef SHISEN_CPP__CONFIG__GRPC__CONFIG_HPP_
 #define SHISEN_CPP__CONFIG__GRPC__CONFIG_HPP_
 
+#include "absl/flags/flag.h"
+#include "absl/flags/parse.h"
+#include "absl/strings/str_format.h"
+#include "grpc/support/log.h"
+#include "grpcpp/grpcpp.h"
+#include "nlohmann/json.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "shisen_cpp/config/grpc/call_data.hpp"
+#include "shisen_cpp/config/grpc/call_data_base.hpp"
+#include "shisen_interfaces/shisen.grpc.pb.h"
+#include "shisen_interfaces/shisen.pb.h"
+#include "shisen_interfaces/msg/capture_setting.hpp"
+#include "shisen_interfaces/msg/camera_config.hpp"
+
 #include <chrono>
 #include <fstream>
 #include <future>
@@ -30,19 +44,6 @@
 #include <string>
 #include <thread>
 
-#include "absl/flags/flag.h"
-#include "absl/flags/parse.h"
-#include "absl/strings/str_format.h"
-#include "shisen_cpp/config/grpc/call_data.hpp"
-#include "shisen_cpp/config/grpc/call_data_base.hpp"
-#include "shisen_interfaces/shisen.grpc.pb.h"
-#include "shisen_interfaces/shisen.pb.h"
-#include "shisen_interfaces/msg/capture_setting.hpp"
-#include "shisen_interfaces/msg/camera_config.hpp"
-#include "grpc/support/log.h"
-#include "grpcpp/grpcpp.h"
-#include "nlohmann/json.hpp"
-#include "rclcpp/rclcpp.hpp"
 
 using shisen_interfaces::proto::Config;
 

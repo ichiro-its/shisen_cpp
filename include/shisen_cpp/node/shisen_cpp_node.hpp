@@ -21,13 +21,13 @@
 #ifndef SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_
 #define SHISEN_CPP__NODE__SHISEN_CPP_NODE_HPP_
 
-#include <rclcpp/rclcpp.hpp>
-#include <memory>
-
-#include "shisen_cpp/config/utils/config.hpp"
-#include "shisen_cpp/config/grpc/config.hpp"
-#include "shisen_cpp/camera/node/camera_node.hpp"
 #include "../utility.hpp"
+#include <rclcpp/rclcpp.hpp>
+#include "shisen_cpp/camera/node/camera_node.hpp"
+#include "shisen_cpp/config/grpc/config.hpp"
+#include "shisen_cpp/config/utils/config.hpp"
+
+#include <memory>
 
 namespace shisen_cpp
 {

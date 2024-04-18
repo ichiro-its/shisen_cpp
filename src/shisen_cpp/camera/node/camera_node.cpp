@@ -24,6 +24,9 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
+
+#include <fstream>
+#include <memory>
 #include <string>
 
 namespace shisen_cpp::camera
@@ -34,7 +37,7 @@ CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const Options & options)
 {
 }
 
-CameraNode::~CameraNode() 
+CameraNode::~CameraNode()
 {
 }
 
@@ -71,8 +74,8 @@ cv::Mat CameraNode::get_mat()
   return image_provider->get_mat();
 }
 
-const std::string & CameraNode::get_camera_prefix() const 
-{ 
+const std::string & CameraNode::get_camera_prefix() const
+{
   return options.camera_prefix;
 }
 

@@ -21,11 +21,11 @@
 #ifndef SHISEN_CPP__CONFIG__UTILS__CONFIG_HPP_
 #define SHISEN_CPP__CONFIG__UTILS__CONFIG_HPP_
 
+#include "nlohmann/json.hpp"
+
 #include <fstream>
 #include <map>
 #include <string>
-
-#include "nlohmann/json.hpp"
 
 namespace shisen_cpp
 {

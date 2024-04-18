@@ -21,11 +21,11 @@
 #ifndef __SHISEN_CPP__CONFIG__GRPC__CALL_DATA_HPP__
 #define __SHISEN_CPP__CONFIG__GRPC__CALL_DATA_HPP__
 
+#include "grpc/support/log.h"
+#include "grpcpp/grpcpp.h"
 #include "shisen_cpp/config/grpc/call_data_base.hpp"
 #include "shisen_interfaces/shisen.grpc.pb.h"
 #include "shisen_interfaces/shisen.pb.h"
-#include "grpc/support/log.h"
-#include "grpcpp/grpcpp.h"
 
 namespace shisen_cpp
 {
