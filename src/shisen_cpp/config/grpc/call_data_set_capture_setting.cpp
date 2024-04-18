@@ -78,7 +78,7 @@ void CallDataSetCaptureSetting::HandleRequest()
     msg.temperature.push_back(temperature);
     msg.exposure.push_back(exposure);
     msg.gain.push_back(gain);
-    
+
     set_capture_publisher_->publish(msg);
     RCLCPP_INFO(
       rclcpp::get_logger("Publish capture setting config"),
