@@ -193,17 +193,6 @@ CaptureSetting CameraNode::on_configure_capture_setting(
 void CameraNode::configure_capture_setting(const CaptureSetting & capture_setting)
 {
   // Update with configured data
-
-  // Debug
-  std::cout << "[Debug From camera_node.cpp]" << std::endl;
-  std::cout << "brightness: " << capture_setting.brightness << std::endl;
-  std::cout << "contrast: " << capture_setting.contrast << std::endl;
-  std::cout << "saturation: " << capture_setting.saturation << std::endl;
-  std::cout << "temperature: " << capture_setting.temperature << std::endl;
-  std::cout << "exposure: " << capture_setting.exposure << std::endl;
-  std::cout << "gain: " << capture_setting.gain << std::endl;
-
-  // !Debug
   current_capture_setting.update_with(on_configure_capture_setting(capture_setting));
   capture_setting_event_publisher->publish(static_cast<CaptureSettingMsg>(current_capture_setting));
 

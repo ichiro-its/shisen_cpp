@@ -54,7 +54,7 @@ void CallDataSaveCaptureSetting::HandleRequest()
     nlohmann::json capture_data = nlohmann::json::parse(json_string);
 
     config.save_capture_setting(capture_data);
-    RCLCPP_INFO(rclcpp::get_logger("Save config"), " config has been saved!  ");
+    RCLCPP_INFO(rclcpp::get_logger("Save config"), "config has been saved!  ");
   } catch (nlohmann::json::exception & e) {
     RCLCPP_ERROR(rclcpp::get_logger("Save config"), e.what());
   }
