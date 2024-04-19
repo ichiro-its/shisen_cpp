@@ -52,7 +52,7 @@ void ConfigGrpc::SignIntHandler(int signum)
   exit(signum);
 }
 
-void ConfigGrpc::Run(uint16_t port, const std::string & path, rclcpp::Node::SharedPtr node)
+void ConfigGrpc::Run(uint16_t port, const std::string & path, rclcpp::Node::SharedPtr node, std::shared_ptr<camera::CameraNode> camera_node)
 {
   Config config(path);
   std::string server_address =
@@ -67,10 +67,10 @@ void ConfigGrpc::Run(uint16_t port, const std::string & path, rclcpp::Node::Shar
   std::cout << "Server listening on " << server_address << std::endl;
 
   signal(SIGINT, SignIntHandler);
-  thread_ = std::thread([&path, &node, this]() {
+  thread_ = std::thread([&path, &node, &camera_node, this]() {
     new CallDataGetCaptureSetting(&service_, cq_.get(), path);
     new CallDataSaveCaptureSetting(&service_, cq_.get(), path);
-    new CallDataSetCaptureSetting(&service_, cq_.get(), path, node);
+    new CallDataSetCaptureSetting(&service_, cq_.get(), path, node, camera_node);
     void * tag;  // uniquely identifies a request.
     bool ok = true;
     while (true) {

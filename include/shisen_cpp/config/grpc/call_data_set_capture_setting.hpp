@@ -24,6 +24,9 @@
 #include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/config/grpc/call_data.hpp>
 #include <shisen_interfaces/msg/capture_setting.hpp>
+#include "shisen_cpp/utility.hpp"
+
+#include "shisen_cpp/camera/node/camera_node.hpp"
 
 namespace shisen_cpp
 {
@@ -33,7 +36,7 @@ class CallDataSetCaptureSetting
 public:
   CallDataSetCaptureSetting(
     shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-    const std::string & path, rclcpp::Node::SharedPtr node);
+    const std::string & path, rclcpp::Node::SharedPtr node, std::shared_ptr<camera::CameraNode> camera_node);
 
 protected:
   void AddNextToCompletionQueue() override;
@@ -41,6 +44,7 @@ protected:
   void HandleRequest();
   rclcpp::Node::SharedPtr node_;
   rclcpp::Publisher<shisen_interfaces::msg::CaptureSetting>::SharedPtr set_capture_publisher_;
+  std::shared_ptr<camera::CameraNode> camera_node_;
 };
 }  // namespace shisen_cpp
 

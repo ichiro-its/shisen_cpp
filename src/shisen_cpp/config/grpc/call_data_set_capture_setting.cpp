@@ -28,8 +28,8 @@ namespace shisen_cpp
 {
 CallDataSetCaptureSetting::CallDataSetCaptureSetting(
   shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-  const std::string & path, rclcpp::Node::SharedPtr node)
-: CallData(service, cq, path), node_(node)
+  const std::string & path, rclcpp::Node::SharedPtr node, std::shared_ptr<camera::CameraNode> camera_node)
+: CallData(service, cq, path), node_(node), camera_node_(camera_node)
 {
   set_capture_publisher_ = node_->create_publisher<shisen_interfaces::msg::CaptureSetting>(
     "shisen_cpp/config/capture_setting", 10);
@@ -38,7 +38,7 @@ CallDataSetCaptureSetting::CallDataSetCaptureSetting(
 
 void CallDataSetCaptureSetting::AddNextToCompletionQueue()
 {
-  new CallDataSetCaptureSetting(service_, cq_, path_, node_);
+  new CallDataSetCaptureSetting(service_, cq_, path_, node_, camera_node_);
 }
 
 void CallDataSetCaptureSetting::WaitForRequest()
@@ -50,6 +50,8 @@ void CallDataSetCaptureSetting::HandleRequest()
 {
   Config config(path_);
   try {
+    CaptureSetting capture_setting;
+
     int brightness = request_.brightness();
     int contrast = request_.contrast();
     int saturation = request_.saturation();
@@ -57,29 +59,30 @@ void CallDataSetCaptureSetting::HandleRequest()
     int exposure = request_.exposure();
     int gain = request_.gain();
 
-    std::cout << "brightness: " << brightness << std::endl;
-    std::cout << "contrast: " << contrast << std::endl;
-    std::cout << "saturation: " << saturation << std::endl;
-    std::cout << "temperature: " << temperature << std::endl;
-    std::cout << "exposure: " << exposure << std::endl;
-    std::cout << "gain: " << gain << std::endl;
+    capture_setting.brightness.set(brightness);
+    capture_setting.contrast.set(contrast);
+    capture_setting.saturation.set(saturation);
+    capture_setting.temperature.set(temperature);
+    capture_setting.exposure.set(exposure);
+    capture_setting.gain.set(gain);
 
-    shisen_interfaces::msg::CaptureSetting msg;
-    msg.brightness.clear();
-    msg.contrast.clear();
-    msg.saturation.clear();
-    msg.temperature.clear();
-    msg.exposure.clear();
-    msg.gain.clear();
+    camera_node_->configure_capture_setting(capture_setting);
+    // shisen_interfaces::msg::CaptureSetting msg;
+    // msg.brightness.clear();
+    // msg.contrast.clear();
+    // msg.saturation.clear();
+    // msg.temperature.clear();
+    // msg.exposure.clear();
+    // msg.gain.clear();
 
-    msg.brightness.push_back(brightness);
-    msg.contrast.push_back(contrast);
-    msg.saturation.push_back(saturation);
-    msg.temperature.push_back(temperature);
-    msg.exposure.push_back(exposure);
-    msg.gain.push_back(gain);
+    // msg.brightness.push_back(brightness);
+    // msg.contrast.push_back(contrast);
+    // msg.saturation.push_back(saturation);
+    // msg.temperature.push_back(temperature);
+    // msg.exposure.push_back(exposure);
+    // msg.gain.push_back(gain);
 
-    set_capture_publisher_->publish(msg);
+    // set_capture_publisher_->publish(msg);
     RCLCPP_INFO(
       rclcpp::get_logger("Publish capture setting config"),
       "capture setting config has been applied!");

@@ -35,6 +35,8 @@
 #include <shisen_interfaces/msg/capture_setting.hpp>
 #include <shisen_interfaces/msg/camera_config.hpp>
 
+#include <shisen_cpp/camera/node/camera_node.hpp>
+
 #include <chrono>
 #include <fstream>
 #include <future>
@@ -57,7 +59,7 @@ public:
 
   ~ConfigGrpc();
 
-  void Run(uint16_t port, const std::string & path, rclcpp::Node::SharedPtr node);
+  void Run(uint16_t port, const std::string & path, rclcpp::Node::SharedPtr node, std::shared_ptr<camera::CameraNode> camera_node);
 
 private:
   std::string path;
@@ -67,6 +69,7 @@ private:
   static inline std::unique_ptr<grpc::Server> server_;
   std::thread thread_;
   shisen_interfaces::proto::Config::AsyncService service_;
+  std::shared_ptr<camera::CameraNode> camera_node_;
 };
 
 }  // namespace shisen_cpp
