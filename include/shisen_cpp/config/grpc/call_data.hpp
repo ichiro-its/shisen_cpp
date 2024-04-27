@@ -27,6 +27,13 @@
 #include <shisen_interfaces/shisen.grpc.pb.h>
 #include <shisen_interfaces/shisen.pb.h>
 
+enum class CallStatus
+{
+  CREATE  = 1,
+  PROCESS = 2,
+  FINISH  = 3,
+};
+
 namespace shisen_cpp
 {
 template <class ConfigRequest, class ConfigReply>
@@ -42,7 +49,7 @@ public:
 protected:
   virtual void AddNextToCompletionQueue() = 0;
 
-  enum CallStatus { CREATE, PROCESS, FINISH };
+  // enum CallStatus { CREATE, PROCESS, FINISH };
 
   CallStatus status_;  // The current serving state.
 
@@ -61,24 +68,28 @@ template <class ConfigRequest, class ConfigReply>
 CallData<ConfigRequest, ConfigReply>::CallData(
   shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
   const std::string & path)
-: status_(CREATE), service_(service), cq_(cq), responder_(&ctx_), path_(path)
+: status_(CallStatus::CREATE), service_(service), cq_(cq), responder_(&ctx_), path_(path)
 {
 }
 
 template <class ConfigRequest, class ConfigReply>
 void CallData<ConfigRequest, ConfigReply>::Proceed()
 {
-  if (status_ == CREATE) {
-    status_ = PROCESS;
-    WaitForRequest();
-  } else if (status_ == PROCESS) {
-    AddNextToCompletionQueue();
-    HandleRequest();
-    status_ = FINISH;
-    responder_.Finish(reply_, grpc::Status::OK, this);
-  } else {
-    GPR_ASSERT(status_ == FINISH);
-    delete this;
+  switch (status_) {
+    case CallStatus::CREATE:
+      status_ = CallStatus::PROCESS;
+      WaitForRequest();
+      break;
+    case CallStatus::PROCESS:
+      AddNextToCompletionQueue();
+      HandleRequest();
+      status_ = CallStatus::FINISH;
+      responder_.Finish(reply_, grpc::Status::OK, this);
+      break;
+    default:
+      GPR_ASSERT(status_ == CallStatus::FINISH);
+      delete this;
+      break;
   }
 }
 
