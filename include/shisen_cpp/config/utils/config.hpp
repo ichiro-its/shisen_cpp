@@ -23,8 +23,6 @@
 
 #include <nlohmann/json.hpp>
 
-#include <fstream>
-#include <map>
 #include <string>
 
 namespace shisen_cpp

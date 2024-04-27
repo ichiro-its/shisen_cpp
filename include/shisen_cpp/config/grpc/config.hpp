@@ -28,14 +28,13 @@
 #include <grpcpp/grpcpp.h>
 #include <nlohmann/json.hpp>
 #include <rclcpp/rclcpp.hpp>
+#include <shisen_cpp/camera/node/camera_node.hpp>
 #include <shisen_cpp/config/grpc/call_data.hpp>
 #include <shisen_cpp/config/grpc/call_data_base.hpp>
 #include <shisen_interfaces/shisen.grpc.pb.h>
 #include <shisen_interfaces/shisen.pb.h>
 #include <shisen_interfaces/msg/capture_setting.hpp>
 #include <shisen_interfaces/msg/camera_config.hpp>
-
-#include <shisen_cpp/camera/node/camera_node.hpp>
 
 #include <chrono>
 #include <fstream>
@@ -45,9 +44,6 @@
 #include <memory>
 #include <string>
 #include <thread>
-
-
-using shisen_interfaces::proto::Config;
 
 namespace shisen_cpp
 {

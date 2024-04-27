@@ -35,9 +35,9 @@ class CallData : public CallDataBase
 public:
   CallData(
     shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-    const std::string path);
+    const std::string & path);
 
-  void Proceed();
+  void Proceed() override;
 
 protected:
   virtual void AddNextToCompletionQueue() = 0;
@@ -60,7 +60,7 @@ protected:
 template <class ConfigRequest, class ConfigReply>
 CallData<ConfigRequest, ConfigReply>::CallData(
   shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-  const std::string path)
+  const std::string & path)
 : status_(CREATE), service_(service), cq_(cq), responder_(&ctx_), path_(path)
 {
 }

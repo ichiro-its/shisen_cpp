@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "shisen_cpp/config/grpc/call_data_base.hpp"
+#include <shisen_cpp/config/grpc/call_data_base.hpp>
 
 namespace shisen_cpp
 {

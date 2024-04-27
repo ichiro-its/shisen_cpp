@@ -24,7 +24,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
 #include <shisen_cpp/config/grpc/call_data.hpp>
-#include "shisen_cpp/utility.hpp"
+#include <shisen_cpp/utility.hpp>
 
 namespace shisen_cpp
 {
@@ -38,9 +38,8 @@ public:
 
 protected:
   void AddNextToCompletionQueue() override;
-  void WaitForRequest();
-  void HandleRequest();
-  rclcpp::Node::SharedPtr node_;
+  void WaitForRequest() override;
+  void HandleRequest() override;
   std::shared_ptr<camera::CameraNode> camera_node_;
 };
 }  // namespace shisen_cpp

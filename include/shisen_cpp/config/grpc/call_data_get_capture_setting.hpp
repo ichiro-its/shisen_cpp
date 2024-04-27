@@ -35,8 +35,8 @@ public:
 
 protected:
   void AddNextToCompletionQueue() override;
-  void WaitForRequest();
-  void HandleRequest();
+  void WaitForRequest() override;
+  void HandleRequest() override;
 };
 }  // namespace shisen_cpp
 
