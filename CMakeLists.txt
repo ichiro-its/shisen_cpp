@@ -38,8 +38,9 @@ add_library(${PROJECT_NAME} SHARED
   "src/${PROJECT_NAME}/viewer/consumer/image_consumer.cpp"
   "src/${PROJECT_NAME}/viewer/node/viewer_node.cpp"
   "src/${PROJECT_NAME}/config/grpc/config.cpp"
-  "src/${PROJECT_NAME}/config/grpc/call_data_base.cpp"  
+  "src/${PROJECT_NAME}/config/grpc/call_data_base.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_get_capture_setting.cpp"
+  "src/${PROJECT_NAME}/config/grpc/call_data_get_image.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_set_capture_setting.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_save_capture_setting.cpp"
 )
@@ -52,9 +53,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 ament_target_dependencies(${PROJECT_NAME}
   keisan OpenCV rclcpp shisen_interfaces sensor_msgs cv_bridge std_msgs)
 
-target_link_libraries(${PROJECT_NAME}  
+target_link_libraries(${PROJECT_NAME}
   gRPC::grpc++_reflection
-  gRPC::grpc++  
+  gRPC::grpc++
 )
 
 install(TARGETS ${PROJECT_NAME}
