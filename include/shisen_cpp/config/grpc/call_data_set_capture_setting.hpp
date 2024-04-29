@@ -21,7 +21,6 @@
 #ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_SET_CAPTURE_SETTING_HPP__
 #define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_SET_CAPTURE_SETTING_HPP__
 
-#include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
 #include <shisen_cpp/config/grpc/call_data.hpp>
 #include <shisen_cpp/utility.hpp>
