@@ -29,9 +29,9 @@
 
 enum class CallStatus
 {
-  CREATE  = 1,
-  PROCESS = 2,
-  FINISH  = 3,
+  CREATE,
+  PROCESS,
+  FINISH,
 };
 
 namespace shisen_cpp
@@ -48,8 +48,6 @@ public:
 
 protected:
   virtual void AddNextToCompletionQueue() = 0;
-
-  // enum CallStatus { CREATE, PROCESS, FINISH };
 
   CallStatus status_;  // The current serving state.
 
@@ -86,8 +84,7 @@ void CallData<ConfigRequest, ConfigReply>::Proceed()
       status_ = CallStatus::FINISH;
       responder_.Finish(reply_, grpc::Status::OK, this);
       break;
-    default:
-      GPR_ASSERT(status_ == CallStatus::FINISH);
+    case CallStatus::FINISH:
       delete this;
       break;
   }
