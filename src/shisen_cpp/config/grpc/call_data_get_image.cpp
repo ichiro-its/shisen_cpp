@@ -58,7 +58,5 @@ void CallDataGetImage::HandleRequest()
   reply_.set_data(image_bytes.data(), image_bytes.size());
   reply_.set_height(image.rows);
   reply_.set_width(image.cols);
-
-  RCLCPP_INFO(rclcpp::get_logger("Get image"), "image has been sent!");
 }
 }  // namespace shisen_cpp
