@@ -32,7 +32,7 @@ class CallDataGetImage
 public:
   CallDataGetImage(
     shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-    const std::string & path, std::shared_ptr<camera::CameraNode> camera_node);
+    const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node);
 
 protected:
   void AddNextToCompletionQueue() override;

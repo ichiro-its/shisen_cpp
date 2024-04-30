@@ -28,7 +28,7 @@ namespace shisen_cpp
 {
 CallDataSetCaptureSetting::CallDataSetCaptureSetting(
   shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-  const std::string & path, std::shared_ptr<camera::CameraNode> camera_node)
+  const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node)
 : CallData(service, cq, path), camera_node_(camera_node)
 {
   Proceed();

@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <opencv2/opencv.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/config/grpc/call_data_get_image.hpp>
 #include <shisen_interfaces/shisen.grpc.pb.h>
@@ -27,7 +28,7 @@ namespace shisen_cpp
 {
 CallDataGetImage::CallDataGetImage(
   shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-  const std::string & path, std::shared_ptr<camera::CameraNode> camera_node)
+  const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node)
 : CallData(service, cq, path), camera_node_(camera_node)
 {
   Proceed();
@@ -45,20 +46,18 @@ void CallDataGetImage::WaitForRequest()
 
 void CallDataGetImage::HandleRequest()
 {
-  sensor_msgs::msg::Image image;
-  image = camera_node_->image_provider->get_image();
+  cv::Mat image = camera_node_->image_provider->get_mat();
+  if (image.empty()) {
+    RCLCPP_WARN(rclcpp::get_logger("Get image"), "Empty image!");
+    return;
+  }
 
-  int width = image.width;
-  int height = image.height;
-  int step = image.step;
-  std::string encoding = image.encoding;
-  std::string data(image.data.begin(), image.data.end());
+  std::vector<uchar> image_bytes;
+  cv::imencode(".jpg", image, image_bytes);
 
-  reply_.set_width(width);
-  reply_.set_height(height);
-  reply_.set_step(step);
-  reply_.set_encoding(encoding);
-  reply_.set_data(data);
+  reply_.set_data(image_bytes.data(), image_bytes.size());
+  reply_.set_height(image.rows);
+  reply_.set_width(image.cols);
 
   RCLCPP_INFO(rclcpp::get_logger("Get image"), "image has been sent!");
 }
