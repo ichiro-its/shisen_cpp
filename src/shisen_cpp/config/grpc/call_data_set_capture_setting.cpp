@@ -50,19 +50,12 @@ void CallDataSetCaptureSetting::HandleRequest()
   try {
     CaptureSetting capture_setting;
 
-    int brightness = request_.brightness();
-    int contrast = request_.contrast();
-    int saturation = request_.saturation();
-    int temperature = request_.temperature();
-    int exposure = request_.exposure();
-    int gain = request_.gain();
-
-    capture_setting.brightness.set(brightness);
-    capture_setting.contrast.set(contrast);
-    capture_setting.saturation.set(saturation);
-    capture_setting.temperature.set(temperature);
-    capture_setting.exposure.set(exposure);
-    capture_setting.gain.set(gain);
+    capture_setting.brightness.set(request_.brightness());
+    capture_setting.contrast.set(request_.contrast());
+    capture_setting.saturation.set(request_.saturation());
+    capture_setting.temperature.set(request_.temperature());
+    capture_setting.exposure.set(request_.exposure());
+    capture_setting.gain.set(request_.gain());
 
     camera_node_->configure_capture_setting(capture_setting);
 
