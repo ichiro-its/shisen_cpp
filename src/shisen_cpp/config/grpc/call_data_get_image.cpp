@@ -56,7 +56,5 @@ void CallDataGetImage::HandleRequest()
   cv::imencode(".jpg", image, image_bytes);
 
   reply_.set_data(image_bytes.data(), image_bytes.size());
-  reply_.set_height(image.rows);
-  reply_.set_width(image.cols);
 }
 }  // namespace shisen_cpp
