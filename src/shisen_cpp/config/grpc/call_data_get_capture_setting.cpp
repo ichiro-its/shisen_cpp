@@ -47,7 +47,11 @@ void CallDataGetCaptureSetting::WaitForRequest()
 void CallDataGetCaptureSetting::HandleRequest()
 {
   Config config(path_);
-  reply_.set_json_capture(config.get_capture_setting("capture"));
-  RCLCPP_INFO(rclcpp::get_logger("Get config"), "config has been sent!");
+  try {
+    reply_.set_json_capture(config.get_capture_setting("capture"));
+    RCLCPP_INFO(rclcpp::get_logger("Get config"), "config has been sent!");
+  } catch (nlohmann::json::exception & e) {
+    RCLCPP_ERROR(rclcpp::get_logger("Publish config"), e.what());
+  }
 }
 }  // namespace shisen_cpp

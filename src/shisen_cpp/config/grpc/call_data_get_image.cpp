@@ -46,15 +46,19 @@ void CallDataGetImage::WaitForRequest()
 
 void CallDataGetImage::HandleRequest()
 {
-  cv::Mat image = camera_node_->image_provider->get_mat();
-  if (image.empty()) {
-    RCLCPP_WARN(rclcpp::get_logger("Get image"), "Empty image!");
-    return;
+  try {
+    cv::Mat image = camera_node_->image_provider->get_mat();
+    if (image.empty()) {
+      RCLCPP_WARN(rclcpp::get_logger("Get image"), "Empty image!");
+      return;
+    }
+
+    std::vector<uchar> image_bytes;
+    cv::imencode(".jpg", image, image_bytes);
+
+    reply_.set_data(image_bytes.data(), image_bytes.size());
+  } catch(const std::exception& e) {
+    RCLCPP_ERROR(rclcpp::get_logger("Publish config"), e.what());
   }
-
-  std::vector<uchar> image_bytes;
-  cv::imencode(".jpg", image, image_bytes);
-
-  reply_.set_data(image_bytes.data(), image_bytes.size());
 }
 }  // namespace shisen_cpp
