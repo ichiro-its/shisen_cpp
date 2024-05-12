@@ -37,8 +37,9 @@ TEST(CompileTest, Camera) {
     {
       shisen_cpp::Options options;
       options.camera_prefix = "foo";
+      std::string path = "./src/shisen_cpp/data/";
 
-      std::make_shared<shisen_cpp::ShisenCppNode>(node, options);
+      std::make_shared<shisen_cpp::ShisenCppNode>(node, path, options);
     }
   } catch (...) {
   }

@@ -21,6 +21,7 @@
 #include <shisen_cpp/camera/provider/image_provider.hpp>
 
 #include <memory>
+#include <opencv2/opencv.hpp>
 
 namespace shisen_cpp::camera
 {
@@ -34,6 +35,9 @@ ImageProvider::ImageProvider(const Options & options)
   if (!video_capture->open(options.camera_file_name)) {
     throw std::runtime_error("unable to open camera on `" + options.camera_file_name + "`");
   }
+
+  video_capture->set(cv::CAP_PROP_FRAME_WIDTH, options.width);
+  video_capture->set(cv::CAP_PROP_FRAME_HEIGHT, options.height);
 }
 
 ImageProvider::~ImageProvider()

@@ -21,7 +21,7 @@
 #ifndef SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 #define SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 
-#include <cv_bridge/cv_bridge.h>
+#include <cv_bridge/cv_bridge.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
 #include <memory>

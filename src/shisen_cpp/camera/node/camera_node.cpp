@@ -20,6 +20,8 @@
 
 #include <shisen_cpp/camera/node/camera_node.hpp>
 
+#include <nlohmann/json.hpp>
+#include <fstream>
 #include <memory>
 #include <string>
 
@@ -159,11 +161,13 @@ CaptureSetting CameraNode::on_configure_capture_setting(
     }
 
     if (new_capture_setting.temperature.is_not_empty()) {
-      video_capture->set(cv::CAP_PROP_TEMPERATURE, new_capture_setting.temperature);
+      video_capture->set(cv::CAP_PROP_AUTO_WB, 0);
+      video_capture->set(cv::CAP_PROP_WB_TEMPERATURE, new_capture_setting.temperature);
     }
 
-    if (new_capture_setting.hue.is_not_empty()) {
-      video_capture->set(cv::CAP_PROP_HUE, new_capture_setting.hue);
+    if (new_capture_setting.exposure.is_not_empty()) {
+      video_capture->set(cv::CAP_PROP_AUTO_EXPOSURE, 1);
+      video_capture->set(cv::CAP_PROP_EXPOSURE, new_capture_setting.exposure);
     }
 
     if (new_capture_setting.gain.is_not_empty()) {
@@ -175,8 +179,8 @@ CaptureSetting CameraNode::on_configure_capture_setting(
   new_capture_setting.brightness = video_capture->get(cv::CAP_PROP_BRIGHTNESS);
   new_capture_setting.contrast = video_capture->get(cv::CAP_PROP_CONTRAST);
   new_capture_setting.saturation = video_capture->get(cv::CAP_PROP_SATURATION);
-  new_capture_setting.temperature = video_capture->get(cv::CAP_PROP_TEMPERATURE);
-  new_capture_setting.hue = video_capture->get(cv::CAP_PROP_HUE);
+  new_capture_setting.temperature = video_capture->get(cv::CAP_PROP_WB_TEMPERATURE);
+  new_capture_setting.exposure = video_capture->get(cv::CAP_PROP_EXPOSURE);
   new_capture_setting.gain = video_capture->get(cv::CAP_PROP_GAIN);
 
   return new_capture_setting;
@@ -187,6 +191,43 @@ void CameraNode::configure_capture_setting(const CaptureSetting & capture_settin
   // Update with configured data
   current_capture_setting.update_with(on_configure_capture_setting(capture_setting));
   capture_setting_event_publisher->publish(static_cast<CaptureSettingMsg>(current_capture_setting));
+}
+
+void CameraNode::load_configuration(const std::string & path)
+{
+  std::string ss = path + "capture_settings.json";
+
+  std::ifstream input(ss, std::ifstream::in);
+  if (!input.is_open()) {
+    throw std::runtime_error("Unable to open `" + ss + "`!");
+  }
+
+  nlohmann::json config = nlohmann::json::parse(input);
+
+  CaptureSetting capture_setting;
+
+  // Get all config
+  for (auto & item : config.items()) {
+    try {
+      if (item.key() == "brightness") {
+        capture_setting.brightness.set(item.value());
+      } else if (item.key() == "contrast") {
+        capture_setting.contrast.set(item.value());
+      } else if (item.key() == "saturation") {
+        capture_setting.saturation.set(item.value());
+      } else if (item.key() == "temperature") {
+        capture_setting.temperature.set(item.value());
+      } else if (item.key() == "exposure") {
+        capture_setting.exposure.set(item.value());
+      } else if (item.key() == "gain") {
+        capture_setting.gain.set(item.value());
+      }
+    } catch (nlohmann::json::parse_error & ex) {
+      throw std::runtime_error("Parse error at byte `" + std::to_string(ex.byte) + "`!");
+    }
+  }
+
+  configure_capture_setting(capture_setting);
 }
 
 }  // namespace shisen_cpp::camera

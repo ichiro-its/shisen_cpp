@@ -45,7 +45,7 @@ struct CaptureSetting
   Emptiable<int> contrast;
   Emptiable<int> saturation;
   Emptiable<int> temperature;
-  Emptiable<int> hue;
+  Emptiable<int> exposure;
   Emptiable<int> gain;
 };
 
