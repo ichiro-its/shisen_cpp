@@ -26,8 +26,6 @@ namespace shisen_cpp
 class CallDataBase
 {
 public:
-  CallDataBase();
-
   virtual void Proceed() = 0;
 
 protected:
