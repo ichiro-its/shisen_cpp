@@ -39,7 +39,7 @@ public:
 
   ~ConfigGrpc();
 
-  void Run(uint16_t port, const std::string & path, std::shared_ptr<camera::CameraNode> camera_node);
+  void Run(const std::string & path, std::shared_ptr<camera::CameraNode> camera_node);
 
 private:
   std::string path;

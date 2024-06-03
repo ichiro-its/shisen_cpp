@@ -42,7 +42,7 @@ ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & p
     }
   );
 
-  config_grpc.Run(5757, path, camera_node);
+  config_grpc.Run(path, camera_node);
   RCLCPP_INFO(rclcpp::get_logger("GrpcServers"), "grpc running");
 }
 

@@ -48,7 +48,7 @@ void ConfigGrpc::SignIntHandler(int signum)
   exit(signum);
 }
 
-void ConfigGrpc::Run(uint16_t port, const std::string & path, std::shared_ptr<camera::CameraNode> camera_node)
+void ConfigGrpc::Run(const std::string & path, std::shared_ptr<camera::CameraNode> camera_node)
 {
   Config config(path);
   std::string server_address =

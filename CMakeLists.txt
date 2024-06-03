@@ -35,7 +35,6 @@ add_library(${PROJECT_NAME} SHARED
   "src/${PROJECT_NAME}/camera/provider/camera_config_provider.cpp"
   "src/${PROJECT_NAME}/camera/provider/image_provider.cpp"
   "src/${PROJECT_NAME}/config/grpc/config.cpp"
-  "src/${PROJECT_NAME}/config/grpc/call_data_base.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_get_capture_setting.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_get_image.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_save_capture_setting.cpp"
