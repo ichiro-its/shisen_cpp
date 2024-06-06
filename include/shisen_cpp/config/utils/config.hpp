@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2024 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,36 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/config/grpc/config.hpp>
-#include <shisen_cpp/node/shisen_cpp_node.hpp>
+#ifndef SHISEN_CPP__CONFIG__UTILS__CONFIG_HPP_
+#define SHISEN_CPP__CONFIG__UTILS__CONFIG_HPP_
 
-#include <memory>
+#include <nlohmann/json.hpp>
 
 namespace shisen_cpp
 {
-using namespace std::chrono_literals;
 
-ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & path, const Options & options)
-: node(node), camera_node(std::make_shared<camera::CameraNode>(node, options))
+class Config
 {
-  auto image_provider = std::make_shared<camera::ImageProvider>(options);
-  auto camera_config_provider = std::make_shared<camera::CameraConfigProvider>(options);
-  camera_node->set_provider(image_provider, camera_config_provider);
-  camera_node->load_configuration(path);
+public:
+  explicit Config(const std::string & path);
 
-  node_timer = node->create_wall_timer(
-    1s / camera_node->image_provider->options.capture_fps,
-    [this]() {
-      camera_node->update();
-    }
-  );
+  std::string get_capture_setting(const std::string & key) const;
+  void save_capture_setting(const nlohmann::json & capture_data);
+  nlohmann::json get_grpc_config() const;
 
-  config_grpc.Run(path, camera_node);
-  RCLCPP_INFO(rclcpp::get_logger("GrpcServers"), "grpc running");
-}
-
-ShisenCppNode::~ShisenCppNode()
-{
-}
+private:
+  std::string path;
+};
 
 }  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__CONFIG__UTILS__CONFIG_HPP_

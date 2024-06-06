@@ -24,13 +24,12 @@
 #include <cv_bridge/cv_bridge.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
+#include <sensor_msgs/msg/image.hpp>
+#include <shisen_cpp/utility.hpp>
+#include <std_msgs/msg/header.hpp>
+
 #include <memory>
 #include <string>
-
-#include "sensor_msgs/msg/image.hpp"
-#include "std_msgs/msg/header.hpp"
-
-#include "shisen_cpp/utility.hpp"
 
 namespace shisen_cpp::camera
 {

@@ -30,7 +30,7 @@ int main(int argc, char ** argv)
 
   shisen_cpp::Options options;
   options.field_of_view = 78;
-  std::string path = "";
+  std::string path = "./src/shisen_cpp/data/";
 
   const char * help_message =
     "Usage: ros2 run shisen_cpp camera [path] [options] [--camera-prefix prefix]\n"
@@ -70,7 +70,10 @@ int main(int argc, char ** argv)
         }
       } else if (pos == 0) {
         path = arg;
-        pos++;
+        ++pos;
+      } else if (pos == 1) {
+        options.camera_file_name = arg;
+        ++pos;
       }
     }
   } catch (...) {

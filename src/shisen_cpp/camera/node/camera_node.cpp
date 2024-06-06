@@ -18,9 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <fstream>
+#include <nlohmann/json.hpp>
+#include <fstream>
+#include <memory>
+#include <nlohmann/json.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
 
-#include <nlohmann/json.hpp>
 #include <fstream>
 #include <memory>
 #include <string>
@@ -123,7 +127,7 @@ void CameraNode::set_provider(
     configure_capture_setting_service = node->create_service<ConfigureCaptureSetting>(
       get_camera_prefix() + CONFIGURE_CAPTURE_SETTING_SUFFIX,
       [this](ConfigureCaptureSetting::Request::SharedPtr request,
-      ConfigureCaptureSetting::Response::SharedPtr response) {
+        ConfigureCaptureSetting::Response::SharedPtr response) {
         // Configure capture setting if exist
         if (request->capture_setting.size() > 0) {
           configure_capture_setting(((CaptureSetting)request->capture_setting.front()));

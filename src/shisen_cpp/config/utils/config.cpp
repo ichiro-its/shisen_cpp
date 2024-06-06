@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2024 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,36 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/config/grpc/config.hpp>
-#include <shisen_cpp/node/shisen_cpp_node.hpp>
+#include <shisen_cpp/config/utils/config.hpp>
 
-#include <memory>
+#include <fstream>
+#include <iomanip>
+#include <string>
 
 namespace shisen_cpp
 {
-using namespace std::chrono_literals;
+Config::Config(const std::string & path) : path(path) {}
 
-ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & path, const Options & options)
-: node(node), camera_node(std::make_shared<camera::CameraNode>(node, options))
+std::string Config::get_capture_setting(const std::string & key) const
 {
-  auto image_provider = std::make_shared<camera::ImageProvider>(options);
-  auto camera_config_provider = std::make_shared<camera::CameraConfigProvider>(options);
-  camera_node->set_provider(image_provider, camera_config_provider);
-  camera_node->load_configuration(path);
+  if (key == "capture") {
+    std::ifstream capture_file(path + "capture_settings.json");
+    nlohmann::json capture_data = nlohmann::json::parse(capture_file);
+    return capture_data.dump();
+  }
 
-  node_timer = node->create_wall_timer(
-    1s / camera_node->image_provider->options.capture_fps,
-    [this]() {
-      camera_node->update();
-    }
-  );
-
-  config_grpc.Run(path, camera_node);
-  RCLCPP_INFO(rclcpp::get_logger("GrpcServers"), "grpc running");
+  return "";
 }
 
-ShisenCppNode::~ShisenCppNode()
+nlohmann::json Config::get_grpc_config() const
 {
+  std::ifstream grpc_file(path + "grpc.json");
+  nlohmann::json grpc_data = nlohmann::json::parse(grpc_file);
+  grpc_file.close();
+  return grpc_data;
+}
+
+void Config::save_capture_setting(const nlohmann::json & capture_data)
+{
+  std::ofstream capture_file(path + "capture_settings.json", std::ios::out | std::ios::trunc);
+  capture_file << std::setw(2) << capture_data << std::endl;
+  capture_file.close();
 }
 
 }  // namespace shisen_cpp

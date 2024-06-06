@@ -21,9 +21,8 @@
 #ifndef SHISEN_CPP__UTILITY__CAPTURE_SETTING_HPP_
 #define SHISEN_CPP__UTILITY__CAPTURE_SETTING_HPP_
 
+#include <shisen_cpp/utility/emptiable.hpp>
 #include <shisen_interfaces/msg/capture_setting.hpp>
-
-#include "./emptiable.hpp"
 
 namespace shisen_cpp
 {

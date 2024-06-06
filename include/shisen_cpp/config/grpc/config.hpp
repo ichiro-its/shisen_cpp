@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2024 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,36 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/config/grpc/config.hpp>
-#include <shisen_cpp/node/shisen_cpp_node.hpp>
+#ifndef SHISEN_CPP__CONFIG__GRPC__CONFIG_HPP_
+#define SHISEN_CPP__CONFIG__GRPC__CONFIG_HPP_
+
+#include <grpcpp/grpcpp.h>
+#include <shisen_cpp/camera/node/camera_node.hpp>
+#include <shisen_interfaces/shisen.grpc.pb.h>
+#include <shisen_interfaces/shisen.pb.h>
 
 #include <memory>
+#include <thread>
 
 namespace shisen_cpp
 {
-using namespace std::chrono_literals;
-
-ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & path, const Options & options)
-: node(node), camera_node(std::make_shared<camera::CameraNode>(node, options))
+class ConfigGrpc
 {
-  auto image_provider = std::make_shared<camera::ImageProvider>(options);
-  auto camera_config_provider = std::make_shared<camera::CameraConfigProvider>(options);
-  camera_node->set_provider(image_provider, camera_config_provider);
-  camera_node->load_configuration(path);
+public:
+  explicit ConfigGrpc();
+  explicit ConfigGrpc(const std::string & path);
 
-  node_timer = node->create_wall_timer(
-    1s / camera_node->image_provider->options.capture_fps,
-    [this]() {
-      camera_node->update();
-    }
-  );
+  ~ConfigGrpc();
 
-  config_grpc.Run(path, camera_node);
-  RCLCPP_INFO(rclcpp::get_logger("GrpcServers"), "grpc running");
-}
+  void Run(const std::string & path, std::shared_ptr<camera::CameraNode> camera_node);
 
-ShisenCppNode::~ShisenCppNode()
-{
-}
+private:
+  std::string path;
+  static void SignIntHandler(int signum);
+
+  static inline std::unique_ptr<grpc::ServerCompletionQueue> cq_;
+  static inline std::unique_ptr<grpc::Server> server_;
+  std::thread thread_;
+  shisen_interfaces::proto::Config::AsyncService service_;
+  std::shared_ptr<camera::CameraNode> camera_node_;
+};
 
 }  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__CONFIG__GRPC__CONFIG_HPP_
