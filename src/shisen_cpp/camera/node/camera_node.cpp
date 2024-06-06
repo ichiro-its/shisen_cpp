@@ -234,41 +234,4 @@ void CameraNode::load_configuration(const std::string & path)
   configure_capture_setting(capture_setting);
 }
 
-void CameraNode::load_configuration(const std::string & path)
-{
-  std::string ss = path + "capture_settings.json";
-
-  std::ifstream input(ss, std::ifstream::in);
-  if (!input.is_open()) {
-    throw std::runtime_error("Unable to open `" + ss + "`!");
-  }
-
-  nlohmann::json config = nlohmann::json::parse(input);
-
-  CaptureSetting capture_setting;
-
-  // Get all config
-  for (auto & item : config.items()) {
-    try {
-      if (item.key() == "brightness") {
-        capture_setting.brightness.set(item.value());
-      } else if (item.key() == "contrast") {
-        capture_setting.contrast.set(item.value());
-      } else if (item.key() == "saturation") {
-        capture_setting.saturation.set(item.value());
-      } else if (item.key() == "temperature") {
-        capture_setting.temperature.set(item.value());
-      } else if (item.key() == "exposure") {
-        capture_setting.exposure.set(item.value());
-      } else if (item.key() == "gain") {
-        capture_setting.gain.set(item.value());
-      }
-    } catch (nlohmann::json::parse_error & ex) {
-      throw std::runtime_error("Parse error at byte `" + std::to_string(ex.byte) + "`!");
-    }
-  }
-
-  configure_capture_setting(capture_setting);
-}
-
 }  // namespace shisen_cpp::camera
