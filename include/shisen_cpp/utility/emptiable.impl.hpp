@@ -21,7 +21,7 @@
 #ifndef SHISEN_CPP__UTILITY__EMPTIABLE_IMPL_HPP_
 #define SHISEN_CPP__UTILITY__EMPTIABLE_IMPL_HPP_
 
-#include <shisen_cpp/utility/emptiable.hpp>
+#include "shisen_cpp/utility/emptiable.hpp"
 
 namespace shisen_cpp
 {

@@ -21,7 +21,7 @@
 #ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_GET_CAPTURE_SETTING_HPP__
 #define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_GET_CAPTURE_SETTING_HPP__
 
-#include <shisen_cpp/config/grpc/call_data.hpp>
+#include "shisen_cpp/config/grpc/call_data.hpp"
 
 namespace shisen_cpp
 {

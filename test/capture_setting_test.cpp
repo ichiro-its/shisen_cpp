@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <gtest/gtest.h>
-#include <shisen_cpp/shisen_cpp.hpp>
+#include "gtest/gtest.h"
+#include "shisen_cpp/shisen_cpp.hpp"
 
 TEST(CaptureSettingTest, FromMsg) {
   shisen_cpp::CaptureSettingMsg msg;

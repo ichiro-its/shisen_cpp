@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/utility/interface.hpp>
+#include "shisen_cpp/utility/interface.hpp"
 
 namespace shisen_cpp
 {

@@ -18,12 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <fstream>
-#include <nlohmann/json.hpp>
-#include <fstream>
-#include <memory>
-#include <nlohmann/json.hpp>
-#include <shisen_cpp/camera/node/camera_node.hpp>
+#include "nlohmann/json.hpp"
+#include "shisen_cpp/camera/node/camera_node.hpp"
 
 #include <fstream>
 #include <memory>

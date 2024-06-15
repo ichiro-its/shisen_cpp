@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/viewer/consumer/image_consumer.hpp>
+#include "shisen_cpp/viewer/consumer/image_consumer.hpp"
 
 namespace shisen_cpp::viewer
 {

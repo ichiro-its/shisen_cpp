@@ -21,10 +21,10 @@
 #ifndef SHISEN_CPP__CONFIG__GRPC__CONFIG_HPP_
 #define SHISEN_CPP__CONFIG__GRPC__CONFIG_HPP_
 
-#include <grpcpp/grpcpp.h>
-#include <shisen_cpp/camera/node/camera_node.hpp>
-#include <shisen_interfaces/shisen.grpc.pb.h>
-#include <shisen_interfaces/shisen.pb.h>
+#include "grpcpp/grpcpp.h"
+#include "shisen_cpp/camera/node/camera_node.hpp"
+#include "shisen_interfaces/shisen.grpc.pb.h"
+#include "shisen_interfaces/shisen.pb.h"
 
 #include <memory>
 #include <thread>

@@ -18,11 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include "rclcpp/rclcpp.hpp"
+#include "shisen_cpp/config/grpc/call_data_get_image.hpp"
+#include "shisen_interfaces/shisen.grpc.pb.h"
+#include "shisen_interfaces/shisen.pb.h"
+
 #include <opencv2/opencv.hpp>
-#include <rclcpp/rclcpp.hpp>
-#include <shisen_cpp/config/grpc/call_data_get_image.hpp>
-#include <shisen_interfaces/shisen.grpc.pb.h>
-#include <shisen_interfaces/shisen.pb.h>
 
 namespace shisen_cpp
 {

@@ -21,14 +21,14 @@
 #ifndef SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 #define SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
 
+#include "sensor_msgs/msg/image.hpp"
+#include "shisen_cpp/utility.hpp"
+#include "std_msgs/msg/header.hpp"
+
 #include <cv_bridge/cv_bridge.hpp>
+#include <memory>
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
-#include <sensor_msgs/msg/image.hpp>
-#include <shisen_cpp/utility.hpp>
-#include <std_msgs/msg/header.hpp>
-
-#include <memory>
 #include <string>
 
 namespace shisen_cpp::camera
