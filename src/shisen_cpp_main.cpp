@@ -26,7 +26,7 @@
 
 int main(int argc, char ** argv)
 {
-  rclcpp::init(argc, argv);
+  auto args = rclcpp::init_and_remove_ros_arguments(argc, argv);
 
   shisen_cpp::Options options;
   options.field_of_view = 78;
@@ -50,20 +50,20 @@ int main(int argc, char ** argv)
   try {
     int i = 1;
     int pos = 0;
-    while (i < argc) {
-      std::string arg = argv[i++];
+    while (i < args.size()) {
+      std::string arg = args[i++];
       if (arg[0] == '-') {
         if (arg == "-h" || arg == "--help") {
           std::cout << help_message << std::endl;
           return 1;
         } else if (arg == "--camera-prefix") {
-          options.camera_prefix = argv[i++];
+          options.camera_prefix = args[i++];
         } else if (arg == "--compression") {
-          options.compression_quality = atoi(argv[i++]);
+          options.compression_quality = stoi(args[i++]);
         } else if (arg == "--capture-fps") {
-          options.capture_fps = atoi(argv[i++]);
+          options.capture_fps = stoi(args[i++]);
         } else if (arg == "--field-of-view") {
-          options.field_of_view = atoi(argv[i++]);
+          options.field_of_view = stoi(args[i++]);
         } else {
           std::cout << "Unknown option `" << arg << "`!\n\n" << help_message << std::endl;
           return 1;

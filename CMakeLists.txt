@@ -10,8 +10,13 @@ if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
 endif()
 
+# Set the build type to Debug if not specified
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic -fPIC)
+  add_compile_options(-Wall -Wextra -Wpedantic -fPIC -g3)
 endif()
 
 find_package(ament_cmake REQUIRED)
@@ -92,6 +97,10 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 install(DIRECTORY "include" DESTINATION ".")
+
+install(DIRECTORY
+  launch
+  DESTINATION "share/${PROJECT_NAME}")
 
 install(TARGETS ${PROJECT_NAME}
 EXPORT export_${PROJECT_NAME}
