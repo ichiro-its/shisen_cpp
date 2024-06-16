@@ -25,7 +25,7 @@
 #include <shisen_cpp/config/grpc/call_data_save_capture_setting.hpp>
 #include <shisen_cpp/config/grpc/call_data_set_capture_setting.hpp>
 #include <shisen_cpp/config/grpc/config.hpp>
-#include <shisen_cpp/config/utils/config.hpp>
+#include <jitsuyo/config.hpp>
 
 using grpc::ServerBuilder;
 using namespace std::chrono_literals;
@@ -50,9 +50,9 @@ void ConfigGrpc::SignIntHandler(int signum)
 
 void ConfigGrpc::Run(const std::string & path, std::shared_ptr<camera::CameraNode> camera_node)
 {
-  Config config(path);
+  nlohmann::json grpc_config = jitsuyo::load_config(path, "grpc.json");
   std::string server_address =
-    absl::StrFormat("0.0.0.0:%d", config.get_grpc_config()["port"].get<uint16_t>());
+    absl::StrFormat("0.0.0.0:%d", grpc_config["port"].get<uint16_t>());
 
   ServerBuilder builder;
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());

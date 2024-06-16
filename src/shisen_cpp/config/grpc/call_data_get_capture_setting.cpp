@@ -20,9 +20,9 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/config/grpc/call_data_get_capture_setting.hpp>
-#include <shisen_cpp/config/utils/config.hpp>
 #include <shisen_interfaces/shisen.grpc.pb.h>
 #include <shisen_interfaces/shisen.pb.h>
+#include <jitsuyo/config.hpp>
 
 namespace shisen_cpp
 {
@@ -46,9 +46,9 @@ void CallDataGetCaptureSetting::WaitForRequest()
 
 void CallDataGetCaptureSetting::HandleRequest()
 {
-  Config config(path_);
+  std::string capture_setting = jitsuyo::load_config(path_, "capture_settings.json").dump();
   try {
-    reply_.set_json_capture(config.get_capture_setting("capture"));
+    reply_.set_json_capture(capture_setting);
     RCLCPP_INFO(rclcpp::get_logger("Get config"), "config has been sent!");
   } catch (nlohmann::json::exception & e) {
     RCLCPP_ERROR(rclcpp::get_logger("Publish config"), e.what());
