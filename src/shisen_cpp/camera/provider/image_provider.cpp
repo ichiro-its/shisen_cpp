@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "shisen_cpp/camera/provider/image_provider.hpp"
+#include <shisen_cpp/camera/provider/image_provider.hpp>
 
 #include <memory>
 #include <opencv2/opencv.hpp>

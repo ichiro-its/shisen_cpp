@@ -53,6 +53,6 @@ private:
 
 }  // namespace shisen_cpp
 
-#include "shisen_cpp/utility/emptiable.impl.hpp"
+#include <shisen_cpp/utility/emptiable.impl.hpp>
 
 #endif  // SHISEN_CPP__UTILITY__EMPTIABLE_HPP_

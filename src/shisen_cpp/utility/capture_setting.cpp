@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "shisen_cpp/utility/capture_setting.hpp"
+#include <shisen_cpp/utility/capture_setting.hpp>
 
 namespace shisen_cpp
 {
