@@ -51,7 +51,7 @@ int main(int argc, char ** argv)
     int i = 1;
     int pos = 0;
     while (i < args.size()) {
-      std::string arg = args[i++];
+      const std::string& arg = args[i++];
       if (arg[0] == '-') {
         if (arg == "-h" || arg == "--help") {
           std::cout << help_message << std::endl;
