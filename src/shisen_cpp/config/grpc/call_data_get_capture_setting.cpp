@@ -46,7 +46,12 @@ void CallDataGetCaptureSetting::WaitForRequest()
 
 void CallDataGetCaptureSetting::HandleRequest()
 {
-  std::string capture_setting = jitsuyo::load_config(path_, "capture_settings.json").dump();
+  nlohmann::json data;
+  if (!jitsuyo::load_config(path_, "capture_settings.json", data)) {
+    RCLCPP_ERROR(rclcpp::get_logger("Get config"), "Failed to load config!");
+    return;
+  }
+  std::string capture_setting = data.dump();
   try {
     reply_.set_json_capture(capture_setting);
     RCLCPP_INFO(rclcpp::get_logger("Get config"), "config has been sent!");

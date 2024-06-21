@@ -199,8 +199,8 @@ void CameraNode::configure_capture_setting(const CaptureSetting & capture_settin
 
 void CameraNode::load_configuration(const std::string & path)
 {
-  nlohmann::json config = jitsuyo::load_config(path, "capture_settings.json");
-  if (config.empty()) {
+  nlohmann::json config;
+  if (!jitsuyo::load_config(path, "capture_settings.json", config)) {
     throw std::runtime_error("Unable to open `" + path + "capture_settings.json`!");
   }
 
