@@ -24,7 +24,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
-#include "jitsuyo/config.hpp"
+#include <jitsuyo/config.hpp>
 
 #include <fstream>
 #include <memory>
@@ -221,7 +221,8 @@ void CameraNode::load_configuration(const std::string & path)
     !jitsuyo::assign_val(config, "exposure", setting_exposure) ||
     !jitsuyo::assign_val(config, "gain", setting_gain))
   {
-    throw std::runtime_error("Failed to load config file");
+    std::cout << "Error found at section `capture_settings`" << std::endl;
+    throw std::runtime_error("Failed to load config file `" + path + "capture_settings.json`");
   }
 
   capture_setting.brightness.set(setting_brightness);
