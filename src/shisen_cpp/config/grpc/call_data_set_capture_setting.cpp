@@ -20,9 +20,9 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/config/grpc/call_data_set_capture_setting.hpp>
-#include <shisen_cpp/config/utils/config.hpp>
 #include <shisen_interfaces/shisen.grpc.pb.h>
 #include <shisen_interfaces/shisen.pb.h>
+#include <nlohmann/json.hpp>
 
 namespace shisen_cpp
 {
@@ -46,7 +46,6 @@ void CallDataSetCaptureSetting::WaitForRequest()
 
 void CallDataSetCaptureSetting::HandleRequest()
 {
-  Config config(path_);
   try {
     CaptureSetting capture_setting;
 

@@ -24,6 +24,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
+#include <jitsuyo/config.hpp>
 
 #include <fstream>
 #include <memory>
@@ -199,37 +200,37 @@ void CameraNode::configure_capture_setting(const CaptureSetting & capture_settin
 
 void CameraNode::load_configuration(const std::string & path)
 {
-  std::string ss = path + "capture_settings.json";
-
-  std::ifstream input(ss, std::ifstream::in);
-  if (!input.is_open()) {
-    throw std::runtime_error("Unable to open `" + ss + "`!");
+  nlohmann::json config;
+  if (!jitsuyo::load_config(path, "capture_settings.json", config)) {
+    throw std::runtime_error("Unable to open `" + path + "capture_settings.json`!");
   }
-
-  nlohmann::json config = nlohmann::json::parse(input);
 
   CaptureSetting capture_setting;
 
-  // Get all config
-  for (auto & item : config.items()) {
-    try {
-      if (item.key() == "brightness") {
-        capture_setting.brightness.set(item.value());
-      } else if (item.key() == "contrast") {
-        capture_setting.contrast.set(item.value());
-      } else if (item.key() == "saturation") {
-        capture_setting.saturation.set(item.value());
-      } else if (item.key() == "temperature") {
-        capture_setting.temperature.set(item.value());
-      } else if (item.key() == "exposure") {
-        capture_setting.exposure.set(item.value());
-      } else if (item.key() == "gain") {
-        capture_setting.gain.set(item.value());
-      }
-    } catch (nlohmann::json::parse_error & ex) {
-      throw std::runtime_error("Parse error at byte `" + std::to_string(ex.byte) + "`!");
-    }
+  int setting_brightness;
+  int setting_contrast;
+  int setting_saturation;
+  int setting_temperature;
+  int setting_exposure;
+  int setting_gain;
+
+  if (!jitsuyo::assign_val(config, "brightness", setting_brightness) ||
+    !jitsuyo::assign_val(config, "contrast", setting_contrast) ||
+    !jitsuyo::assign_val(config, "saturation", setting_saturation) ||
+    !jitsuyo::assign_val(config, "temperature", setting_temperature) ||
+    !jitsuyo::assign_val(config, "exposure", setting_exposure) ||
+    !jitsuyo::assign_val(config, "gain", setting_gain))
+  {
+    std::cout << "Error found at section `capture_settings`" << std::endl;
+    throw std::runtime_error("Failed to load config file `" + path + "capture_settings.json`");
   }
+
+  capture_setting.brightness.set(setting_brightness);
+  capture_setting.contrast.set(setting_contrast);
+  capture_setting.saturation.set(setting_saturation);
+  capture_setting.temperature.set(setting_temperature);
+  capture_setting.exposure.set(setting_exposure);
+  capture_setting.gain.set(setting_gain);
 
   configure_capture_setting(capture_setting);
 }

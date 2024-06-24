@@ -21,9 +21,9 @@
 #include <nlohmann/json.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/config/grpc/call_data_save_capture_setting.hpp>
-#include <shisen_cpp/config/utils/config.hpp>
 #include <shisen_interfaces/shisen.grpc.pb.h>
 #include <shisen_interfaces/shisen.pb.h>
+#include <jitsuyo/config.hpp>
 
 namespace shisen_cpp
 {
@@ -47,13 +47,12 @@ void CallDataSaveCaptureSetting::WaitForRequest()
 
 void CallDataSaveCaptureSetting::HandleRequest()
 {
-  Config config(path_);
   try {
     std::string json_string = request_.json_capture();
     std::replace(json_string.begin(), json_string.end(), '\\', ' ');
     nlohmann::json capture_data = nlohmann::json::parse(json_string);
 
-    config.save_capture_setting(capture_data);
+    jitsuyo::save_config(path_, "capture_settings.json", capture_data);
     RCLCPP_INFO(rclcpp::get_logger("Save config"), "config has been saved!  ");
   } catch (nlohmann::json::exception & e) {
     RCLCPP_ERROR(rclcpp::get_logger("Save config"), e.what());
