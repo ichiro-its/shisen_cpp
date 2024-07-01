@@ -18,23 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <fstream>
+
 #include <nlohmann/json.hpp>
-#include <fstream>
-#include <memory>
-#include <nlohmann/json.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
 #include <jitsuyo/config.hpp>
 
+#include <chrono>
 #include <fstream>
 #include <memory>
+#include <sstream>
 #include <string>
 
 namespace shisen_cpp::camera
 {
 
 CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const Options & options)
-: node(node), options(options)
+: node(node), options(options), is_record_on(false)
 {
 }
 
@@ -53,6 +53,7 @@ void CameraNode::update()
   if (!captured_mat.empty()) {
     on_mat_captured(captured_mat);
     on_camera_config(captured_mat.cols, captured_mat.rows);
+
   } else {
     RCLCPP_WARN_ONCE(node->get_logger(), "Once, captured an empty mat!");
   }
@@ -67,6 +68,23 @@ void CameraNode::on_camera_config(int width, int height)
 {
   camera_config_provider->set_config(width, height);
   camera_config_publisher->publish(camera_config_provider->get_camera_config());
+}
+
+void CameraNode::save_image(cv::Mat mat)
+{
+  auto now = std::chrono::system_clock::now();
+  std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+
+  std::stringstream ss;
+  ss << std::put_time(std::localtime(&now_time), "%Y-%m-%d_%H-%M-%S");
+  std::string timestamp = ss.str();
+
+  std::string filename = "image/" + timestamp + ".jpg";
+
+  bool result = cv::imwrite(filename, mat);
+  if (!result) {
+    RCLCPP_ERROR(node->get_logger(), "Failed to save image!");
+  }
 }
 
 cv::Mat CameraNode::get_mat()
