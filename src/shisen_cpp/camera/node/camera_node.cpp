@@ -53,7 +53,9 @@ void CameraNode::update()
   if (!captured_mat.empty()) {
     on_mat_captured(captured_mat);
     on_camera_config(captured_mat.cols, captured_mat.rows);
-
+    if (is_record_on) {
+      save_image(captured_mat);
+    }
   } else {
     RCLCPP_WARN_ONCE(node->get_logger(), "Once, captured an empty mat!");
   }

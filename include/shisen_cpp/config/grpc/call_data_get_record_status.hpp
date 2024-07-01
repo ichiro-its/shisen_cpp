@@ -18,38 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <opencv2/opencv.hpp>
-#include <rclcpp/rclcpp.hpp>
-#include <shisen_cpp/config/grpc/call_data_record_image.hpp>
-#include <shisen_interfaces/shisen.grpc.pb.h>
-#include <shisen_interfaces/shisen.pb.h>
+#ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_GET_RECORD_STATUS_HPP__
+#define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_GET_RECORD_STATUS_HPP__
+
+#include <shisen_cpp/camera/node/camera_node.hpp>
+#include <shisen_cpp/config/grpc/call_data.hpp>
 
 namespace shisen_cpp
 {
-CallDataRecordImage::CallDataRecordImage(
-  shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-  const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node)
-: CallData(service, cq, path), camera_node_(camera_node)
+class CallDataGetRecordStatus
+: CallData<shisen_interfaces::proto::Empty, shisen_interfaces::proto::RecordStatus>
 {
-  Proceed();
-}
+public:
+  CallDataGetRecordStatus(
+    shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
+    const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node);
 
-void CallDataRecordImage::AddNextToCompletionQueue()
-{
-  new CallDataRecordImage(service_, cq_, path_, camera_node_);
-}
-
-void CallDataRecordImage::WaitForRequest()
-{
-  service_->RequestRecordImage(&ctx_, &request_, &responder_, cq_, cq_, this);
-}
-
-void CallDataRecordImage::HandleRequest()
-{
-  try {
-    camera_node_->set_record_status(request_.record());
-  } catch(const std::exception& e) {
-    RCLCPP_ERROR(rclcpp::get_logger("Record Image"), e.what());
-  }
-}
+protected:
+  void AddNextToCompletionQueue() override;
+  void WaitForRequest() override;
+  void HandleRequest() override;
+  std::shared_ptr<camera::CameraNode> camera_node_;
+};
 }  // namespace shisen_cpp
+
+#endif  // SHISEN_CPP__CONFIG__GRPC__CALL_DATA_GET_RECORD_STATUS_HPP__
