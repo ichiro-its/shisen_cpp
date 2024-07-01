@@ -18,19 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_SET_RECORD_STATUS_HPP__
-#define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_SET_RECORD_STATUS_HPP__
+#ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_RECORD_IMAGE_HPP__
+#define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_RECORD_IMAGE_HPP__
 
 #include <shisen_cpp/camera/node/camera_node.hpp>
 #include <shisen_cpp/config/grpc/call_data.hpp>
 
 namespace shisen_cpp
 {
-class CallDataSetRecordStatus
-: CallData<shisen_interfaces::proto::RecordStatus, shisen_interfaces::proto::Empty>
+class CallDataRecordImage
+: CallData<shisen_interfaces::proto::Empty, shisen_interfaces::proto::Empty>
 {
 public:
-  CallDataSetRecordStatus(
+  CallDataRecordImage(
     shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
     const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node);
 
@@ -42,4 +42,4 @@ protected:
 };
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__CONFIG__GRPC__CALL_DATA_SET_RECORD_STATUS_HPP__
+#endif  // SHISEN_CPP__CONFIG__GRPC__CALL_DATA_RECORD_IMAGE_HPP__

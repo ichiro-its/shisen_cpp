@@ -34,7 +34,7 @@ namespace shisen_cpp::camera
 {
 
 CameraNode::CameraNode(rclcpp::Node::SharedPtr node, const Options & options)
-: node(node), options(options), is_record_on(false)
+: node(node), options(options)
 {
 }
 
@@ -53,9 +53,6 @@ void CameraNode::update()
   if (!captured_mat.empty()) {
     on_mat_captured(captured_mat);
     on_camera_config(captured_mat.cols, captured_mat.rows);
-    if (is_record_on) {
-      save_image(captured_mat);
-    }
   } else {
     RCLCPP_WARN_ONCE(node->get_logger(), "Once, captured an empty mat!");
   }
@@ -75,10 +72,12 @@ void CameraNode::on_camera_config(int width, int height)
 void CameraNode::save_image(cv::Mat mat)
 {
   auto now = std::chrono::system_clock::now();
-  std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+  std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+  auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 
   std::stringstream ss;
-  ss << std::put_time(std::localtime(&now_time), "%Y-%m-%d_%H-%M-%S");
+  ss << std::put_time(std::localtime(&now_time_t), "%Y-%m-%d_%H-%M-%S");
+  ss << '-' << std::setfill('0') << std::setw(3) << now_ms.count();
   std::string timestamp = ss.str();
 
   std::string filename = "image/" + timestamp + ".jpg";

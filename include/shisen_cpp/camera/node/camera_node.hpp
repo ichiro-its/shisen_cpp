@@ -58,9 +58,6 @@ public:
   std::shared_ptr<ImageProvider> image_provider;
   std::shared_ptr<CameraConfigProvider> camera_config_provider;
 
-  bool get_record_status() { return is_record_on; }
-  void set_record_status(bool status) { is_record_on = status; }
-
 private:
   rclcpp::Node::SharedPtr node;
   CaptureSetting current_capture_setting;
@@ -72,8 +69,6 @@ private:
   rclcpp::Service<ConfigureCaptureSetting>::SharedPtr configure_capture_setting_service;
 
   Options options;
-
-  bool is_record_on;
 };
 
 }  // namespace shisen_cpp::camera
