@@ -29,6 +29,8 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 namespace shisen_cpp::camera
 {
@@ -71,6 +73,15 @@ void CameraNode::on_camera_config(int width, int height)
 
 void CameraNode::save_image(cv::Mat mat)
 {
+  struct stat info;
+
+  if (stat("image", &info) != 0) {
+    if (mkdir("image", 0777) == -1) {
+      RCLCPP_ERROR(node->get_logger(), "Error creating `image` directory!");
+      return;
+    }
+  }
+
   auto now = std::chrono::system_clock::now();
   std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
   auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
