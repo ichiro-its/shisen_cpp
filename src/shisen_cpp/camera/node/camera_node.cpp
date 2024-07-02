@@ -18,16 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <fstream>
+
 #include <nlohmann/json.hpp>
-#include <fstream>
-#include <memory>
-#include <nlohmann/json.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
 #include <jitsuyo/config.hpp>
 
+#include <chrono>
 #include <fstream>
 #include <memory>
+#include <sstream>
 #include <string>
 
 namespace shisen_cpp::camera
@@ -67,6 +67,32 @@ void CameraNode::on_camera_config(int width, int height)
 {
   camera_config_provider->set_config(width, height);
   camera_config_publisher->publish(camera_config_provider->get_camera_config());
+}
+
+void CameraNode::save_image(cv::Mat mat)
+{
+  if (!std::filesystem::exists("image")) {
+    if (!std::filesystem::create_directory("image")) {
+      RCLCPP_ERROR(node->get_logger(), "Error creating `image` directory!");
+      return;
+    }
+  }
+
+  auto now = std::chrono::system_clock::now();
+  std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+  auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+
+  std::stringstream ss;
+  ss << std::put_time(std::localtime(&now_time_t), "%Y-%m-%d_%H-%M-%S");
+  ss << '-' << std::setfill('0') << std::setw(3) << now_ms.count();
+  std::string timestamp = ss.str();
+
+  std::string filename = "image/" + timestamp + ".jpg";
+
+  bool result = cv::imwrite(filename, mat);
+  if (!result) {
+    RCLCPP_ERROR(node->get_logger(), "Failed to save image!");
+  }
 }
 
 cv::Mat CameraNode::get_mat()

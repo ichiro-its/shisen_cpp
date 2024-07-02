@@ -40,6 +40,7 @@ add_library(${PROJECT_NAME} SHARED
   "src/${PROJECT_NAME}/config/grpc/call_data_get_image.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_save_capture_setting.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_set_capture_setting.cpp"
+  "src/${PROJECT_NAME}/config/grpc/call_data_record_image.cpp"
   "src/${PROJECT_NAME}/utility/capture_setting.cpp"
   "src/${PROJECT_NAME}/utility/interface.cpp"
   "src/${PROJECT_NAME}/node/shisen_cpp_node.cpp"
