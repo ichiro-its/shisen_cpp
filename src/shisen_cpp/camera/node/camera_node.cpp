@@ -29,8 +29,6 @@
 #include <memory>
 #include <sstream>
 #include <string>
-#include <sys/stat.h>
-#include <sys/types.h>
 
 namespace shisen_cpp::camera
 {
@@ -73,10 +71,8 @@ void CameraNode::on_camera_config(int width, int height)
 
 void CameraNode::save_image(cv::Mat mat)
 {
-  struct stat info;
-
-  if (stat("image", &info) != 0) {
-    if (mkdir("image", 0777) == -1) {
+  if (!std::filesystem::exists("image")) {
+    if (!std::filesystem::create_directory("image")) {
       RCLCPP_ERROR(node->get_logger(), "Error creating `image` directory!");
       return;
     }
