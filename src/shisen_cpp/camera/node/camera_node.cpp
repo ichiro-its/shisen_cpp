@@ -192,12 +192,10 @@ CaptureSetting CameraNode::on_configure_capture_setting(
     }
 
     if (new_capture_setting.temperature.is_not_empty()) {
-      video_capture->set(cv::CAP_PROP_AUTO_WB, 0);
       video_capture->set(cv::CAP_PROP_WB_TEMPERATURE, new_capture_setting.temperature);
     }
 
     if (new_capture_setting.exposure.is_not_empty()) {
-      video_capture->set(cv::CAP_PROP_AUTO_EXPOSURE, 1);
       video_capture->set(cv::CAP_PROP_EXPOSURE, new_capture_setting.exposure);
     }
 
