@@ -38,6 +38,11 @@ ImageProvider::ImageProvider(const Options & options)
 
   video_capture->set(cv::CAP_PROP_FRAME_WIDTH, options.width);
   video_capture->set(cv::CAP_PROP_FRAME_HEIGHT, options.height);
+  video_capture->set(cv::CAP_PROP_AUTOFOCUS, 0);   // Disable autofocus
+  video_capture->set(cv::CAP_PROP_AUTO_WB, 0);     // Disable auto white balance
+  video_capture->set(cv::CAP_PROP_AUTO_EXPOSURE, 1);  // Set auto exposure to manual mode
+  video_capture->set(cv::CAP_PROP_SHARPNESS, 0); // Set sharpness to 0
+  video_capture->set(cv::CAP_PROP_FOCUS, 0); // Set focus to 0
 }
 
 ImageProvider::~ImageProvider()
