@@ -1,4 +1,4 @@
-// Copyright (c) 2021 ICHIRO ITS
+// Copyright (c) 2024 ICHIRO ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,50 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
-#define SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
+#ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_LOAD_CONFIG_HPP__
+#define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_LOAD_CONFIG_HPP__
 
-#include <sensor_msgs/msg/image.hpp>
+#include <shisen_cpp/camera/node/camera_node.hpp>
+#include <shisen_cpp/config/grpc/call_data.hpp>
 #include <shisen_cpp/utility.hpp>
-#include <std_msgs/msg/header.hpp>
 
-#include <cv_bridge/cv_bridge.hpp>
-#include <memory>
-#include <opencv2/core.hpp>
-#include <opencv2/videoio.hpp>
-#include <string>
-
-namespace shisen_cpp::camera
+namespace shisen_cpp
 {
-
-class ImageProvider
+class CallDataLoadConfig
+: CallData<shisen_interfaces::proto::Empty, shisen_interfaces::proto::Empty>
 {
 public:
-  using Image = sensor_msgs::msg::Image;
+  CallDataLoadConfig(
+    shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
+    const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node);
 
-  explicit ImageProvider(const Options & options = Options());
-  ~ImageProvider();
-
-  void set_image(const Image & image);
-  void set_mat(cv::Mat mat);
-  void update_mat();
-
-  const Image & get_image() const;
-  cv::Mat get_mat() const;
-
-  std::shared_ptr<cv::VideoCapture> get_video_capture() const;
-
-  Options options;
-
-private:
-  Image current_image_msg;
-  cv::Mat current_mat_image;
-
-  int compression_quality;
-
-  std::shared_ptr<cv::VideoCapture> video_capture;
+protected:
+  void AddNextToCompletionQueue() override;
+  void WaitForRequest() override;
+  void HandleRequest() override;
+  std::shared_ptr<camera::CameraNode> camera_node_;
 };
+}  // namespace shisen_cpp
 
-}  // namespace shisen_cpp::camera
-
-#endif  // SHISEN_CPP__CAMERA__PROVIDER__IMAGE_PROVIDER_HPP_
+#endif  // SHISEN_CPP__CONFIG__GRPC__CALL_DATA_LOAD_CONFIG_HPP__

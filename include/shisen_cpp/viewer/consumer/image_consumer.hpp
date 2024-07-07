@@ -21,13 +21,13 @@
 #ifndef SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 #define SHISEN_CPP__VIEWER__CONSUMER__IMAGE_CONSUMER_HPP_
 
-#include <cv_bridge/cv_bridge.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <shisen_cpp/utility.hpp>
 
+#include <cv_bridge/cv_bridge.hpp>
 #include <memory>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 #include <string>
 
 namespace shisen_cpp::viewer

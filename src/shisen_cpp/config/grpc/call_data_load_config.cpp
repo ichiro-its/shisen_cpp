@@ -19,15 +19,14 @@
 // THE SOFTWARE.
 
 #include <rclcpp/rclcpp.hpp>
-#include <shisen_cpp/config/grpc/call_data_get_image.hpp>
+#include <shisen_cpp/config/grpc/call_data_load_config.hpp>
+#include <shisen_cpp/config/utils/config.hpp>
 #include <shisen_interfaces/shisen.grpc.pb.h>
 #include <shisen_interfaces/shisen.pb.h>
 
-#include <opencv2/opencv.hpp>
-
 namespace shisen_cpp
 {
-CallDataGetImage::CallDataGetImage(
+CallDataLoadConfig::CallDataLoadConfig(
   shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
   const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node)
 : CallData(service, cq, path), camera_node_(camera_node)
@@ -35,31 +34,26 @@ CallDataGetImage::CallDataGetImage(
   Proceed();
 }
 
-void CallDataGetImage::AddNextToCompletionQueue()
+void CallDataLoadConfig::AddNextToCompletionQueue()
 {
-  new CallDataGetImage(service_, cq_, path_, camera_node_);
+  new CallDataLoadConfig(service_, cq_, path_, camera_node_);
 }
 
-void CallDataGetImage::WaitForRequest()
+void CallDataLoadConfig::WaitForRequest()
 {
-  service_->RequestGetImage(&ctx_, &request_, &responder_, cq_, cq_, this);
+  service_->RequestLoadConfig(&ctx_, &request_, &responder_, cq_, cq_, this);
 }
 
-void CallDataGetImage::HandleRequest()
+void CallDataLoadConfig::HandleRequest()
 {
   try {
-    cv::Mat image = camera_node_->image_provider->get_mat();
-    if (image.empty()) {
-      RCLCPP_WARN(rclcpp::get_logger("Get image"), "Empty image!");
-      return;
-    }
+    camera_node_->load_configuration(path_);
 
-    std::vector<uchar> image_bytes;
-    cv::imencode(".jpg", image, image_bytes);
-
-    reply_.set_data(image_bytes.data(), image_bytes.size());
-  } catch(const std::exception& e) {
-    RCLCPP_ERROR(rclcpp::get_logger("Publish config"), e.what());
+    RCLCPP_INFO(
+      rclcpp::get_logger("Load config"), "config has been loaded!"
+    );
+  } catch (nlohmann::json::exception e) {
+    RCLCPP_ERROR(rclcpp::get_logger("Load config"), e.what());
   }
 }
 }  // namespace shisen_cpp

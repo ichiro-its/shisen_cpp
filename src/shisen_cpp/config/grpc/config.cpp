@@ -22,6 +22,7 @@
 #include <shisen_cpp/config/grpc/call_data_base.hpp>
 #include <shisen_cpp/config/grpc/call_data_get_capture_setting.hpp>
 #include <shisen_cpp/config/grpc/call_data_get_image.hpp>
+#include <shisen_cpp/config/grpc/call_data_load_config.hpp>
 #include <shisen_cpp/config/grpc/call_data_save_capture_setting.hpp>
 #include <shisen_cpp/config/grpc/call_data_set_capture_setting.hpp>
 #include <shisen_cpp/config/grpc/call_data_record_image.hpp>
@@ -73,6 +74,7 @@ void ConfigGrpc::Run(const std::string & path, std::shared_ptr<camera::CameraNod
     new CallDataSaveCaptureSetting(&service_, cq_.get(), path);
     new CallDataSetCaptureSetting(&service_, cq_.get(), path, camera_node);
     new CallDataGetImage(&service_, cq_.get(), path, camera_node);
+    new CallDataLoadConfig(&service_, cq_.get(), path, camera_node);
     new CallDataRecordImage(&service_, cq_.get(), path, camera_node);
     void * tag;  // uniquely identifies a request.
     bool ok = true;
