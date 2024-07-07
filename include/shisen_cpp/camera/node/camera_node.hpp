@@ -43,6 +43,7 @@ public:
   void update();
   void on_mat_captured(cv::Mat mat);
   void on_camera_config(int width, int height);
+  void save_image(cv::Mat mat);
   CaptureSetting on_configure_capture_setting(const CaptureSetting & capture_setting);
   void configure_capture_setting(const CaptureSetting & capture_setting = CaptureSetting());
   void load_configuration(const std::string & path);

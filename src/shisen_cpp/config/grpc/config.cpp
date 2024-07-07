@@ -25,8 +25,9 @@
 #include <shisen_cpp/config/grpc/call_data_load_config.hpp>
 #include <shisen_cpp/config/grpc/call_data_save_capture_setting.hpp>
 #include <shisen_cpp/config/grpc/call_data_set_capture_setting.hpp>
+#include <shisen_cpp/config/grpc/call_data_record_image.hpp>
 #include <shisen_cpp/config/grpc/config.hpp>
-#include <shisen_cpp/config/utils/config.hpp>
+#include <jitsuyo/config.hpp>
 
 using grpc::ServerBuilder;
 using namespace std::chrono_literals;
@@ -51,9 +52,13 @@ void ConfigGrpc::SignIntHandler(int signum)
 
 void ConfigGrpc::Run(const std::string & path, std::shared_ptr<camera::CameraNode> camera_node)
 {
-  Config config(path);
+  nlohmann::json grpc_config;
+  if (!jitsuyo::load_config(path, "grpc.json", grpc_config)) {
+    RCLCPP_ERROR(rclcpp::get_logger("ConfigGrpc"), "Failed to load grpc config");
+    return;
+  }
   std::string server_address =
-    absl::StrFormat("0.0.0.0:%d", config.get_grpc_config()["port"].get<uint16_t>());
+    absl::StrFormat("0.0.0.0:%d", grpc_config["port"].get<uint16_t>());
 
   ServerBuilder builder;
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
@@ -70,6 +75,7 @@ void ConfigGrpc::Run(const std::string & path, std::shared_ptr<camera::CameraNod
     new CallDataSetCaptureSetting(&service_, cq_.get(), path, camera_node);
     new CallDataGetImage(&service_, cq_.get(), path, camera_node);
     new CallDataLoadConfig(&service_, cq_.get(), path, camera_node);
+    new CallDataRecordImage(&service_, cq_.get(), path, camera_node);
     void * tag;  // uniquely identifies a request.
     bool ok = true;
     while (true) {

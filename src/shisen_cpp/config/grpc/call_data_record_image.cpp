@@ -18,40 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/config/utils/config.hpp>
-
-#include <fstream>
-#include <iomanip>
-#include <string>
+#include <rclcpp/rclcpp.hpp>
+#include <shisen_cpp/config/grpc/call_data_record_image.hpp>
+#include <shisen_interfaces/shisen.grpc.pb.h>
+#include <shisen_interfaces/shisen.pb.h>
 
 namespace shisen_cpp
 {
-Config::Config(const std::string & path) : path(path) {}
-
-std::string Config::get_capture_setting(const std::string & key) const
+CallDataRecordImage::CallDataRecordImage(
+  shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
+  const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node)
+: CallData(service, cq, path), camera_node_(camera_node)
 {
-  if (key == "capture") {
-    std::ifstream capture_file(path + "capture_settings.json");
-    nlohmann::json capture_data = nlohmann::json::parse(capture_file);
-    return capture_data.dump();
+  Proceed();
+}
+
+void CallDataRecordImage::AddNextToCompletionQueue()
+{
+  new CallDataRecordImage(service_, cq_, path_, camera_node_);
+}
+
+void CallDataRecordImage::WaitForRequest()
+{
+  service_->RequestRecordImage(&ctx_, &request_, &responder_, cq_, cq_, this);
+}
+
+void CallDataRecordImage::HandleRequest()
+{
+  try {
+    camera_node_->save_image(camera_node_->get_mat());
+  } catch(const std::exception& e) {
+    RCLCPP_ERROR(rclcpp::get_logger("Record Image"), e.what());
   }
-
-  return "";
 }
-
-nlohmann::json Config::get_grpc_config() const
-{
-  std::ifstream grpc_file(path + "grpc.json");
-  nlohmann::json grpc_data = nlohmann::json::parse(grpc_file);
-  grpc_file.close();
-  return grpc_data;
-}
-
-void Config::save_capture_setting(const nlohmann::json & capture_data)
-{
-  std::ofstream capture_file(path + "capture_settings.json", std::ios::out | std::ios::trunc);
-  capture_file << std::setw(2) << capture_data << std::endl;
-  capture_file.close();
-}
-
 }  // namespace shisen_cpp

@@ -18,27 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CONFIG__UTILS__CONFIG_HPP_
-#define SHISEN_CPP__CONFIG__UTILS__CONFIG_HPP_
+#ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_RECORD_IMAGE_HPP__
+#define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_RECORD_IMAGE_HPP__
 
-#include <nlohmann/json.hpp>
+#include <shisen_cpp/camera/node/camera_node.hpp>
+#include <shisen_cpp/config/grpc/call_data.hpp>
 
 namespace shisen_cpp
 {
-
-class Config
+class CallDataRecordImage
+: CallData<shisen_interfaces::proto::Empty, shisen_interfaces::proto::Empty>
 {
 public:
-  explicit Config(const std::string & path);
+  CallDataRecordImage(
+    shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
+    const std::string & path, const std::shared_ptr<camera::CameraNode>& camera_node);
 
-  std::string get_capture_setting(const std::string & key) const;
-  void save_capture_setting(const nlohmann::json & capture_data);
-  nlohmann::json get_grpc_config() const;
-
-private:
-  std::string path;
+protected:
+  void AddNextToCompletionQueue() override;
+  void WaitForRequest() override;
+  void HandleRequest() override;
+  std::shared_ptr<camera::CameraNode> camera_node_;
 };
-
 }  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__CONFIG__UTILS__CONFIG_HPP_
+#endif  // SHISEN_CPP__CONFIG__GRPC__CALL_DATA_RECORD_IMAGE_HPP__

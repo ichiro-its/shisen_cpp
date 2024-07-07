@@ -18,11 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <nlohmann/json.hpp>
-#include <shisen_cpp/camera/node/camera_node.hpp>
 
+#include <nlohmann/json.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <shisen_cpp/camera/node/camera_node.hpp>
+#include <jitsuyo/config.hpp>
+
+#include <chrono>
 #include <fstream>
 #include <memory>
+#include <sstream>
 #include <string>
 
 namespace shisen_cpp::camera
@@ -62,6 +67,32 @@ void CameraNode::on_camera_config(int width, int height)
 {
   camera_config_provider->set_config(width, height);
   camera_config_publisher->publish(camera_config_provider->get_camera_config());
+}
+
+void CameraNode::save_image(cv::Mat mat)
+{
+  if (!std::filesystem::exists("image")) {
+    if (!std::filesystem::create_directory("image")) {
+      RCLCPP_ERROR(node->get_logger(), "Error creating `image` directory!");
+      return;
+    }
+  }
+
+  auto now = std::chrono::system_clock::now();
+  std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+  auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+
+  std::stringstream ss;
+  ss << std::put_time(std::localtime(&now_time_t), "%Y-%m-%d_%H-%M-%S");
+  ss << '-' << std::setfill('0') << std::setw(3) << now_ms.count();
+  std::string timestamp = ss.str();
+
+  std::string filename = "image/" + timestamp + ".jpg";
+
+  bool result = cv::imwrite(filename, mat);
+  if (!result) {
+    RCLCPP_ERROR(node->get_logger(), "Failed to save image!");
+  }
 }
 
 cv::Mat CameraNode::get_mat()
@@ -161,12 +192,10 @@ CaptureSetting CameraNode::on_configure_capture_setting(
     }
 
     if (new_capture_setting.temperature.is_not_empty()) {
-      video_capture->set(cv::CAP_PROP_AUTO_WB, 0);
       video_capture->set(cv::CAP_PROP_WB_TEMPERATURE, new_capture_setting.temperature);
     }
 
     if (new_capture_setting.exposure.is_not_empty()) {
-      video_capture->set(cv::CAP_PROP_AUTO_EXPOSURE, 1);
       video_capture->set(cv::CAP_PROP_EXPOSURE, new_capture_setting.exposure);
     }
 
@@ -195,37 +224,37 @@ void CameraNode::configure_capture_setting(const CaptureSetting & capture_settin
 
 void CameraNode::load_configuration(const std::string & path)
 {
-  std::string ss = path + "capture_settings.json";
-
-  std::ifstream input(ss, std::ifstream::in);
-  if (!input.is_open()) {
-    throw std::runtime_error("Unable to open `" + ss + "`!");
+  nlohmann::json config;
+  if (!jitsuyo::load_config(path, "capture_settings.json", config)) {
+    throw std::runtime_error("Unable to open `" + path + "capture_settings.json`!");
   }
-
-  nlohmann::json config = nlohmann::json::parse(input);
 
   CaptureSetting capture_setting;
 
-  // Get all config
-  for (auto & item : config.items()) {
-    try {
-      if (item.key() == "brightness") {
-        capture_setting.brightness.set(item.value());
-      } else if (item.key() == "contrast") {
-        capture_setting.contrast.set(item.value());
-      } else if (item.key() == "saturation") {
-        capture_setting.saturation.set(item.value());
-      } else if (item.key() == "temperature") {
-        capture_setting.temperature.set(item.value());
-      } else if (item.key() == "exposure") {
-        capture_setting.exposure.set(item.value());
-      } else if (item.key() == "gain") {
-        capture_setting.gain.set(item.value());
-      }
-    } catch (nlohmann::json::parse_error & ex) {
-      throw std::runtime_error("Parse error at byte `" + std::to_string(ex.byte) + "`!");
-    }
+  int setting_brightness;
+  int setting_contrast;
+  int setting_saturation;
+  int setting_temperature;
+  int setting_exposure;
+  int setting_gain;
+
+  if (!jitsuyo::assign_val(config, "brightness", setting_brightness) ||
+    !jitsuyo::assign_val(config, "contrast", setting_contrast) ||
+    !jitsuyo::assign_val(config, "saturation", setting_saturation) ||
+    !jitsuyo::assign_val(config, "temperature", setting_temperature) ||
+    !jitsuyo::assign_val(config, "exposure", setting_exposure) ||
+    !jitsuyo::assign_val(config, "gain", setting_gain))
+  {
+    std::cout << "Error found at section `capture_settings`" << std::endl;
+    throw std::runtime_error("Failed to load config file `" + path + "capture_settings.json`");
   }
+
+  capture_setting.brightness.set(setting_brightness);
+  capture_setting.contrast.set(setting_contrast);
+  capture_setting.saturation.set(setting_saturation);
+  capture_setting.temperature.set(setting_temperature);
+  capture_setting.exposure.set(setting_exposure);
+  capture_setting.gain.set(setting_gain);
 
   configure_capture_setting(capture_setting);
 }

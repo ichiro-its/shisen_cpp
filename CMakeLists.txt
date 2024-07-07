@@ -20,6 +20,7 @@ find_package(keisan REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(shisen_interfaces REQUIRED)
+find_package(jitsuyo REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(Protobuf CONFIG REQUIRED)
@@ -40,7 +41,7 @@ add_library(${PROJECT_NAME} SHARED
   "src/${PROJECT_NAME}/config/grpc/call_data_load_config.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_save_capture_setting.cpp"
   "src/${PROJECT_NAME}/config/grpc/call_data_set_capture_setting.cpp"
-  "src/${PROJECT_NAME}/config/utils/config.cpp"
+  "src/${PROJECT_NAME}/config/grpc/call_data_record_image.cpp"
   "src/${PROJECT_NAME}/utility/capture_setting.cpp"
   "src/${PROJECT_NAME}/utility/interface.cpp"
   "src/${PROJECT_NAME}/node/shisen_cpp_node.cpp"
@@ -73,6 +74,7 @@ ament_target_dependencies(${PROJECT_NAME}
   OpenCV
   rclcpp
   shisen_interfaces
+  jitsuyo
   sensor_msgs
   cv_bridge
   std_msgs
@@ -83,6 +85,7 @@ ament_target_dependencies(${PROJECT_NAME}_exported
   OpenCV
   rclcpp
   shisen_interfaces
+  jitsuyo
   sensor_msgs
   cv_bridge
   std_msgs)
@@ -93,6 +96,10 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 install(DIRECTORY "include" DESTINATION ".")
+
+install(DIRECTORY
+  launch
+  DESTINATION "share/${PROJECT_NAME}")
 
 install(TARGETS ${PROJECT_NAME}
 EXPORT export_${PROJECT_NAME}
