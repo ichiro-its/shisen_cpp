@@ -51,6 +51,8 @@ void CallDataGetCaptureSetting::HandleRequest()
     RCLCPP_ERROR(rclcpp::get_logger("Get config"), "Failed to load config!");
     return;
   }
+  data.erase("width");
+  data.erase("height");
   std::string capture_setting = data.dump();
   try {
     reply_.set_json_capture(capture_setting);
