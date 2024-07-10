@@ -36,6 +36,15 @@ ImageProvider::ImageProvider(const Options & options)
     throw std::runtime_error("unable to open camera on `" + options.camera_file_name + "`");
   }
 
+  initialize_video_capture(options);
+}
+
+ImageProvider::~ImageProvider()
+{
+}
+
+void ImageProvider::initialize_video_capture(const Options & options)
+{
   video_capture->set(cv::CAP_PROP_FRAME_WIDTH, options.width);
   video_capture->set(cv::CAP_PROP_FRAME_HEIGHT, options.height);
   video_capture->set(cv::CAP_PROP_AUTOFOCUS, 0);   // Disable autofocus
@@ -43,10 +52,6 @@ ImageProvider::ImageProvider(const Options & options)
   video_capture->set(cv::CAP_PROP_AUTO_EXPOSURE, 1);  // Set auto exposure to manual mode
   video_capture->set(cv::CAP_PROP_SHARPNESS, 0); // Set sharpness to 0
   video_capture->set(cv::CAP_PROP_FOCUS, 0); // Set focus to 0
-}
-
-ImageProvider::~ImageProvider()
-{
 }
 
 void ImageProvider::set_image(const Image & image)

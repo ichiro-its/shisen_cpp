@@ -237,13 +237,17 @@ void CameraNode::load_configuration(const std::string & path)
   int setting_temperature;
   int setting_exposure;
   int setting_gain;
+  int setting_width;
+  int setting_height;
 
   if (!jitsuyo::assign_val(config, "brightness", setting_brightness) ||
     !jitsuyo::assign_val(config, "contrast", setting_contrast) ||
     !jitsuyo::assign_val(config, "saturation", setting_saturation) ||
     !jitsuyo::assign_val(config, "temperature", setting_temperature) ||
     !jitsuyo::assign_val(config, "exposure", setting_exposure) ||
-    !jitsuyo::assign_val(config, "gain", setting_gain))
+    !jitsuyo::assign_val(config, "gain", setting_gain) ||
+    !jitsuyo::assign_val(config, "width", setting_width) ||
+    !jitsuyo::assign_val(config, "height", setting_height))
   {
     std::cout << "Error found at section `capture_settings`" << std::endl;
     throw std::runtime_error("Failed to load config file `" + path + "capture_settings.json`");
@@ -257,6 +261,11 @@ void CameraNode::load_configuration(const std::string & path)
   capture_setting.gain.set(setting_gain);
 
   configure_capture_setting(capture_setting);
+
+  options.width = setting_width;
+  options.height = setting_height;
+
+  image_provider->initialize_video_capture(options);
 }
 
 }  // namespace shisen_cpp::camera

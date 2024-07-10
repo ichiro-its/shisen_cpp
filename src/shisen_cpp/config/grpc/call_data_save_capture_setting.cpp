@@ -52,8 +52,17 @@ void CallDataSaveCaptureSetting::HandleRequest()
     std::replace(json_string.begin(), json_string.end(), '\\', ' ');
     nlohmann::json capture_data = nlohmann::json::parse(json_string);
 
+    nlohmann::json data;
+    if (!jitsuyo::load_config(path_, "capture_settings.json", data)) {
+      RCLCPP_ERROR(rclcpp::get_logger("Get config"), "Failed to load config!");
+      return;
+    }
+
+    capture_data["width"] = data["width"];
+    capture_data["height"] = data["height"];
+
     jitsuyo::save_config(path_, "capture_settings.json", capture_data);
-    RCLCPP_INFO(rclcpp::get_logger("Save config"), "config has been saved!  ");
+    RCLCPP_INFO(rclcpp::get_logger("Save config"), "config has been saved!");
   } catch (nlohmann::json::exception & e) {
     RCLCPP_ERROR(rclcpp::get_logger("Save config"), e.what());
   }
