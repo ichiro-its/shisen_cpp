@@ -47,6 +47,7 @@ public:
   CaptureSetting on_configure_capture_setting(const CaptureSetting & capture_setting);
   void configure_capture_setting(const CaptureSetting & capture_setting = CaptureSetting());
   void load_configuration(const std::string & path);
+  const CaptureSetting & get_capture_setting() const;
 
   cv::Mat get_mat();
   const std::string & get_camera_prefix() const;

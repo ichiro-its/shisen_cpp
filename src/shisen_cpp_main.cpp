@@ -85,6 +85,7 @@ int main(int argc, char ** argv)
 
   try {
     auto camera = std::make_shared<shisen_cpp::ShisenCppNode>(node, path, options);
+    camera->run_config_service(path);
     rclcpp::spin(node);
   } catch (const std::exception & e) {
     RCLCPP_ERROR_STREAM(node->get_logger(), "Exception! " << e.what());

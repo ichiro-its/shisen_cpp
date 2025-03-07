@@ -259,4 +259,9 @@ void CameraNode::load_configuration(const std::string & path)
   configure_capture_setting(capture_setting);
 }
 
+const CaptureSetting & CameraNode::get_capture_setting() const
+{
+  return current_capture_setting;
+}
+
 }  // namespace shisen_cpp::camera
