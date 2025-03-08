@@ -20,8 +20,8 @@
 
 #include <shisen_cpp/config/node/config_node.hpp>
 
-#include <rclcpp/rclcpp.hpp>
 #include <jitsuyo/config.hpp>
+#include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/utility/capture_setting.hpp>
 #include <shisen_cpp/viewer/node/viewer_node.hpp>
 
@@ -32,7 +32,7 @@ namespace shisen_cpp::camera
 {
 
 ConfigNode::ConfigNode(rclcpp::Node::SharedPtr node, const std::string & path,
-  const std::shared_ptr<camera::CameraNode> & camera_node)
+  const std::shared_ptr<CameraNode> & camera_node)
 {
   get_capture_setting_service = node->create_service<GetCaptureSetting>(
     get_node_prefix() + "/get_capture_setting",

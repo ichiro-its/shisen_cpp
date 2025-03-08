@@ -39,7 +39,7 @@ public:
   using UpdateCaptureSetting = shisen_interfaces::srv::UpdateCaptureSetting;
 
   explicit ConfigNode(rclcpp::Node::SharedPtr node, const std::string & path,
-    const std::shared_ptr<camera::CameraNode> & camera_node);
+    const std::shared_ptr<CameraNode> & camera_node);
 
 private:
   std::string get_node_prefix() const;
