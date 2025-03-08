@@ -36,16 +36,18 @@ ConfigNode::ConfigNode(rclcpp::Node::SharedPtr node, const std::string & path,
 {
   get_capture_setting_service = node->create_service<GetCaptureSetting>(
     get_node_prefix() + "/get_capture_setting",
-    [this, path, camera_node](std::shared_ptr<GetCaptureSetting::Request> request,
+    [this, path](std::shared_ptr<GetCaptureSetting::Request> request,
     std::shared_ptr<GetCaptureSetting::Response> response) {
-      camera_node->load_configuration(path);
-      CaptureSetting capture_setting = camera_node->get_capture_setting();
-      response->brightness = capture_setting.brightness;
-      response->contrast = capture_setting.contrast;
-      response->saturation = capture_setting.saturation;
-      response->temperature = capture_setting.temperature;
-      response->exposure = capture_setting.exposure;
-      response->gain = capture_setting.gain;
+      nlohmann::json config;
+      if (!jitsuyo::load_config(path, "capture_settings.json", config)) {
+        throw std::runtime_error("Unable to open `" + path + "capture_settings.json`!");
+      }
+      response->brightness = config["brightness"];
+      response->contrast = config["contrast"];
+      response->saturation = config["saturation"];
+      response->temperature = config["temperature"];
+      response->exposure = config["exposure"];
+      response->gain = config["gain"];
     }
   );
 
