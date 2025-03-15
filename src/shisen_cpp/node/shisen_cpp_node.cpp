@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <shisen_cpp/config/grpc/config.hpp>
 #include <shisen_cpp/node/shisen_cpp_node.hpp>
 
 #include <memory>
@@ -41,13 +40,15 @@ ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & p
       camera_node->update();
     }
   );
-
-  config_grpc.Run(path, camera_node);
-  RCLCPP_INFO(rclcpp::get_logger("GrpcServers"), "grpc running");
 }
 
 ShisenCppNode::~ShisenCppNode()
 {
+}
+
+void ShisenCppNode::run_config_service(const std::string & path)
+{
+  config_node = std::make_shared<camera::ConfigNode>(node, path, camera_node);
 }
 
 }  // namespace shisen_cpp

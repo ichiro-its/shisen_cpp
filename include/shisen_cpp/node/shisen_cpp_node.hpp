@@ -23,7 +23,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <shisen_cpp/camera/node/camera_node.hpp>
-#include <shisen_cpp/config/grpc/config.hpp>
+#include <shisen_cpp/config/node/config_node.hpp>
 #include <shisen_cpp/utility.hpp>
 
 #include <memory>
@@ -37,13 +37,15 @@ public:
   explicit ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & path, const Options & options = Options());
   ~ShisenCppNode();
 
+  void run_config_service(const std::string & path);
+
 private:
   rclcpp::Node::SharedPtr node;
   rclcpp::TimerBase::SharedPtr node_timer;
 
-  ConfigGrpc config_grpc;
-
   std::shared_ptr<camera::CameraNode> camera_node;
+
+  std::shared_ptr<camera::ConfigNode> config_node;
 };
 
 }  // namespace shisen_cpp

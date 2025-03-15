@@ -1,4 +1,4 @@
-// Copyright (c) 2024 ICHIRO ITS
+// Copyright (c) 2025 Ichiro ITS
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,26 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SHISEN_CPP__CONFIG__GRPC__CALL_DATA_GET_CAPTURE_SETTING_HPP__
-#define SHISEN_CPP__CONFIG__GRPC__CALL_DATA_GET_CAPTURE_SETTING_HPP__
+#ifndef SHISEN_CPP__CONFIG__NODE__CONFIG_NODE_HPP_
+#define SHISEN_CPP__CONFIG__NODE__CONFIG_NODE_HPP_
 
-#include <shisen_cpp/config/grpc/call_data.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <shisen_interfaces/srv/get_capture_setting.hpp>
+#include <shisen_interfaces/srv/update_capture_setting.hpp>
+#include <shisen_cpp/camera/node/camera_node.hpp>
 
-namespace shisen_cpp
+#include <memory>
+#include <string>
+
+namespace shisen_cpp::camera
 {
-class CallDataGetCaptureSetting
-: CallData<shisen_interfaces::proto::Empty, shisen_interfaces::proto::ConfigCapture>
+
+class ConfigNode
 {
 public:
-  CallDataGetCaptureSetting(
-    shisen_interfaces::proto::Config::AsyncService * service, grpc::ServerCompletionQueue * cq,
-    const std::string & path);
+  using GetCaptureSetting = shisen_interfaces::srv::GetCaptureSetting;
+  using UpdateCaptureSetting = shisen_interfaces::srv::UpdateCaptureSetting;
 
-protected:
-  void AddNextToCompletionQueue() override;
-  void WaitForRequest() override;
-  void HandleRequest() override;
+  explicit ConfigNode(rclcpp::Node::SharedPtr node, const std::string & path,
+    const std::shared_ptr<CameraNode> & camera_node);
+
+private:
+  std::string get_node_prefix() const;
+
+  rclcpp::Service<GetCaptureSetting>::SharedPtr get_capture_setting_service;
+  rclcpp::Service<UpdateCaptureSetting>::SharedPtr update_capture_setting_service;
 };
-}  // namespace shisen_cpp
 
-#endif  // SHISEN_CPP__CONFIG__GRPC__CALL_DATA_GET_CAPTURE_SETTING_HPP__
+}  // namespace shisen_cpp::camera
+
+#endif  // SHISEN_CPP__CONFIG__NODE__CONFIG_NODE_HPP_
