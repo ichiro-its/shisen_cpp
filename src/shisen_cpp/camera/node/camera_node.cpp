@@ -60,7 +60,12 @@ void CameraNode::update()
 
 void CameraNode::on_mat_captured(cv::Mat mat)
 {
-  image_publisher->publish(image_provider->get_image());
+    auto image_msg = image_provider->get_image();
+
+    image_msg.header.stamp = node->get_clock()->now();
+    image_msg.header.frame_id = "camera";
+
+    image_publisher->publish(image_msg);
 }
 
 void CameraNode::on_camera_config(int width, int height)
