@@ -21,6 +21,7 @@
 #include <shisen_cpp/node/shisen_cpp_node.hpp>
 
 #include <memory>
+#include <thread>
 
 namespace shisen_cpp
 {
@@ -32,6 +33,17 @@ ShisenCppNode::ShisenCppNode(rclcpp::Node::SharedPtr node, const std::string & p
   auto image_provider = std::make_shared<camera::ImageProvider>(options);
   auto camera_config_provider = std::make_shared<camera::CameraConfigProvider>(options);
   camera_node->set_provider(image_provider, camera_config_provider);
+
+  for (int i = 0; i < 10; ++i) {
+    try {
+      camera_node->update();
+      break;
+    } catch (const std::exception & e) {
+      RCLCPP_WARN(node->get_logger(), "Waiting for camera to be ready...");
+      std::this_thread::sleep_for(100ms);
+    }
+  }
+
   camera_node->load_configuration(path);
 
   node_timer = node->create_wall_timer(
