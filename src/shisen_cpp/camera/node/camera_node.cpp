@@ -197,10 +197,12 @@ CaptureSetting CameraNode::on_configure_capture_setting(
     }
 
     if (new_capture_setting.temperature.is_not_empty()) {
+      video_capture->set(cv::CAP_PROP_AUTO_WB, 0);
       video_capture->set(cv::CAP_PROP_WB_TEMPERATURE, new_capture_setting.temperature);
     }
 
     if (new_capture_setting.exposure.is_not_empty()) {
+      video_capture->set(cv::CAP_PROP_AUTO_EXPOSURE, 1);
       video_capture->set(cv::CAP_PROP_EXPOSURE, new_capture_setting.exposure);
     }
 
@@ -209,13 +211,30 @@ CaptureSetting CameraNode::on_configure_capture_setting(
     }
   }
 
-  // Get new capture setting from the camera
-  new_capture_setting.brightness = video_capture->get(cv::CAP_PROP_BRIGHTNESS);
-  new_capture_setting.contrast = video_capture->get(cv::CAP_PROP_CONTRAST);
-  new_capture_setting.saturation = video_capture->get(cv::CAP_PROP_SATURATION);
-  new_capture_setting.temperature = video_capture->get(cv::CAP_PROP_WB_TEMPERATURE);
-  new_capture_setting.exposure = video_capture->get(cv::CAP_PROP_EXPOSURE);
-  new_capture_setting.gain = video_capture->get(cv::CAP_PROP_GAIN);
+  // Get new capture setting from the camera if they were empty
+  if (new_capture_setting.brightness.is_empty()) {
+    new_capture_setting.brightness = video_capture->get(cv::CAP_PROP_BRIGHTNESS);
+  }
+
+  if (new_capture_setting.contrast.is_empty()) {
+    new_capture_setting.contrast = video_capture->get(cv::CAP_PROP_CONTRAST);
+  }
+
+  if (new_capture_setting.saturation.is_empty()) {
+    new_capture_setting.saturation = video_capture->get(cv::CAP_PROP_SATURATION);
+  }
+
+  if (new_capture_setting.temperature.is_empty()) {
+    new_capture_setting.temperature = video_capture->get(cv::CAP_PROP_WB_TEMPERATURE);
+  }
+
+  if (new_capture_setting.exposure.is_empty()) {
+    new_capture_setting.exposure = video_capture->get(cv::CAP_PROP_EXPOSURE);
+  }
+
+  if (new_capture_setting.gain.is_empty()) {
+    new_capture_setting.gain = video_capture->get(cv::CAP_PROP_GAIN);
+  }
 
   return new_capture_setting;
 }
@@ -229,6 +248,8 @@ void CameraNode::configure_capture_setting(const CaptureSetting & capture_settin
 
 void CameraNode::load_configuration(const std::string & path)
 {
+  RCLCPP_INFO_STREAM(node->get_logger(), "Loading configuration from: " << path);
+
   nlohmann::json config;
   if (!jitsuyo::load_config(path, "capture_settings.json", config)) {
     throw std::runtime_error("Unable to open `" + path + "capture_settings.json`!");
